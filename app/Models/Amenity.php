@@ -23,6 +23,11 @@ class Amenity extends Model
 
     public function homestays(): BelongsToMany
     {
-        return $this->belongsToMany(Homestay::class);
+        return $this->belongsToMany(
+            Homestay::class,
+            'homestay_amenity',
+            'amenity_id',
+            'homestay_id'
+        );
     }
 }

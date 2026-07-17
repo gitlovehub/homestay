@@ -13,7 +13,7 @@
     <main class="mx-auto max-w-5xl px-6 py-20">
         <div class="rounded-3xl bg-white p-10 shadow-xl">
             <p class="font-semibold uppercase tracking-widest text-blue-600">
-                HomeStayGo
+                DashboardStayGo
             </p>
 
             <h1 class="mt-3 text-5xl font-bold text-slate-900">

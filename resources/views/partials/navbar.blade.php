@@ -57,7 +57,7 @@
 
                     <button
                         type="submit"
-                        class="rounded-xl border border-red-600 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
+                        class="rounded-xl border border-blue-600 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
                         Đăng xuất
                     </button>
                 </form>

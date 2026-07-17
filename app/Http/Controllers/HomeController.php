@@ -13,8 +13,7 @@ class HomeController extends Controller
             ->with('category')
             ->where('status', true)
             ->latest()
-            ->take(6)
-            ->get();
+            ->paginate(6);
 
         return view('home.index', compact('homestays'));
     }

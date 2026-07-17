@@ -278,6 +278,10 @@
                         </article>
                     @endforeach
                 </div>
+
+                <div class="mt-12 flex justify-center">
+                    {{ $homestays->links() }}
+                </div>
             @endif
         </div>
     </section>

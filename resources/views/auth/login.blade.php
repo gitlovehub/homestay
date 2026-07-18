@@ -136,7 +136,7 @@
                             @if (Route::has('password.request'))
                                 <a
                                     href="{{ route('password.request') }}"
-                                    class="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                                    class="text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline"
                                 >
                                     Quên mật khẩu?
                                 </a>

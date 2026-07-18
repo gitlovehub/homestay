@@ -157,7 +157,7 @@
                             <button
                                 id="togglePassword"
                                 type="button"
-                                class="absolute inset-y-0 right-0 px-4 text-sm font-semibold text-slate-500 hover:text-blue-600"
+                                class="absolute inset-y-0 right-0 px-4 text-sm font-semibold text-slate-500 hover:text-blue-600 cursor-pointer"
                             >
                                 Hiện
                             </button>

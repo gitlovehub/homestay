@@ -220,7 +220,7 @@
                         <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
                             <div class="relative overflow-hidden">
                                 <img
-                                    src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
+                                    src="{{ Storage::url($homestay->image) }}"
                                     alt="{{ $homestay->name }}"
                                     class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
                                 >

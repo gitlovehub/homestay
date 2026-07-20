@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Thêm tiện ích | HomeStay</title>
+    <title>Cập nhật tiện ích | HomeStay</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -27,22 +27,26 @@
             </a>
 
             <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                Thêm tiện ích
+                Cập nhật tiện ích
             </h1>
 
             <p class="mt-2 text-slate-500">
-                Nhập thông tin để tạo một tiện ích mới cho Homestay.
+                Chỉnh sửa thông tin của tiện ích
+                <span class="font-semibold text-slate-700">
+                    {{ $amenity->name }}
+                </span>
             </p>
 
         </div>
 
-        {{-- Form thêm tiện ích --}}
+        {{-- Form Cập nhật tiện ích --}}
         <form
-            action="{{ route('admin.amenities.store') }}"
+            action="{{ route('admin.amenities.update', $amenity) }}"
             method="POST"
             class="space-y-6"
         >
             @csrf
+            @method('PUT')
 
             {{-- Card thông tin chính --}}
             <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
@@ -80,13 +84,13 @@
                             id="name"
                             type="text"
                             name="name"
-                            value="{{ old('name') }}"
+                            value="{{ old('name', $amenity->name) }}"
                             placeholder="Ví dụ: Wi-Fi miễn phí"
                             autocomplete="off"
-                            class="w-full rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('name')
-                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
                                 }}"
                         >
 
@@ -114,25 +118,25 @@
                                 id="icon"
                                 type="text"
                                 name="icon"
-                                value="{{ old('icon') }}"
+                                value="{{ old('icon', $amenity->icon) }}"
                                 placeholder="Ví dụ: 📶"
                                 autocomplete="off"
-                                class="w-full rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                     {{ $errors->has('icon')
-                                        ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
                                     }}"
                             >
 
                             <div
-                                class="flex min-h-12 min-w-20 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4"
+                                class="flex min-h-12 min-w-20 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4"
                             >
                                 <span
                                     id="icon-preview"
                                     class="text-2xl"
                                     aria-label="Xem trước icon"
                                 >
-                                    {{ old('icon', '✅') }}
+                                    {{ old('icon', $amenity->icon ?: '✅') }}
                                 </span>
                             </div>
 
@@ -176,12 +180,12 @@
                             name="description"
                             rows="5"
                             placeholder="Nhập mô tả ngắn về tiện ích..."
-                            class="w-full resize-y rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                            class="w-full resize-y rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('description')
-                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
                                 }}"
-                        >{{ old('description') }}</textarea>
+                        >{{ old('description', $amenity->description) }}</textarea>
 
                         @error('description')
                             <p class="mt-2 text-sm font-medium text-red-500">
@@ -212,7 +216,10 @@
                                     name="status"
                                     value="1"
                                     class="peer sr-only"
-                                    {{ old('status', '1') == '1' ? 'checked' : '' }}
+                                    {{ (string) old('status', (int) $amenity->status) === '1'
+                                        ? 'checked'
+                                        : ''
+                                    }}
                                 >
 
                                 <div
@@ -256,7 +263,10 @@
                                     name="status"
                                     value="0"
                                     class="peer sr-only"
-                                    {{ old('status') == '0' ? 'checked' : '' }}
+                                    {{ (string) old('status', (int) $amenity->status) === '0'
+                                        ? 'checked'
+                                        : ''
+                                    }}
                                 >
 
                                 <div
@@ -310,16 +320,16 @@
 
                 <a
                     href="{{ route('admin.amenities.index') }}"
-                    class="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200"
+                    class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200"
                 >
                     Hủy
                 </a>
 
                 <button
                     type="submit"
-                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 active:scale-[0.99]"
+                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 active:scale-[0.99]"
                 >
-                    Thêm tiện ích
+                    Cập nhật tiện ích
                 </button>
 
             </div>

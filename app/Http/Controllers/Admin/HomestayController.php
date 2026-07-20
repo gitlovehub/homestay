@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHomestayRequest;
+use App\Http\Requests\UpdateHomestayRequest;
 use App\Models\Category;
 use App\Models\Homestay;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -121,9 +123,46 @@ class HomestayController extends Controller
     /**
      * Cập nhật Homestay.
      */
-    public function update(Request $request, Homestay $homestay)
+    public function update(UpdateHomestayRequest $request, Homestay $homestay)
     {
-        //
+        $data = $request->validated();
+
+        // Cập nhật slug nếu đổi tên
+        if ($data['name'] !== $homestay->name) {
+            $data['slug'] = $this->createUniqueSlug($data['name']);
+        }
+
+        // Nếu người dùng bấm xóa ảnh hiện tại
+        if ($request->boolean('remove_image')) {
+            if (
+                $homestay->image &&
+                Storage::disk('public')->exists($homestay->image)
+            ) {
+                Storage::disk('public')->delete($homestay->image);
+            }
+
+            $data['image'] = null;
+        }
+
+        // Nếu người dùng chọn ảnh mới
+        if ($request->hasFile('image')) {
+            if (
+                $homestay->image &&
+                Storage::disk('public')->exists($homestay->image)
+            ) {
+                Storage::disk('public')->delete($homestay->image);
+            }
+
+            $data['image'] = $request
+                ->file('image')
+                ->store('homestays', 'public');
+        }
+
+        $homestay->update($data);
+
+        return redirect()
+            ->route('admin.homestays.index')
+            ->with('success', 'Cập nhật Homestay thành công.');
     }
 
     /**
@@ -137,20 +176,27 @@ class HomestayController extends Controller
     /**
      * Tạo slug duy nhất.
      */
-    private function createUniqueSlug(string $name): string
-    {
-        $baseSlug = Str::slug($name);
+    private function createUniqueSlug(
+        string $name,
+        ?int $ignoreId = null
+    ): string {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
 
-        if ($baseSlug === '') {
-            $baseSlug = 'homestay';
-        }
-
-        $slug = $baseSlug;
-        $number = 1;
-
-        while (Homestay::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $number;
-            $number++;
+        while (
+            Homestay::query()
+                ->when(
+                    $ignoreId,
+                    function ($query) use ($ignoreId) {
+                        $query->where('id', '!=', $ignoreId);
+                    }
+                )
+                ->where('slug', $slug)
+                ->exists()
+        ) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
         }
 
         return $slug;

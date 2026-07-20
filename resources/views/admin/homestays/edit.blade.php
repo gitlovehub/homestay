@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Thêm mới Homestay | HomeStay</title>
+    <title>Cập nhật Homestay | HomeStay</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -25,7 +25,7 @@
 
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-slate-900">
-                Thêm mới Homestay
+                Cập nhật Homestay
             </h1>
 
             <p class="mt-2 text-slate-500">
@@ -323,6 +323,12 @@
                                 accept=".jpg,.jpeg,.png,.webp"
                                 class="hidden"
                             >
+                            <input
+                                type="hidden"
+                                name="remove_image"
+                                id="remove_image"
+                                value="0"
+                            >
 
                             @error('image')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -350,12 +356,14 @@
                                 </button>
                             </div>
 
-                            <img
-                                id="image-preview"
-                                src="{{ $homestay->image ? Storage::url($homestay->image) : '' }}"
-                                alt="Ảnh Homestay xem trước"
-                                class="{{ $homestay->image ? '' : 'hidden' }} h-full w-full rounded-2xl border border-slate-200 object-cover"
-                            >
+                            <div>
+                                <img
+                                    id="image-preview"
+                                    src="{{ $homestay->image ? Storage::url($homestay->image) : '' }}"
+                                    alt="Ảnh Homestay xem trước"
+                                    class="{{ $homestay->image ? '' : 'hidden' }} h-full w-full rounded-2xl border border-slate-200 object-cover"
+                                >
+                            </div>
                         </div>
 
                         {{-- Mô tả --}}
@@ -485,7 +493,7 @@
                     type="submit"
                     class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
                 >
-                    Thêm mới Homestay
+                    Cập nhật Homestay
                 </button>
 
             </div>
@@ -499,33 +507,33 @@
         const previewWrapper = document.getElementById('image-preview-wrapper');
         const previewImage = document.getElementById('image-preview');
         const removeImageButton = document.getElementById('remove-image');
+        const removeImageInput = document.getElementById('remove_image');
 
-        imageInput.addEventListener('change', function (event) {
+        imageInput?.addEventListener('change', function (event) {
             const file = event.target.files[0];
 
             if (!file) {
-                hidePreview();
                 return;
             }
 
             previewImage.src = URL.createObjectURL(file);
+            previewImage.classList.remove('hidden');
             previewWrapper.classList.remove('hidden');
+
+            // Người dùng đã chọn ảnh mới nên không xóa ảnh nữa
+            removeImageInput.value = '0';
         });
 
-        removeImageButton.addEventListener('click', function () {
+        removeImageButton?.addEventListener('click', function () {
             imageInput.value = '';
-            hidePreview();
-        });
-
-        function hidePreview() {
-            previewWrapper.classList.add('hidden');
-
-            if (previewImage.src) {
-                URL.revokeObjectURL(previewImage.src);
-            }
 
             previewImage.src = '';
-        }
+            previewImage.classList.add('hidden');
+            previewWrapper.classList.add('hidden');
+
+            // Báo cho controller xóa ảnh hiện tại
+            removeImageInput.value = '1';
+        });
     </script>
 
 </body>

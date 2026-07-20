@@ -25,7 +25,7 @@
             ← Quay lại bảng điều khiển
         </a>
 
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
             <div>
                 <h1 class="text-3xl font-bold text-slate-900">
@@ -60,7 +60,7 @@
 
         </div>
 
-        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
             <div class="overflow-x-auto">
 
@@ -68,10 +68,6 @@
 
                     <thead class="bg-slate-50">
                         <tr>
-
-                            <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                ID
-                            </th>
 
                             <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Homestay
@@ -109,10 +105,6 @@
                         @forelse ($homestays as $homestay)
 
                         <tr class="transition hover:bg-slate-50">
-
-                            <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-700">
-                                {{ $homestay->id }}
-                            </td>
 
                             <td class="px-6 py-4">
 
@@ -154,12 +146,12 @@
 
                             <td class="whitespace-nowrap px-6 py-4 text-center">
                                 @if ($homestay->status)
-                                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-green-100 px-3 py-2 text-xs font-semibold text-green-700">
                                         <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
                                         Hoạt động
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                                    <span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-red-100 px-3 py-2 text-xs font-semibold text-red-700">
                                         <span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
                                         Tạm khóa
                                     </span>
@@ -172,8 +164,7 @@
 
                                     <a
                                         href="{{ route('admin.homestays.show', $homestay) }}"
-                                        class="rounded-lg border border-violet-300 px-3 py-2 font-semibold text-violet-600 transition hover:bg-violet-50"
-                                    >
+                                        class="rounded-lg border border-violet-300 px-3 py-2 font-semibold text-violet-600 transition hover:bg-violet-50">
                                         Xem
                                     </a>
 

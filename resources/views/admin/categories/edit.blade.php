@@ -16,8 +16,6 @@
 
     <main class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
 
-        <x-alert />
-
         <div class="mb-8">
 
             <a

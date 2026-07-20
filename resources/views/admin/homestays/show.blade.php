@@ -83,11 +83,11 @@
 
                         <div>
                             @if ($homestay->status)
-                                <span class="inline-flex h-fit w-fit items-center whitespace-nowrap rounded-full bg-green-100 px-5 py-2 text-sm font-semibold leading-none text-green-700">
+                                <span class="inline-flex h-fit w-fit items-center whitespace-nowrap rounded-full bg-green-100 px-5 py-3 text-sm font-semibold leading-none text-green-700">
                                     Hoạt động
                                 </span>
                             @else
-                                <span class="inline-flex h-fit w-fit items-center whitespace-nowrap rounded-full bg-red-100 px-5 py-2 text-sm font-semibold leading-none text-red-700">
+                                <span class="inline-flex h-fit w-fit items-center whitespace-nowrap rounded-full bg-red-100 px-5 py-3 text-sm font-semibold leading-none text-red-700">
                                     Tạm khóa
                                 </span>
                             @endif

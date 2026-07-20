@@ -25,7 +25,7 @@
             ← Quay lại bảng điều khiển
         </a>
 
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
             <div>
                 <h1 class="text-3xl font-bold text-slate-900">
@@ -60,7 +60,7 @@
 
         </div>
 
-        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
             <div class="overflow-x-auto">
 
@@ -68,10 +68,6 @@
 
                     <thead class="bg-slate-50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                ID
-                            </th>
-
                             <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Tên danh mục
                             </th>
@@ -95,10 +91,6 @@
                         @forelse ($categories as $category)
 
                             <tr class="transition hover:bg-slate-50">
-
-                                <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-700">
-                                    {{ $category->id }}
-                                </td>
 
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="text-sm font-semibold text-slate-900">

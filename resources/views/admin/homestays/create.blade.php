@@ -16,21 +16,24 @@
 
     <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
 
-        <a
-            href="{{ route('admin.homestays.index') }}"
-            class="mb-4 inline-flex text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-        >
-            ← Quay lại danh sách Homestay
-        </a>
-
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-slate-900">
+
+            <a
+                href="{{ route('admin.homestays.index') }}"
+                class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+            >
+                <span aria-hidden="true">←</span>
+                Quay lại danh sách Homestay
+            </a>
+
+            <h1 class="mt-4 text-3xl font-bold text-slate-900">
                 Thêm mới Homestay
             </h1>
 
             <p class="mt-2 text-slate-500">
                 Nhập đầy đủ thông tin để thêm Homestay mới vào hệ thống.
             </p>
+
         </div>
 
         <form

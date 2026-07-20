@@ -63,10 +63,14 @@
                             name="name"
                             type="text"
                             value="{{ old('name') }}"
-                            required
                             autofocus
                             placeholder="Ví dụ: Villa, Nhà gỗ, Căn hộ..."
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            
+                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('name')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"
                         >
 
                         @error('name')
@@ -95,7 +99,12 @@
                             type="text"
                             value="{{ old('slug') }}"
                             placeholder="Để trống để hệ thống tự tạo"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            
+                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('slug')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"
                         >
 
                         <p class="mt-2 text-xs text-slate-500">
@@ -115,19 +124,34 @@
                 <section>
                     <div>
 
-                        <label
-                            for="description"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
-                            Mô tả
-                        </label>
+                        <div class="mb-2 flex items-center justify-between gap-4">
+
+                            <label
+                                for="description"
+                                class="block text-sm font-semibold text-slate-700"
+                            >
+                                Mô tả
+                            </label>
+
+                            <span
+                                id="description-counter"
+                                class="text-xs font-medium text-slate-400"
+                            >
+                                0 ký tự
+                            </span>
+
+                        </div>
 
                         <textarea
                             id="description"
                             name="description"
                             rows="5"
                             placeholder="Nhập mô tả ngắn cho danh mục..."
-                            class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            class="w-full resize-y rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('description')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"                            
                         >{{ old('description') }}</textarea>
 
                         @error('description')
@@ -163,6 +187,17 @@
 
     </main>
 
+    <script>
+        const description = document.getElementById('description');
+        const counter = document.getElementById('description-counter');
+
+        const updateCounter = () => {
+            counter.textContent = `${description.value.length} ký tự`;
+        };
+
+        description.addEventListener('input', updateCounter);
+        updateCounter();
+    </script>
 </body>
 
 </html>

@@ -29,7 +29,10 @@
             </h1>
 
             <p class="mt-2 text-slate-500">
-                Nhập đầy đủ thông tin để thêm Homestay mới vào hệ thống.
+                Chỉnh sửa thông tin của Homestay
+                <span class="font-semibold text-slate-700">
+                    {{ $homestay->name }}
+                </span>
             </p>
         </div>
 

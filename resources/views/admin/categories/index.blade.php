@@ -137,7 +137,7 @@
 
                                             <button
                                                 type="submit"
-                                                class="rounded-lg border border-red-300 px-3 py-2 font-semibold text-red-600 transition hover:bg-red-50">
+                                                class="cursor-pointer rounded-lg border border-red-300 px-3 py-2 font-semibold text-red-600 transition hover:bg-red-50">
                                                 Xóa
                                             </button>
                                         </form>

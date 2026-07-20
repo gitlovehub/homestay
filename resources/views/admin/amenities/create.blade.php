@@ -115,7 +115,7 @@
                                 type="text"
                                 name="icon"
                                 value="{{ old('icon') }}"
-                                placeholder="Ví dụ: 📶"
+                                placeholder="Ví dụ: ☕"
                                 autocomplete="off"
                                 class="w-full rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                     {{ $errors->has('icon')
@@ -132,7 +132,7 @@
                                     class="text-2xl"
                                     aria-label="Xem trước icon"
                                 >
-                                    {{ old('icon', '⚡') }}
+                                    {{ old('icon', '💎') }}
                                 </span>
                             </div>
 
@@ -339,7 +339,7 @@
             function updateIconPreview() {
                 const iconValue = iconInput.value.trim();
 
-                iconPreview.textContent = iconValue || '⚡';
+                iconPreview.textContent = iconValue || '💎';
             }
 
             function updateDescriptionCounter() {

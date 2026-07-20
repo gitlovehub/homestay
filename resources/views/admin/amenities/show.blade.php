@@ -49,7 +49,7 @@
                         <div
                             class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-3xl shadow-sm"
                         >
-                            {{ $amenity->icon ?: '⚡' }}
+                            {{ $amenity->icon ?: '💎' }}
                         </div>
 
                         <div>
@@ -156,11 +156,11 @@
                         <div class="mt-2 flex items-center gap-3">
 
                             <span class="text-3xl">
-                                {{ $amenity->icon ?: '⚡' }}
+                                {{ $amenity->icon ?: '💎' }}
                             </span>
 
                             <span class="text-sm text-slate-500">
-                                {{ $amenity->icon ?: 'Chưa có icon' }}
+                                {{ $amenity->icon ? ' ' : 'Chưa có icon' }}
                             </span>
 
                         </div>

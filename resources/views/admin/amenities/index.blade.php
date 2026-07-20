@@ -88,7 +88,7 @@
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <span class="flex h-10 w-10 items-center justify-center p-2 rounded-lg bg-blue-50 text-xl">
-                                            {{ $amenity->icon ?: '✅' }}
+                                            {{ $amenity->icon ?: '💎' }}
                                         </span>
 
                                         <span class="font-semibold text-slate-900">

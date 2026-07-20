@@ -31,8 +31,16 @@ class UpdateHomestayRequest extends FormRequest
             'phone' => ['nullable', 'regex:/^(0)[0-9]{9,10}$/'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'remove_image' => ['nullable','boolean'],
+            'remove_image' => ['nullable', 'boolean'],
             'status' => ['required', 'boolean'],
+            'amenities' => [
+                'nullable',
+                'array',
+            ],
+            'amenities.*' => [
+                'integer',
+                'exists:amenities,id',
+            ],
         ];
     }
 
@@ -70,6 +78,10 @@ class UpdateHomestayRequest extends FormRequest
             'status.boolean' => 'Trạng thái không hợp lệ.',
 
             'remove_image.boolean' => 'Yêu cầu xóa ảnh không hợp lệ.',
+
+            'amenities.array' => 'Danh sách tiện ích không hợp lệ.',
+            'amenities.*.integer' => 'Tiện ích không hợp lệ.',
+            'amenities.*.exists' => 'Tiện ích không tồn tại.',
         ];
     }
 

@@ -72,6 +72,16 @@ class StoreHomestayRequest extends FormRequest
                 'required',
                 'boolean',
             ],
+
+            'amenities' => [
+                'nullable',
+                'array',
+            ],
+
+            'amenities.*' => [
+                'integer',
+                'exists:amenities,id',
+            ],
         ];
     }
 
@@ -107,6 +117,10 @@ class StoreHomestayRequest extends FormRequest
 
             'status.required' => 'Vui lòng chọn trạng thái.',
             'status.boolean' => 'Trạng thái không hợp lệ.',
+
+            'amenities.array' => 'Danh sách tiện ích không hợp lệ.',
+            'amenities.*.integer' => 'Tiện ích được chọn không hợp lệ.',
+            'amenities.*.exists' => 'Tiện ích được chọn không tồn tại.',
         ];
     }
 

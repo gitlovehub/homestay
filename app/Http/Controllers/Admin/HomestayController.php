@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHomestayRequest;
 use App\Http\Requests\UpdateHomestayRequest;
+use App\Models\Amenity;
 use App\Models\Category;
 use App\Models\Homestay;
 use App\Models\User;
@@ -65,9 +66,15 @@ class HomestayController extends Controller
             ->orderBy('name')
             ->get();
 
+        $amenities = Amenity::query()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
+
         return view('admin.homestays.create', compact(
             'categories',
-            'owners'
+            'owners',
+            'amenities'
         ));
     }
 
@@ -78,6 +85,10 @@ class HomestayController extends Controller
     {
         $data = $request->validated();
 
+        $amenityIds = $data['amenities'] ?? [];
+
+        unset($data['amenities']);
+
         $data['slug'] = $this->createUniqueSlug($data['name']);
 
         if ($request->hasFile('image')) {
@@ -86,7 +97,9 @@ class HomestayController extends Controller
                 ->store('homestays', 'public');
         }
 
-        Homestay::create($data);
+        $homestay = Homestay::create($data);
+
+        $homestay->amenities()->sync($amenityIds);
 
         return redirect()
             ->route('admin.homestays.index')
@@ -119,12 +132,18 @@ class HomestayController extends Controller
 
         $owners = User::orderBy('name')->get();
 
+        $amenities = Amenity::query()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
+
         return view(
             'admin.homestays.edit',
             compact(
                 'homestay',
                 'categories',
-                'owners'
+                'owners',
+                'amenities'
             )
         );
     }
@@ -135,6 +154,10 @@ class HomestayController extends Controller
     public function update(UpdateHomestayRequest $request, Homestay $homestay)
     {
         $data = $request->validated();
+
+        $amenityIds = $data['amenities'] ?? [];
+
+        unset($data['amenities']);
 
         // Cập nhật slug nếu đổi tên
         if ($data['name'] !== $homestay->name) {
@@ -168,6 +191,8 @@ class HomestayController extends Controller
         }
 
         $homestay->update($data);
+
+        $homestay->amenities()->sync($amenityIds);
 
         return redirect()
             ->route('admin.homestays.index')

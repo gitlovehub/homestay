@@ -48,13 +48,14 @@
 
                 {{-- Thông tin cơ bản --}}
                 <section>
+
                     <div class="mb-6">
                         <h2 class="text-lg font-bold text-slate-900">
                             Thông tin cơ bản
                         </h2>
 
                         <p class="mt-1 text-sm text-slate-500">
-                            Tên, danh mục và chủ sở hữu của Homestay.
+                            Tên, danh mục, chủ sở hữu và tiện ích của Homestay.
                         </p>
                     </div>
 
@@ -168,6 +169,117 @@
                         </div>
 
                     </div>
+
+                    {{-- Tiện ích --}}
+                    <div class="mt-6">
+
+                        <div class="mb-3">
+
+                            <h3 class="text-sm font-semibold text-slate-700">
+                                Tiện ích
+                                <span class="text-red-500">*</span>
+                            </h3>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                Chọn các tiện ích có tại Homestay.
+                            </p>
+
+                        </div>
+
+                        @if ($amenities->isNotEmpty())
+
+                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                                @foreach ($amenities as $amenity)
+
+                                    <label
+                                        for="amenity-{{ $amenity->id }}"
+                                        class="group cursor-pointer"
+                                    >
+
+                                        <input
+                                            id="amenity-{{ $amenity->id }}"
+                                            type="checkbox"
+                                            name="amenities[]"
+                                            value="{{ $amenity->id }}"
+                                            class="peer sr-only"
+                                            {{ in_array(
+                                                $amenity->id,
+                                                old('amenities', [])
+                                            ) ? 'checked' : '' }}
+                                        >
+
+                                        <div
+                                            class="flex h-full items-start gap-3 rounded-2xl border border-slate-300 bg-white p-4 transition
+                                                group-hover:border-blue-300
+                                                group-hover:bg-blue-50/50
+                                                peer-checked:border-blue-500
+                                                peer-checked:bg-blue-50
+                                                peer-focus-visible:ring-4
+                                                peer-focus-visible:ring-blue-100"
+                                        >
+
+                                            <div
+                                                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-xl transition peer-checked:bg-blue-100"
+                                            >
+                                                {{ $amenity->icon ?: '💎' }}
+                                            </div>
+
+                                            <div class="min-w-0">
+
+                                                <p class="font-semibold text-slate-900">
+                                                    {{ $amenity->name }}
+                                                </p>
+
+                                                @if ($amenity->description)
+                                                    <p class="mt-1 line-clamp-2 text-sm leading-5 text-slate-500">
+                                                        {{ $amenity->description }}
+                                                    </p>
+                                                @endif
+
+                                            </div>
+
+                                        </div>
+
+                                    </label>
+
+                                @endforeach
+
+                            </div>
+
+                        @else
+
+                            <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-center">
+
+                                <p class="text-sm font-medium text-slate-600">
+                                    Chưa có tiện ích đang hoạt động.
+                                </p>
+
+                                <a
+                                    href="{{ route('admin.amenities.create') }}"
+                                    class="mt-2 inline-flex cursor-pointer text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+                                >
+                                    Thêm tiện ích mới
+                                </a>
+
+                            </div>
+
+                        @endif
+
+                        @error('amenities')
+                            <p class="mt-2 text-sm font-medium text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                        @error('amenities.*')
+                            <p class="mt-2 text-sm font-medium text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
                 </section>
 
                 <div class="border-t border-slate-200"></div>

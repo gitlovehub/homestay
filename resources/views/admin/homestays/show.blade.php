@@ -162,7 +162,51 @@
                     </div>
                 </section>
 
-                <div class="border-t border-slate-200"></div>
+                {{-- Tiện ích --}}
+                <section>
+                    <h2 class="text-xl font-bold text-slate-900">
+                        Tiện ích
+                    </h2>
+                    <p class="mt-1 text-sm text-slate-500">Các tiện ích hiện có tại Homestay.</p>
+
+                    <div class="mt-5 rounded-2xl sm:col-span-2">
+
+                        @if ($homestay->amenities->isNotEmpty())
+
+                            <div class="flex flex-wrap gap-3">
+
+                                @foreach ($homestay->amenities as $amenity)
+
+                                    <div
+                                        class="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700"
+                                    >
+                                        <span class="text-lg">
+                                            {{ $amenity->icon ?: '💎' }}
+                                        </span>
+
+                                        <span>
+                                            {{ $amenity->name }}
+                                        </span>
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                        @else
+
+                            <div class="rounded-xl border border-dashed border-slate-300 bg-white p-4">
+
+                                <p class="text-sm text-slate-500">
+                                    Homestay này chưa có tiện ích.
+                                </p>
+
+                            </div>
+
+                        @endif
+
+                    </div>
+                </section>
 
                 {{-- Địa chỉ --}}
                 <section>
@@ -195,8 +239,6 @@
                     </div>
                 </section>
 
-                <div class="border-t border-slate-200"></div>
-
                 {{-- Mô tả --}}
                 <section>
                     <h2 class="mb-5 text-xl font-bold text-slate-900">
@@ -217,8 +259,6 @@
                 </section>
 
                 {{-- Thời gian --}}
-                <div class="border-t border-slate-200"></div>
-
                 <section>
                     <h2 class="mb-5 text-xl font-bold text-slate-900">
                         Thông tin hệ thống

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -57,17 +58,27 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+
+        $data['slug'] = $data['slug']
+            ? Str::slug($data['slug'])
+            : Str::slug($data['name']);
+
+        $category->update($data);
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('success', 'Cập nhật danh mục thành công.');
     }
 
     /**

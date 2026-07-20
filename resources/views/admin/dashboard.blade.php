@@ -79,7 +79,7 @@
             <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
                 <a
-                    href="#"
+                    href="{{ route('admin.categories.index') }}"
                     class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50"
                 >
                     <h3 class="font-bold text-slate-900">

@@ -23,6 +23,8 @@ Route::middleware(['auth', 'admin'])
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
+
+        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     });
 
 require __DIR__.'/auth.php';

@@ -104,7 +104,18 @@ class HomestayController extends Controller
      */
     public function edit(Homestay $homestay)
     {
-        //
+        $categories = Category::orderBy('name')->get();
+
+        $owners = User::orderBy('name')->get();
+
+        return view(
+            'admin.homestays.edit',
+            compact(
+                'homestay',
+                'categories',
+                'owners'
+            )
+        );
     }
 
     /**

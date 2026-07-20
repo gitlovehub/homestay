@@ -18,6 +18,13 @@
 
         <x-alert />
 
+        <a
+            href="{{ route('admin.dashboard') }}"
+            class="block mb-4 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+        >
+            ← Quay lại bảng điều khiển
+        </a>
+
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
             <div>

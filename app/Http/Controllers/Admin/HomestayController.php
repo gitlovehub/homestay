@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreHomestayRequest;
+use App\Models\Category;
 use App\Models\Homestay;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HomestayController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Hiển thị danh sách Homestay.
      */
     public function index(Request $request)
     {
@@ -21,8 +25,20 @@ class HomestayController extends Controller
             'amenities',
         ])
             ->when($search, function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%");
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%")
+                        ->orWhere('city', 'like', "%{$search}%")
+                        ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                            $categoryQuery->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('owner', function ($ownerQuery) use ($search) {
+                            $ownerQuery
+                                ->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
             })
             ->latest()
             ->paginate(10)
@@ -35,50 +51,97 @@ class HomestayController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Hiển thị form thêm Homestay.
      */
     public function create()
     {
-        //
+        $categories = Category::query()
+            ->orderBy('name')
+            ->get();
+
+        $owners = User::query()
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.homestays.create', compact(
+            'categories',
+            'owners'
+        ));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Lưu Homestay mới.
      */
-    public function store(Request $request)
+    public function store(StoreHomestayRequest $request)
+    {
+        $data = $request->validated();
+
+        $data['slug'] = $this->createUniqueSlug($data['name']);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request
+                ->file('image')
+                ->store('homestays', 'public');
+        }
+
+        Homestay::create($data);
+
+        return redirect()
+            ->route('admin.homestays.index')
+            ->with('success', 'Thêm Homestay thành công.');
+    }
+
+    /**
+     * Hiển thị chi tiết Homestay.
+     */
+    public function show(Homestay $homestay)
     {
         //
     }
 
     /**
-     * Display the specified resource.
+     * Hiển thị form sửa Homestay.
      */
-    public function show(string $id)
+    public function edit(Homestay $homestay)
     {
         //
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Cập nhật Homestay.
      */
-    public function edit(string $id)
+    public function update(Request $request, Homestay $homestay)
     {
         //
     }
 
     /**
-     * Update the specified resource in storage.
+     * Xóa Homestay.
      */
-    public function update(Request $request, string $id)
+    public function destroy(Homestay $homestay)
     {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Tạo slug duy nhất.
      */
-    public function destroy(string $id)
+    private function createUniqueSlug(string $name): string
     {
-        //
+        $baseSlug = Str::slug($name);
+
+        if ($baseSlug === '') {
+            $baseSlug = 'homestay';
+        }
+
+        $slug = $baseSlug;
+        $number = 1;
+
+        while (Homestay::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $number;
+            $number++;
+        }
+
+        return $slug;
     }
 }

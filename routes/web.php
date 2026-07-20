@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomestayController;
 use App\Http\Controllers\HomeController;
@@ -28,6 +29,7 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('categories', CategoryController::class);
         Route::resource('homestays', HomestayController::class);
+        Route::resource('amenities', AmenityController::class);
 });
 
 

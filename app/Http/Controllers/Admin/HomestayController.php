@@ -98,7 +98,16 @@ class HomestayController extends Controller
      */
     public function show(Homestay $homestay)
     {
-        //
+        $homestay->load([
+            'category',
+            'owner',
+            'amenities',
+        ]);
+
+        return view(
+            'admin.homestays.show',
+            compact('homestay')
+        );
     }
 
     /**

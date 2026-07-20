@@ -171,6 +171,13 @@
                                 <div class="flex justify-end gap-2">
 
                                     <a
+                                        href="{{ route('admin.homestays.show', $homestay) }}"
+                                        class="rounded-lg border border-violet-300 px-3 py-2 font-semibold text-violet-600 transition hover:bg-violet-50"
+                                    >
+                                        Xem
+                                    </a>
+
+                                    <a
                                         href="{{ route('admin.homestays.edit', $homestay) }}"
                                         class="rounded-lg border border-amber-300 px-3 py-2 font-semibold text-amber-600 transition hover:bg-amber-50">
                                         Sửa
@@ -191,7 +198,6 @@
                                             Xóa
 
                                         </button>
-
                                     </form>
 
                                 </div>

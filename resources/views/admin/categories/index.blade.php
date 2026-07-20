@@ -30,12 +30,26 @@
                 </p>
             </div>
 
-            <a
-                href="{{ route('admin.categories.create') }}"
-                class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-            >
-                + Thêm danh mục
-            </a>
+            <div class="flex items-center justify-between gap-4">
+                <form method="GET">
+                    <input
+                        type="search"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Tìm kiếm danh mục..."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2"
+                        onsearch="this.form.submit()"
+                        oninput="if(this.value === '') this.form.submit()"
+                    >
+                </form>
+
+                <a
+                    href="{{ route('admin.categories.create') }}"
+                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                    + Thêm danh mục
+                </a>
+            </div>
 
         </div>
 

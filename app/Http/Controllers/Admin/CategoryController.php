@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -23,15 +25,25 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $data['slug'] = $data['slug']
+            ? Str::slug($data['slug'])
+            : Str::slug($data['name']);
+
+        Category::create($data);
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with('success', 'Thêm danh mục thành công.');
     }
 
     /**

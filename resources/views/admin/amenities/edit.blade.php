@@ -136,7 +136,7 @@
                                     class="text-2xl"
                                     aria-label="Xem trước icon"
                                 >
-                                    {{ old('icon', $amenity->icon ?: '✅') }}
+                                    {{ old('icon', $amenity->icon ?: '⚡') }}
                                 </span>
                             </div>
 
@@ -349,7 +349,7 @@
             function updateIconPreview() {
                 const iconValue = iconInput.value.trim();
 
-                iconPreview.textContent = iconValue || '✅';
+                iconPreview.textContent = iconValue || '⚡';
             }
 
             function updateDescriptionCounter() {

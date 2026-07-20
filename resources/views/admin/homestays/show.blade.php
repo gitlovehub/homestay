@@ -22,7 +22,7 @@
     <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
 
         {{-- Điều hướng --}}
-        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mb-6 flex flex-row gap-4 items-center justify-between">
 
             <a
                 href="{{ route('admin.homestays.index') }}"
@@ -31,12 +31,30 @@
                 ← Quay lại danh sách Homestay
             </a>
 
-            <a
-                href="{{ route('admin.homestays.edit', $homestay) }}"
-                class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-600"
-            >
-                Sửa Homestay
-            </a>
+            <div class="flex justify-end gap-2">
+
+                <a
+                    href="{{ route('admin.homestays.edit', $homestay) }}"
+                    class="rounded-lg border border-amber-300 px-3 py-2 font-semibold text-amber-600 transition hover:bg-amber-50">
+                    Sửa
+                </a>
+
+                <form
+                    action="{{ route('admin.homestays.destroy', $homestay) }}"
+                    method="POST"
+                    onsubmit="return confirm('Bạn có chắc muốn xóa Homestay này không?')">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button
+                        type="submit"
+                        class="cursor-pointer rounded-lg border border-red-300 px-3 py-2 font-semibold text-red-600 transition hover:bg-red-50">
+                        Xóa
+                    </button>
+                </form>
+
+            </div>
 
         </div>
 

@@ -18,7 +18,7 @@
 
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-slate-900">
-                Trang quản trị
+                Bảng điều khiển
             </h1>
 
             <p class="mt-2 text-slate-500">

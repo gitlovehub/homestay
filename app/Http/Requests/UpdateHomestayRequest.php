@@ -68,6 +68,8 @@ class UpdateHomestayRequest extends FormRequest
 
             'status.required' => 'Vui lòng chọn trạng thái.',
             'status.boolean' => 'Trạng thái không hợp lệ.',
+
+            'remove_image.boolean' => 'Yêu cầu xóa ảnh không hợp lệ.',
         ];
     }
 

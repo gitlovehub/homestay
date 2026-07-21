@@ -2,9 +2,14 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get(
+    '/homestays/{slug}',
+    [FrontendHomestayController::class, 'show']
+)->name('homestays.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

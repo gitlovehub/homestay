@@ -268,7 +268,7 @@
                                     </div>
 
                                     <a
-                                        href="#"
+                                        href="{{ route('homestays.show', $homestay->slug) }}"
                                         class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white"
                                     >
                                         Xem chi tiết

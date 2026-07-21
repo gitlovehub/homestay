@@ -74,7 +74,7 @@
                         @if ($homestay->image)
 
                             <img
-                                src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80"
+                                src="{{ Storage::url($homestay->image) }}"
                                 alt="{{ $homestay->name }}"
                                 class="h-[320px] w-full object-cover sm:h-[450px] lg:h-[520px]"
                             >

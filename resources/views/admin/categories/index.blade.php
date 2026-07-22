@@ -100,7 +100,7 @@
                                     <div class="flex justify-end gap-2">
 
                                         <a
-                                            href="#"
+                                            href="{{ route('admin.categories.edit', $category) }}"
                                             class="rounded-lg border border-amber-300 px-3 py-2 font-semibold text-amber-600 transition hover:bg-amber-50"
                                         >
                                             Sửa

@@ -52,7 +52,6 @@
                             name="name"
                             type="text"
                             value="{{ old('name') }}"
-                            required
                             autofocus
                             autocomplete="name"
                             placeholder="Nhập họ và tên"
@@ -77,7 +76,6 @@
                             name="email"
                             type="email"
                             value="{{ old('email') }}"
-                            required
                             autocomplete="username"
                             placeholder="example@gmail.com"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -100,7 +98,6 @@
                             id="password"
                             name="password"
                             type="password"
-                            required
                             autocomplete="new-password"
                             placeholder="Tối thiểu 8 ký tự"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -123,7 +120,6 @@
                             id="password_confirmation"
                             name="password_confirmation"
                             type="password"
-                            required
                             autocomplete="new-password"
                             placeholder="Nhập lại mật khẩu"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -136,7 +132,6 @@
                         <input
                             type="checkbox"
                             name="terms"
-                            required
                             class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                         >
 

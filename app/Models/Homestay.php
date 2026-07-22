@@ -16,6 +16,7 @@ class Homestay extends Model
         'owner_id',
         'name',
         'slug',
+        'price',
         'address',
         'city',
         'phone',

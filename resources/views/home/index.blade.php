@@ -26,17 +26,13 @@
                 </p>
 
                 <div class="mt-8 flex flex-wrap gap-4">
-                    <a
-                        href="#featured"
-                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
-                    >
+                    <a href="#featured"
+                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700">
                         Khám phá ngay
                     </a>
 
-                    <a
-                        href="#about"
-                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
-                    >
+                    <a href="#about"
+                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600">
                         Tìm hiểu thêm
                     </a>
                 </div>
@@ -73,11 +69,8 @@
 
             <div class="relative">
                 <div class="overflow-hidden rounded-[2rem] bg-white p-3 shadow-2xl shadow-slate-900/15">
-                    <img
-                        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
-                        alt="Homestay nổi bật"
-                        class="h-[480px] w-full rounded-[1.5rem] object-cover"
-                    >
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+                        alt="Homestay nổi bật" class="h-[480px] w-full rounded-[1.5rem] object-cover">
                 </div>
 
                 <div class="absolute -bottom-6 -left-6 hidden rounded-2xl bg-white p-4 shadow-xl sm:block">
@@ -104,82 +97,118 @@
     {{-- Search --}}
     <section class="relative z-10 -mt-5 px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/10">
-            <form
-                action="{{ route('home') }}"
-                method="GET"
-                class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
-            >
-                <div class="lg:col-span-2">
-                    <label
-                        for="location"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
+            <form action="{{ route('home') }}" method="GET" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {{-- Địa điểm --}}
+                <div>
+                    <label for="location" class="mb-2 block text-sm font-semibold text-slate-700">
                         Địa điểm
                     </label>
 
-                    <input
-                        id="location"
-                        type="text"
-                        name="location"
-                        value="{{ request('location') }}"
+                    <input id="location" type="text" name="location" value="{{ request('location') }}"
                         placeholder="Đà Lạt, Sa Pa, Hội An..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                 </div>
 
+                {{-- Ngày nhận phòng --}}
                 <div>
-                    <label
-                        for="check_in"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
+                    <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
                         Ngày nhận phòng
                     </label>
 
-                    <input
-                        id="check_in"
-                        type="date"
-                        name="check_in"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                    <input id="check_in" type="date" name="check_in" value="{{ request('check_in') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                 </div>
 
+                {{-- Ngày trả phòng --}}
                 <div>
-                    <label
-                        for="check_out"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
+                    <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
                         Ngày trả phòng
                     </label>
 
-                    <input
-                        id="check_out"
-                        type="date"
-                        name="check_out"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                    <input id="check_out" type="date" name="check_out" value="{{ request('check_out') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                 </div>
 
+                {{-- Khoảng giá --}}
+                <div>
+                    <label for="price_range" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Khoảng giá
+                    </label>
+
+                    <select id="price_range" name="price_range"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        <option value="">Tất cả mức giá</option>
+                        <option value="under_500" @selected(request('price_range') === 'under_500')>
+                            Dưới 500.000đ
+                        </option>
+                        <option value="500_1000" @selected(request('price_range') === '500_1000')>
+                            500.000đ - 1.000.000đ
+                        </option>
+                        <option value="1000_2000" @selected(request('price_range') === '1000_2000')>
+                            1.000.000đ - 2.000.000đ
+                        </option>
+                        <option value="over_2000" @selected(request('price_range') === 'over_2000')>
+                            Trên 2.000.000đ
+                        </option>
+                    </select>
+                </div>
+
+                {{-- Loại phòng --}}
+                <div>
+                    <label for="category_id" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Loại phòng
+                    </label>
+
+                    <select id="category_id" name="category_id"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        <option value="">Tất cả loại phòng</option>
+
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected((string) request('category_id') === (string) $category->id)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Sắp xếp --}}
+                <div>
+                    <label for="sort_price" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Sắp xếp
+                    </label>
+
+                    <select id="sort_price" name="sort_price"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        <option value="">Mới nhất</option>
+                        <option value="asc" @selected(request('sort_price') === 'asc')>
+                            Giá thấp đến cao
+                        </option>
+                        <option value="desc" @selected(request('sort_price') === 'desc')>
+                            Giá cao đến thấp
+                        </option>
+                    </select>
+                </div>
+
+                {{-- Nút tìm kiếm --}}
                 <div class="flex items-end">
-                    <button
-                        type="submit"
-                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
-                    >
+                    <button type="submit"
+                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700">
                         Tìm kiếm
                     </button>
                 </div>
-            </form>
 
-            <p class="mt-3 text-xs text-slate-400">
-                Chức năng tìm kiếm sẽ được kết nối ở phần tiếp theo.
-            </p>
-        </div>
+                {{-- Nút xóa lọc --}}
+                <div class="flex items-end">
+                    <a href="{{ route('home') }}"
+                        class="w-full rounded-xl border border-slate-300 px-5 py-3 text-center font-semibold text-slate-600 transition hover:bg-slate-100">
+                        Xóa bộ lọc
+                    </a>
+                </div>
+            </form>
     </section>
 
     {{-- Featured --}}
-    <section
-        id="featured"
-        class="py-20"
-    >
+    <section id="featured" class="py-20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                 <div>
@@ -196,10 +225,7 @@
                     </p>
                 </div>
 
-                <a
-                    href="#"
-                    class="font-semibold text-blue-600 hover:text-blue-700"
-                >
+                <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
                     Xem tất cả →
                 </a>
             </div>
@@ -217,65 +243,64 @@
             @else
                 <div class="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($homestays as $homestay)
-                        <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                            <div class="relative overflow-hidden">
-                                <img
-                                    src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
-                                    alt="{{ $homestay->name }}"
-                                    class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-                                >
+                            <article
+                                class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                                <div class="relative overflow-hidden">
+                                    <img src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
+                                        alt="{{ $homestay->name }}"
+                                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
 
-                                <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow">
-                                    {{ $homestay->category?->name ?? 'Homestay' }}
-                                </span>
+                                    <span
+                                        class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow">
+                                        {{ $homestay->category?->name ?? 'Homestay' }}
+                                    </span>
 
-                                <span class="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white">
-                                    Còn hoạt động
-                                </span>
-                            </div>
-
-                            <div class="p-6">
-                                <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-medium text-blue-600">
-                                        {{ $homestay->city }}
-                                    </p>
-
-                                    <span class="text-sm text-amber-500">
-                                        ★ 4.8
+                                    <span
+                                        class="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white">
+                                        Còn hoạt động
                                     </span>
                                 </div>
 
-                                <h3 class="mt-2 line-clamp-1 text-xl font-bold text-slate-950">
-                                    {{ $homestay->name }}
-                                </h3>
-
-                                <p class="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
-                                    {{ \Illuminate\Support\Str::limit(
-                                        $homestay->description ?? 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
-                                        100
-                                    ) }}
-                                </p>
-
-                                <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
-                                    <div>
-                                        <p class="text-xs text-slate-400">
-                                            Địa chỉ
+                                <div class="p-6">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <p class="text-sm font-medium text-blue-600">
+                                            {{ $homestay->city }}
                                         </p>
 
-                                        <p class="mt-1 max-w-48 truncate text-sm font-semibold text-slate-700">
-                                            {{ $homestay->address }}
-                                        </p>
+                                        <span class="text-sm text-amber-500">
+                                            ★ 4.8
+                                        </span>
                                     </div>
 
-                                    <a
-                                        href="{{ route('homestays.show', $homestay->slug) }}"
-                                        class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white"
-                                    >
-                                        Xem chi tiết
-                                    </a>
+                                    <h3 class="mt-2 line-clamp-1 text-xl font-bold text-slate-950">
+                                        {{ $homestay->name }}
+                                    </h3>
+
+                                    <p class="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
+                                        {{ \Illuminate\Support\Str::limit(
+                            $homestay->description ?? 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
+                            100
+                        ) }}
+                                    </p>
+
+                                    <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
+                                        <div>
+                                            <p class="text-xs text-slate-400">
+                                                Địa chỉ
+                                            </p>
+
+                                            <p class="mt-1 max-w-48 truncate text-sm font-semibold text-slate-700">
+                                                {{ $homestay->address }}
+                                            </p>
+                                        </div>
+
+                                        <a href="{{ route('homestays.show', $homestay->slug) }}"
+                                            class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white">
+                                            Xem chi tiết
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
+                            </article>
                     @endforeach
                 </div>
 
@@ -287,10 +312,7 @@
     </section>
 
     {{-- About --}}
-    <section
-        id="about"
-        class="bg-slate-100 py-20"
-    >
+    <section id="about" class="bg-slate-100 py-20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <p class="font-semibold uppercase tracking-widest text-blue-600">

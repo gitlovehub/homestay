@@ -66,6 +66,10 @@ class DatabaseSeeder extends Seeder
             'Máy giặt',
             'Bữa sáng',
             'Ban công',
+            'BBQ',
+            'Xe đạp miễn phí',
+            'Đưa đón sân bay',
+            'Thang máy',
         ];
 
         foreach ($amenityNames as $amenityName) {
@@ -83,7 +87,7 @@ class DatabaseSeeder extends Seeder
         |--------------------------------------------------------------------------
         */
 
-        Homestay::factory(20)->create([
+        Homestay::factory(50)->create([
             'owner_id' => $admin->id,
         ]);
 
@@ -103,5 +107,9 @@ class DatabaseSeeder extends Seeder
 
             $homestay->amenities()->attach($randomAmenityIds);
         });
+        
+        $this->call([
+            RoomSeeder::class,
+        ]);
     }
 }

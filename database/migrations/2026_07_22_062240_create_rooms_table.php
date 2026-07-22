@@ -18,8 +18,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->string('name');            // Phòng 101
-            $table->string('room_type');       // Deluxe, Suite...
+            $table->string('name');         
+            $table->string('room_type');       
             $table->unsignedBigInteger('price');
             $table->integer('capacity');
             $table->boolean('status')->default(true);

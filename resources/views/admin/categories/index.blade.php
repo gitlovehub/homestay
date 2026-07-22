@@ -16,6 +16,8 @@
 
     <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
+        <x-alert />
+
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
             <div>
@@ -29,7 +31,7 @@
             </div>
 
             <a
-                href="#"
+                href="{{ route('admin.categories.create') }}"
                 class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
                 + Thêm danh mục

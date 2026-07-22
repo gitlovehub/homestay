@@ -45,8 +45,8 @@
                     Xin chào, {{ auth()->user()->name }}
                 </span>
 
-                @if(Route::has('dashboard'))
-                    <a href="{{ route('dashboard') }}"
+                @if (auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
                         class="rounded-xl border border-blue-600 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
                         Quản trị
                     </a>

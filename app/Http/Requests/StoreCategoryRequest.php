@@ -17,6 +17,7 @@ class StoreCategoryRequest extends FormRequest
             'name' => 'required|max:255|unique:categories,name',
             'slug' => 'nullable|max:255|unique:categories,slug',
             'description' => 'nullable|max:1000',
+            'status' => ['required', 'boolean'],
         ];
     }
 
@@ -31,6 +32,9 @@ class StoreCategoryRequest extends FormRequest
             'slug.max' => 'Slug không được quá 255 ký tự.',
 
             'description.max' => 'Mô tả không được quá 1000 ký tự.',
+
+            'status.required' => 'Vui lòng chọn trạng thái danh mục.',
+            'status.boolean' => 'Trạng thái danh mục không hợp lệ.',
         ];
     }
 }

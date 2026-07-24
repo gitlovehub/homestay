@@ -26,20 +26,22 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name' => [
                 'required',
-                'max:100',
+                'max:255',
                 Rule::unique('categories')->ignore($this->category),
             ],
 
             'slug' => [
                 'nullable',
-                'max:100',
+                'max:255',
                 Rule::unique('categories')->ignore($this->category),
             ],
 
             'description' => [
                 'nullable',
-                'max:500',
+                'max:1000',
             ],
+
+            'status' => 'required|boolean',
         ];
     }
 }

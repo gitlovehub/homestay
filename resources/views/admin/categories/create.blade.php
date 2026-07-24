@@ -14,9 +14,7 @@
 
     @include('partials.navbar')
 
-    <main class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-
-        <x-alert />
+    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
 
         <div class="mb-8">
 
@@ -24,7 +22,8 @@
                 href="{{ route('admin.categories.index') }}"
                 class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
             >
-                ← Quay lại danh sách
+                <span aria-hidden="true">←</span>
+                Quay lại danh sách
             </a>
 
             <h1 class="mt-4 text-3xl font-bold text-slate-900">
@@ -37,127 +36,240 @@
 
         </div>
 
-        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <form
+            method="POST"
+            action="{{ route('admin.categories.store') }}"
+            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+        >
 
-            <form
-                method="POST"
-                action="{{ route('admin.categories.store') }}"
-                class="space-y-6"
-            >
+            @csrf
 
-                @csrf
+            <div class="space-y-8 p-6 sm:p-8">
 
                 {{-- Tên danh mục --}}
-                <div>
+                <section>
+                    <div>
 
-                    <label
-                        for="name"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Tên danh mục
-                        <span class="text-red-500">*</span>
-                    </label>
+                        <label
+                            for="name"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Tên danh mục
+                            <span class="text-red-500">*</span>
+                        </label>
 
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        value="{{ old('name') }}"
-                        required
-                        autofocus
-                        placeholder="Ví dụ: Villa, Nhà gỗ, Căn hộ..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            value="{{ old('name') }}"
+                            autofocus
+                            placeholder="Ví dụ: Villa, Nhà gỗ, Căn hộ..."
+                            
+                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('name')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"
+                        >
 
-                    @error('name')
-                        <p class="mt-2 text-sm font-medium text-red-600">
-                            {{ $message }}
-                        </p>
-                    @enderror
+                        @error('name')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
 
-                </div>
+                    </div>
+                </section>
 
                 {{-- Slug --}}
-                <div>
+                <section>
+                    <div>
 
-                    <label
-                        for="slug"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Slug
-                    </label>
+                        <label
+                            for="slug"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Slug
+                        </label>
 
-                    <input
-                        id="slug"
-                        name="slug"
-                        type="text"
-                        value="{{ old('slug') }}"
-                        placeholder="Để trống để hệ thống tự tạo"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                        <input
+                            id="slug"
+                            name="slug"
+                            type="text"
+                            value="{{ old('slug') }}"
+                            placeholder="Để trống để hệ thống tự tạo"
+                            
+                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('slug')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"
+                        >
 
-                    <p class="mt-2 text-xs text-slate-500">
-                        Ví dụ: “Nhà gỗ” sẽ có slug là “nha-go”.
-                    </p>
-
-                    @error('slug')
-                        <p class="mt-2 text-sm font-medium text-red-600">
-                            {{ $message }}
+                        <p class="mt-2 text-xs text-slate-500">
+                            Ví dụ: “Nhà gỗ” sẽ có slug là “nha-go”.
                         </p>
-                    @enderror
 
-                </div>
+                        @error('slug')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+                </section>
 
                 {{-- Mô tả --}}
-                <div>
+                <section>
+                    <div>
 
-                    <label
-                        for="description"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Mô tả
-                    </label>
+                        <div class="mb-2 flex items-center justify-between gap-4">
 
-                    <textarea
-                        id="description"
-                        name="description"
-                        rows="5"
-                        placeholder="Nhập mô tả ngắn cho danh mục..."
-                        class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >{{ old('description') }}</textarea>
+                            <label
+                                for="description"
+                                class="block text-sm font-semibold text-slate-700"
+                            >
+                                Mô tả
+                            </label>
 
-                    @error('description')
-                        <p class="mt-2 text-sm font-medium text-red-600">
-                            {{ $message }}
-                        </p>
-                    @enderror
+                            <span
+                                id="description-counter"
+                                class="text-xs font-medium text-slate-400"
+                            >
+                                0 ký tự
+                            </span>
 
-                </div>
+                        </div>
 
-                <div class="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="5"
+                            placeholder="Nhập mô tả ngắn cho danh mục..."
+                            class="w-full resize-y rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('description')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                                }}"                            
+                        >{{ old('description') }}</textarea>
 
-                    <a
-                        href="{{ route('admin.categories.index') }}"
-                        class="rounded-xl border border-slate-300 px-6 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                    >
-                        Hủy
-                    </a>
+                        @error('description')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
 
-                    <button
-                        type="submit"
-                        class="rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                    >
-                        Thêm danh mục
-                    </button>
+                    </div>
+                </section>
 
-                </div>
+                {{-- Trạng thái --}}
+                <section>
+                    <div>
+                        <label class="mb-3 block text-sm font-semibold text-slate-700">
+                            Trạng thái
+                            <span class="text-red-500">*</span>
+                        </label>
 
-            </form>
+                        <div class="grid gap-3 sm:grid-cols-2">
 
-        </div>
+                            <label
+                                for="status-active"
+                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-emerald-400 hover:bg-emerald-50"
+                            >
+                                <div class="flex items-start gap-3">
+                                    <input
+                                        id="status-active"
+                                        name="status"
+                                        type="radio"
+                                        value="1"
+                                        {{ old('status', '1') == '1' ? 'checked' : '' }}
+                                        class="mt-1 h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                    >
+
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-900">
+                                            Hoạt động
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-slate-500">
+                                            Danh mục được phép hiển thị và sử dụng.
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label
+                                for="status-inactive"
+                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-red-400 hover:bg-red-50"
+                            >
+                                <div class="flex items-start gap-3">
+                                    <input
+                                        id="status-inactive"
+                                        name="status"
+                                        type="radio"
+                                        value="0"
+                                        {{ old('status') == '0' ? 'checked' : '' }}
+                                        class="mt-1 h-4 w-4 border-slate-300 text-red-600 focus:ring-red-500"
+                                    >
+
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-900">
+                                            Tạm khóa
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-slate-500">
+                                            Danh mục chưa được phép hiển thị hoặc sử dụng.
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+
+                        </div>
+
+                        @error('status')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
+
+                <a
+                    href="{{ route('admin.categories.index') }}"
+                    class="rounded-xl border border-slate-300 px-6 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                    Hủy
+                </a>
+
+                <button
+                    type="submit"
+                    class="cursor-pointer rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                >
+                    Thêm danh mục
+                </button>
+
+            </div>
+
+        </form>
 
     </main>
 
+    <script>
+        const description = document.getElementById('description');
+        const counter = document.getElementById('description-counter');
+
+        const updateCounter = () => {
+            counter.textContent = `${description.value.length} ký tự`;
+        };
+
+        description.addEventListener('input', updateCounter);
+        updateCounter();
+    </script>
 </body>
 
 </html>

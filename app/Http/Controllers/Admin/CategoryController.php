@@ -19,9 +19,9 @@ class CategoryController extends Controller
         $categories = Category::when($request->search, function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->search . '%');
         })
-        ->latest()
-        ->paginate(10)
-        ->withQueryString();
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -41,7 +41,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        $data['slug'] = $data['slug']
+        $data['slug'] = !empty($data['slug'])
             ? Str::slug($data['slug'])
             : Str::slug($data['name']);
 
@@ -75,7 +75,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        $data['slug'] = $data['slug']
+        $data['slug'] = !empty($data['slug'])
             ? Str::slug($data['slug'])
             : Str::slug($data['name']);
 

@@ -27,7 +27,8 @@ return new class extends Migration {
                 ->cascadeOnDelete();
 
             $table->unsignedTinyInteger('rating');
-            $table->text('comment')->nullable();
+            $table->string('title')->nullable();
+            $table->text('content')->nullable();
 
             $table->enum('status', [
                 'pending',

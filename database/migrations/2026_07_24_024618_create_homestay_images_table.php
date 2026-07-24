@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('image_path');
             $table->string('alt_text')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
-            $table->boolean('is_thumbnail')->default(false);
+            $table->boolean('is_primary')->default(false);
 
             $table->timestamps();
         });

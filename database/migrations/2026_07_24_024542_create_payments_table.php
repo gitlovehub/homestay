@@ -32,13 +32,13 @@ return new class extends Migration {
 
             $table->enum('status', [
                 'pending',
-                'success',
+                'paid',
                 'failed',
                 'refunded',
             ])->default('pending');
 
             $table->dateTime('paid_at')->nullable();
-            $table->json('payment_data')->nullable();
+            $table->json('response_data')->nullable();
 
             $table->timestamps();
         });

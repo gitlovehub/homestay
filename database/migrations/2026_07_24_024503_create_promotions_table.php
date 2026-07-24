@@ -23,14 +23,14 @@ return new class extends Migration {
             ]);
 
             $table->decimal('discount_value', 12, 2);
-            $table->unsignedBigInteger('minimum_order')->default(0);
-            $table->unsignedBigInteger('maximum_discount')->nullable();
+            $table->unsignedBigInteger('min_order_value')->default(0);
+            $table->unsignedBigInteger('max_discount')->nullable();
 
             $table->unsignedInteger('usage_limit')->nullable();
             $table->unsignedInteger('used_count')->default(0);
 
-            $table->dateTime('start_at');
-            $table->dateTime('end_at');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
 
             $table->boolean('status')->default(true);
 

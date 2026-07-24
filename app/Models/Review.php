@@ -24,6 +24,7 @@ class Review extends Model
     protected function casts(): array
     {
         return [
+            'review_number' => 'integer',
             'rating' => 'integer',
         ];
     }

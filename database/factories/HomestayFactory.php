@@ -94,7 +94,6 @@ class HomestayFactory extends Factory
             ]),
 
             'thumbnail' => null,
-            'image' => null,
 
             'status' => true,
         ];

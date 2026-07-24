@@ -28,7 +28,6 @@ class Homestay extends Model
         'check_out_time',
         'policy',
         'thumbnail',
-        'image',
         'status',
     ];
 

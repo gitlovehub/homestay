@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('booking_id')
-                ->unique()
                 ->constrained()
                 ->cascadeOnDelete();
 
@@ -35,6 +34,13 @@ return new class extends Migration {
                 'approved',
                 'hidden',
             ])->default('pending');
+
+            $table->unsignedTinyInteger('review_number')->default(1);
+
+            $table->unique(
+                ['booking_id', 'review_number'],
+                'reviews_booking_review_number_unique'
+            );
 
             $table->timestamps();
         });

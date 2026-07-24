@@ -14,11 +14,10 @@ class Review extends Model
         'booking_id',
         'user_id',
         'homestay_id',
-
+        'review_number',
         'rating',
         'title',
         'content',
-
         'status',
     ];
 

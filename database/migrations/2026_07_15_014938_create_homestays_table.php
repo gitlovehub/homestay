@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string('city');
             $table->string('phone', 20)->nullable();
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
             $table->boolean('status')->default(true);
 
             $table->timestamps();

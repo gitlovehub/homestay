@@ -111,7 +111,6 @@
                             value="{{ old('email') }}"
                             placeholder="example@gmail.com"
                             autocomplete="email"
-                            required
                             autofocus
                             class="w-full rounded-xl border px-4 py-3.5 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('email')
@@ -150,7 +149,6 @@
                                 name="password"
                                 placeholder="Nhập mật khẩu"
                                 autocomplete="current-password"
-                                required
                                 class="w-full rounded-xl border border-slate-300 px-4 py-3.5 pr-16 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                             >
 

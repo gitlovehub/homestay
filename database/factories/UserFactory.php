@@ -2,44 +2,71 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+
+            'phone' => fake()->unique()->numerify('09########'),
+            'address' => fake()->randomElement([
+                'Hà Nội',
+                'Đà Nẵng',
+                'Đà Lạt',
+                'TP. Hồ Chí Minh',
+                'Nha Trang',
+                'Hội An',
+                'Sa Pa',
+                'Phú Quốc',
+            ]),
+
+            'avatar' => null,
+
+            'password' => static::$password ??= Hash::make('12345678'),
+
+            'role' => 'user',
+            'status' => fake()->randomElement([
+                'active',
+                'active',
+                'active',
+                'inactive',
+            ]),
+
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'role' => 'admin',
+            'status' => 'active',
+        ]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'active',
+        ]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'inactive',
         ]);
     }
 }

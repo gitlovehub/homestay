@@ -157,7 +157,16 @@ class HomestayController extends Controller
             ? Str::slug($data['slug'])
             : Str::slug($data['name']);
 
-        if ($request->hasFile('thumbnail')) {
+        if ($request->boolean('remove_thumbnail')) {
+            if (
+                $homestay->thumbnail &&
+                Storage::disk('public')->exists($homestay->thumbnail)
+            ) {
+                Storage::disk('public')->delete($homestay->thumbnail);
+            }
+
+            $data['thumbnail'] = null;
+        } elseif ($request->hasFile('thumbnail')) {
             if (
                 $homestay->thumbnail &&
                 Storage::disk('public')->exists($homestay->thumbnail)

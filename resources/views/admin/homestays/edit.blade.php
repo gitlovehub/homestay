@@ -685,6 +685,13 @@
                                 class="hidden"
                             >
 
+                            <input
+                                type="hidden"
+                                name="remove_thumbnail"
+                                id="remove_thumbnail"
+                                value="0"
+                            >
+
                             @error('thumbnail')
                                 <p class="mt-2 text-sm font-medium text-red-600">
                                     {{ $message }}
@@ -958,10 +965,11 @@
 
     <script>
         const thumbnailInput = document.getElementById('thumbnail');
+        const thumbnailPreview = document.getElementById('thumbnail-preview');
+        const thumbnailPreviewWrapper = document.getElementById('thumbnail-preview-wrapper');
         const thumbnailName = document.getElementById('thumbnail-name');
-        const previewWrapper = document.getElementById('thumbnail-preview-wrapper');
-        const previewImage = document.getElementById('thumbnail-preview');
         const removeThumbnailButton = document.getElementById('remove-thumbnail');
+        const removeThumbnailInput = document.getElementById('remove_thumbnail');
 
         let previewUrl = null;
 
@@ -973,53 +981,47 @@
                 return;
             }
 
+            removeThumbnailInput.value = '0';
+
             if (previewUrl) {
                 URL.revokeObjectURL(previewUrl);
             }
 
             previewUrl = URL.createObjectURL(file);
-            previewImage.src = previewUrl;
+
+            thumbnailPreview.src = previewUrl;
             thumbnailName.textContent = file.name;
-            previewWrapper.classList.remove('hidden');
+            thumbnailPreviewWrapper.classList.remove('hidden');
         });
 
         removeThumbnailButton.addEventListener('click', function () {
             thumbnailInput.value = '';
-            hideThumbnailPreview();
-        });
-
-        function hideThumbnailPreview() {
-            previewWrapper.classList.add('hidden');
-            thumbnailName.textContent = 'JPG, JPEG, PNG hoặc WEBP. Tối đa 3MB.';
+            removeThumbnailInput.value = '1';
 
             if (previewUrl) {
                 URL.revokeObjectURL(previewUrl);
                 previewUrl = null;
             }
 
-            previewImage.src = '';
+            thumbnailPreview.src = '';
+            thumbnailPreviewWrapper.classList.add('hidden');
+
+            thumbnailName.textContent =
+                'JPG, JPEG, PNG hoặc WEBP. Tối đa 2MB.';
+        });
+
+        function hideThumbnailPreview() {
+            thumbnailPreviewWrapper.classList.add('hidden');
+            thumbnailName.textContent =
+                'JPG, JPEG, PNG hoặc WEBP. Tối đa 2MB.';
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+                previewUrl = null;
+            }
+
+            thumbnailPreview.src = '';
         }
-
-        const description = document.getElementById('description');
-        const descriptionCounter = document.getElementById('description-counter');
-
-        const policy = document.getElementById('policy');
-        const policyCounter = document.getElementById('policy-counter');
-
-        const updateCounter = (input, counter, maximum) => {
-            counter.textContent = `${input.value.length}/${maximum} ký tự`;
-        };
-
-        description.addEventListener('input', function () {
-            updateCounter(description, descriptionCounter, 3000);
-        });
-
-        policy.addEventListener('input', function () {
-            updateCounter(policy, policyCounter, 3000);
-        });
-
-        updateCounter(description, descriptionCounter, 3000);
-        updateCounter(policy, policyCounter, 3000);
     </script>
 
 </body>

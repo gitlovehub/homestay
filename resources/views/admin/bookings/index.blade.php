@@ -346,7 +346,7 @@
                                             {{-- Xem chi tiết --}}
                                             <a
                                                 href="{{ route('admin.bookings.show', $booking) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                                             >
                                                 <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
                                                     👁

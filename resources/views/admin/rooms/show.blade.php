@@ -68,7 +68,7 @@
 
                                 <div class="text-center">
                                     <div class="text-6xl">
-                                        🛏️
+                                        🚪
                                     </div>
 
                                     <p class="mt-4 font-semibold text-slate-600">

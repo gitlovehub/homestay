@@ -69,7 +69,7 @@
         </div>
 
         {{-- Bảng --}}
-        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
             <div class="overflow-x-auto">
 
@@ -121,7 +121,7 @@
                                             >
                                         @else
                                             <div class="flex h-14 w-20 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-2xl">
-                                                🛏️
+                                                🚪
                                             </div>
                                         @endif
 
@@ -234,12 +234,10 @@
                         @empty
 
                             <tr>
-                                <td
-                                    colspan="7"
-                                    class="px-6 py-16 text-center"
-                                >
+                                <td colspan="6" class="px-6 py-14 text-center">
+
                                     <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-3xl">
-                                        🛏️
+                                        🚪
                                     </div>
 
                                     <p class="mt-4 font-semibold text-slate-700">
@@ -256,6 +254,7 @@
                                     >
                                         Thêm phòng mới
                                     </a>
+
                                 </td>
                             </tr>
 

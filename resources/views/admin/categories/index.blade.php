@@ -161,7 +161,7 @@
                         @empty
 
                             <tr>
-                                <td colspan="6" class="px-6 py-14 text-center">
+                                <td colspan="5" class="px-6 py-14 text-center">
 
                                     <div class="mx-auto max-w-md">
 
@@ -187,7 +187,7 @@
             </div>
 
             @if ($categories->hasPages())
-                <div class="border-t border-slate-200 px-6 py-4">
+                <div class="border-t border-slate-200 px-6 py-5">
                     {{ $categories->links() }}
                 </div>
             @endif

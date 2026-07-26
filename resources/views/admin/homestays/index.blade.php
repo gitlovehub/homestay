@@ -256,7 +256,7 @@
             </div>
 
             @if ($homestays->hasPages())
-                <div class="border-t border-slate-200 px-6 py-4">
+                <div class="border-t border-slate-200 px-6 py-5">
                     {{ $homestays->links() }}
                 </div>
             @endif

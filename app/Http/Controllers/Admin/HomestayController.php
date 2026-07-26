@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHomestayRequest;
+use App\Http\Requests\UpdateHomestayRequest;
 use App\Models\Amenity;
 use App\Models\Category;
 use App\Models\Homestay;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class HomestayController extends Controller
@@ -105,12 +107,69 @@ class HomestayController extends Controller
 
     public function edit(Homestay $homestay)
     {
-        //
+        $categories = Category::query()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
+
+        $owners = User::query()
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        $amenities = Amenity::query()
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
+
+        $homestay->load('amenities');
+
+        return view(
+            'admin.homestays.edit',
+            compact(
+                'homestay',
+                'categories',
+                'owners',
+                'amenities'
+            )
+        );
     }
 
-    public function update(Request $request, Homestay $homestay)
-    {
-        //
+    public function update(
+        UpdateHomestayRequest $request,
+        Homestay $homestay
+    ) {
+        $data = $request->validated();
+
+        $amenities = $data['amenities'] ?? [];
+        unset($data['amenities']);
+
+        $data['slug'] = !empty($data['slug'])
+            ? Str::slug($data['slug'])
+            : Str::slug($data['name']);
+
+        if ($request->hasFile('thumbnail')) {
+            if (
+                $homestay->thumbnail &&
+                Storage::disk('public')->exists($homestay->thumbnail)
+            ) {
+                Storage::disk('public')->delete($homestay->thumbnail);
+            }
+
+            $data['thumbnail'] = $request
+                ->file('thumbnail')
+                ->store('homestays/thumbnails', 'public');
+        } else {
+            unset($data['thumbnail']);
+        }
+
+        $homestay->update($data);
+
+        $homestay->amenities()->sync($amenities);
+
+        return redirect()
+            ->route('admin.homestays.index')
+            ->with('success', 'Cập nhật Homestay thành công.');
     }
 
     public function destroy(Homestay $homestay)

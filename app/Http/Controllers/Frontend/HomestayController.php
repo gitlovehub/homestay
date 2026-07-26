@@ -8,9 +8,6 @@ use Illuminate\View\View;
 
 class HomestayController extends Controller
 {
-    /**
-     * Hiển thị chi tiết Homestay ở phía khách hàng.
-     */
     public function show(string $slug): View
     {
         $homestay = Homestay::query()
@@ -18,6 +15,12 @@ class HomestayController extends Controller
                 'category',
                 'owner',
                 'amenities',
+                'images',
+                'rooms' => function ($query) {
+                    $query
+                        ->where('status', 'available')
+                        ->orderBy('price_per_night');
+                },
             ])
             ->where('slug', $slug)
             ->where('status', true)

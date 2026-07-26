@@ -183,6 +183,19 @@ class HomestayController extends Controller
 
     public function destroy(Homestay $homestay)
     {
-        //
+        if (
+            $homestay->thumbnail &&
+            Storage::disk('public')->exists($homestay->thumbnail)
+        ) {
+            Storage::disk('public')->delete($homestay->thumbnail);
+        }
+
+        $homestay->amenities()->detach();
+
+        $homestay->delete();
+
+        return redirect()
+            ->route('admin.homestays.index')
+            ->with('success', 'Xóa Homestay thành công.');
     }
 }

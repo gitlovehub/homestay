@@ -142,7 +142,7 @@
                                 </p>
 
                                 <p class="mt-2 font-bold text-slate-900">
-                                    {{ $homestay->check_in_time ?: 'Chưa cập nhật' }}
+                                    {{ \Carbon\Carbon::createFromFormat('H:i:s', $homestay->check_in_time)->format('h:i A') ?: 'Chưa cập nhật' }}
                                 </p>
 
                             </div>
@@ -154,7 +154,7 @@
                                 </p>
 
                                 <p class="mt-2 font-bold text-slate-900">
-                                    {{ $homestay->check_out_time ?: 'Chưa cập nhật' }}
+                                    {{ \Carbon\Carbon::createFromFormat('H:i:s', $homestay->check_out_time)->format('h:i A') ?: 'Chưa cập nhật' }}
                                 </p>
 
                             </div>

@@ -201,7 +201,7 @@
                                         <form
                                             action="{{ route('admin.homestays.destroy', $homestay) }}"
                                             method="POST"
-                                            onsubmit="return confirm('Bạn có chắc muốn xóa Homestay này không?')"
+                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?\nHành động này không thể hoàn tác.')"
                                         >
                                             @csrf
                                             @method('DELETE')

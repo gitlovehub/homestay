@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\HomestayController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\HomeController;
@@ -10,72 +11,86 @@ use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayControll
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
 use Illuminate\Support\Facades\Route;
 
-// Route công khai
+// ROUTE CÔNG KHAI (Public Routes)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get(
     '/homestays/{slug}',
     [FrontendHomestayController::class, 'show']
 )->name('homestays.show');
 
-// Route cần đăng nhập
+// ROUTE CẦN ĐĂNG NHẬP (Authenticated Routes)
 Route::middleware('auth')->group(function () {
+
+    // Profile (Thông tin cá nhân)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('bookings')
-        ->name('bookings.')
-        ->group(function () {
-            Route::get(
-                '/history',
-                [FrontendBookingController::class, 'history']
-            )->name('history');
+    // Bookings (Đặt phòng của người dùng)
+    Route::prefix('bookings')->name('bookings.')->group(function () {
+        Route::get(
+            '/history',
+            [FrontendBookingController::class, 'history']
+        )->name('history');
 
-            Route::get(
-                '/room/{room}/create',
-                [FrontendBookingController::class, 'create']
-            )->name('create');
+        Route::get(
+            '/room/{room}/create',
+            [FrontendBookingController::class, 'create']
+        )->name('create');
 
-            Route::post(
-                '/',
-                [FrontendBookingController::class, 'store']
-            )->name('store');
+        Route::post(
+            '/',
+            [FrontendBookingController::class, 'store']
+        )->name('store');
 
-            Route::get(
-                '/{booking}',
-                [FrontendBookingController::class, 'show']
-            )->name('show');
-        });
+        Route::get(
+            '/{booking}',
+            [FrontendBookingController::class, 'show']
+        )->name('show');
+    });
 
 });
 
-// Route dành cho Admin
-Route::middleware(['auth', 'admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+// ROUTE DÀNH CHO ADMIN (Admin Routes)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
-        Route::resource('categories', CategoryController::class);
-        Route::resource('homestays', HomestayController::class);
-        Route::resource('rooms', RoomController::class);
+    // --- Dashboard Admin ---
+    Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
 
-        Route::get(
-            '/bookings',
-            [BookingController::class, 'index']
-        )->name('bookings.index');
+    // --- Quản lý Category ---
+    Route::resource('categories', CategoryController::class);
 
-        Route::get(
-            '/bookings/{booking}',
-            [BookingController::class, 'show']
-        )->name('bookings.show');
+    // --- Quản lý Homestay ---
+    Route::resource('homestays', HomestayController::class);
+    
+    // --- Quản lý Room ---
+    Route::resource('rooms', RoomController::class);
 
-        Route::patch(
-            '/bookings/{booking}/status',
-            [BookingController::class, 'updateStatus']
-        )->name('bookings.update-status');
-    });
+    // --- Quản lý Booking ---
+    Route::get(
+        '/bookings',
+        [BookingController::class, 'index']
+    )->name('bookings.index');
+
+    Route::get(
+        '/bookings/{booking}',
+        [BookingController::class, 'show']
+    )->name('bookings.show');
+
+    Route::patch(
+        '/bookings/{booking}/status',
+        [BookingController::class, 'updateStatus']
+    )->name('bookings.update-status');
+
+    // --- Quản lý Review ---
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+    
+    Route::patch('/reviews/{review}/status', [ReviewController::class, 'updateStatus']
+    )->name('reviews.update-status');
+
+    Route::get('/reviews/{review}', [ReviewController::class, 'show']
+    )->name('reviews.show');
+
+});
 
 require __DIR__ . '/auth.php';

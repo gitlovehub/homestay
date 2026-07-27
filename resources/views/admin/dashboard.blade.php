@@ -430,6 +430,264 @@
 
         </div>
 
+        {{-- Dữ liệu gần đây --}}
+        <div class="mt-8 grid gap-6 xl:grid-cols-3">
+
+            {{-- Booking mới nhất --}}
+            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm xl:col-span-2">
+
+                <div class="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">
+                            Đơn đặt phòng mới nhất
+                        </h2>
+
+                        <p class="mt-1 text-sm text-slate-500">
+                            5 đơn đặt phòng được tạo gần đây.
+                        </p>
+                    </div>
+
+                    <a
+                        href="{{ route('admin.bookings.index') }}"
+                        class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+                    >
+                        Xem tất cả
+                    </a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-fixed divide-y divide-slate-200">
+
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Khách hàng
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Homestay
+                                </th>
+
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Nhận phòng
+                                </th>
+
+                                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Tổng tiền
+                                </th>
+
+                                <th class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                    Trạng thái
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-slate-100 bg-white">
+
+                            @forelse ($latestBookings as $booking)
+
+                                @php
+                                    $bookingStatusLabels = [
+                                        'pending' => 'Chờ xác nhận',
+                                        'confirmed' => 'Đã xác nhận',
+                                        'checked_in' => 'Đang nhận phòng',
+                                        'completed' => 'Hoàn thành',
+                                        'cancelled' => 'Đã hủy',
+                                    ];
+
+                                    $bookingStatusStyles = [
+                                        'pending' => 'bg-amber-50 text-amber-700',
+                                        'confirmed' => 'bg-blue-50 text-blue-700',
+                                        'checked_in' => 'bg-violet-50 text-violet-700',
+                                        'completed' => 'bg-emerald-50 text-emerald-700',
+                                        'cancelled' => 'bg-red-50 text-red-700',
+                                    ];
+
+                                    $customerName = $booking->customer_name
+                                        ?? $booking->user?->name
+                                        ?? 'Không xác định';
+
+                                    $avatarText = mb_strtoupper(
+                                        mb_substr(trim($customerName), 0, 1)
+                                    );
+                                @endphp
+
+                                <tr class="transition hover:bg-slate-50">
+
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <div class="flex items-center gap-3">
+
+                                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+                                                {{ $avatarText }}
+                                            </div>
+
+                                            <div class="min-w-0">
+                                                <p class="max-w-[100px] truncate font-semibold text-slate-900">
+                                                    {{ $customerName }}
+                                                </p>
+
+                                                <p class="max-w-[100px] truncate text-xs text-slate-500">
+                                                    {{ $booking->booking_code }}
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <p class="max-w-[150px] truncate text-sm font-medium text-slate-900">
+                                            {{ $booking->room?->homestay?->name ?? 'Không xác định' }}
+                                        </p>
+
+                                        <p class="max-w-[150px] truncate text-xs text-slate-500">
+                                            {{ $booking->room?->name ?? 'Không xác định' }}
+                                        </p>
+                                    </td>
+
+                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-600">
+                                        {{ $booking->check_in?->format('d/m/Y') ?? 'Không xác định' }}
+                                    </td>
+
+                                    <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-bold text-slate-900">
+                                        {{ number_format($booking->total_price, 0, ',', '.') }}₫
+                                    </td>
+
+                                    <td class="whitespace-nowrap px-6 py-4 text-center">
+                                        <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ $bookingStatusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                            {{ $bookingStatusLabels[$booking->status] ?? 'Không xác định' }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            @empty
+
+                                <tr>
+                                    <td
+                                        colspan="5"
+                                        class="px-6 py-10 text-center text-sm text-slate-500"
+                                    >
+                                        Chưa có đơn đặt phòng nào.
+                                    </td>
+                                </tr>
+
+                            @endforelse
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </section>
+
+            {{-- Review mới nhất --}}
+            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+                <div class="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">
+                            Đánh giá mới nhất
+                        </h2>
+
+                        <p class="mt-1 text-sm text-slate-500">
+                            Hoạt động đánh giá gần đây.
+                        </p>
+                    </div>
+
+                    <a
+                        href="{{ route('admin.reviews.index') }}"
+                        class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+                    >
+                        Xem tất cả
+                    </a>
+                </div>
+
+                <div class="divide-y divide-slate-100">
+
+                    @forelse ($latestReviews as $review)
+
+                        @php
+                            $reviewUserName = $review->user?->name ?? 'Không xác định';
+
+                            $reviewAvatar = mb_strtoupper(
+                                mb_substr(trim($reviewUserName), 0, 1)
+                            );
+
+                            $reviewStatusLabels = [
+                                'pending' => 'Chờ duyệt',
+                                'approved' => 'Đã duyệt',
+                                'hidden' => 'Đã ẩn',
+                            ];
+
+                            $reviewStatusStyles = [
+                                'pending' => 'bg-amber-50 text-amber-700',
+                                'approved' => 'bg-emerald-50 text-emerald-700',
+                                'hidden' => 'bg-slate-100 text-slate-600',
+                            ];
+                        @endphp
+
+                        <article class="px-6 py-5 transition hover:bg-slate-50">
+
+                            <div class="flex items-start gap-3">
+
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700">
+                                    {{ $reviewAvatar }}
+                                </div>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <div class="flex items-start justify-between gap-3">
+
+                                        <div class="min-w-0">
+                                            <p class="truncate font-semibold text-slate-900">
+                                                {{ $reviewUserName }}
+                                            </p>
+
+                                            <p class="truncate text-xs text-slate-500">
+                                                {{ $review->homestay?->name ?? 'Homestay không xác định' }}
+                                            </p>
+                                        </div>
+
+                                        <span class="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold {{ $reviewStatusStyles[$review->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                            {{ $reviewStatusLabels[$review->status] ?? 'Không xác định' }}
+                                        </span>
+
+                                    </div>
+
+                                    <div class="mt-2 flex items-center gap-1 text-amber-400">
+                                        @for ($star = 1; $star <= 5; $star++)
+                                            <span>{{ $star <= $review->rating ? '★' : '☆' }}</span>
+                                        @endfor
+                                    </div>
+
+                                    <p class="mt-2 line-clamp-2 text-sm text-slate-600">
+                                        {{ $review->content ?: $review->title ?: 'Không có nội dung đánh giá.' }}
+                                    </p>
+
+                                    <p class="mt-2 text-xs text-slate-400">
+                                        {{ $review->created_at->diffForHumans() }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    @empty
+
+                        <div class="px-6 py-10 text-center text-sm text-slate-500">
+                            Chưa có đánh giá nào.
+                        </div>
+
+                    @endforelse
+
+                </div>
+
+            </section>
+
+        </div>
+
         <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
 
             <h2 class="text-xl font-bold text-slate-900">

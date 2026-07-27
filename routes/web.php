@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\HomestayController;
+use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
@@ -25,7 +28,9 @@ Route::middleware(['auth', 'admin'])
             return view('admin.dashboard');
         })->name('dashboard');
 
-        Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('homestays', HomestayController::class);
+        Route::resource('rooms', RoomController::class);
     });
 
 require __DIR__.'/auth.php';

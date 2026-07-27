@@ -32,7 +32,6 @@ class Room extends Model
             'capacity' => 'integer',
             'number_of_beds' => 'integer',
             'area' => 'decimal:2',
-            'status' => 'boolean',
         ];
     }
 

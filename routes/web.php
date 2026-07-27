@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomestayController;
@@ -60,6 +61,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // --- Quản lý Category ---
     Route::resource('categories', CategoryController::class);
+
+    // --- Quản lý Amenity ---
+    Route::resource('amenities', AmenityController::class);
 
     // --- Quản lý Homestay ---
     Route::resource('homestays', HomestayController::class);

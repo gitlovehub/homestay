@@ -909,7 +909,7 @@
 
                 {{-- Tiện ích --}}
                 <a
-                    href="#"
+                    href="{{ route('admin.amenities.index') }}"
                     class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-rose-200 hover:bg-rose-50 hover:shadow-md"
                 >
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 transition group-hover:bg-rose-600 group-hover:text-white">

@@ -3,440 +3,632 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Trang quản trị | HomeStay</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ $homestay->name }} | HomeStayGo</title>
+
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js',
+    ])
 </head>
 
-<body class="min-h-screen bg-slate-100">
+<body class="min-h-screen bg-slate-50">
 
     @include('partials.navbar')
 
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <main>
 
-        <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        {{-- Breadcrumb --}}
+        <section class="border-b border-slate-200 bg-white">
+            <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
 
-            <div>
+                <nav
+                    class="flex flex-wrap items-center gap-2 text-sm text-slate-500"
+                    aria-label="Điều hướng"
+                >
+                    <a
+                        href="{{ route('home') }}"
+                        class="font-medium transition hover:text-blue-600"
+                    >
+                        Trang chủ
+                    </a>
 
-                <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">
-                    Xin chào, {{ auth()->user()->name }} 👋
-                </h1>
+                    <span>/</span>
 
-                <p class="mt-2 text-slate-500">
-                    Chào mừng quay trở lại hệ thống quản lý Homestay.
-                    Dưới đây là tổng quan hoạt động hiện tại.
-                </p>
+                    @if ($homestay->category)
+                        <span>
+                            {{ $homestay->category->name }}
+                        </span>
+
+                        <span>/</span>
+                    @endif
+
+                    <span class="font-semibold text-slate-800">
+                        {{ $homestay->name }}
+                    </span>
+                </nav>
 
             </div>
+        </section>
 
-            <div class="flex items-center gap-3">
+        {{-- Nội dung chính --}}
+        <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
-                <div class="rounded-2xl border border-slate-200 bg-white px-5 py-3 shadow-sm">
+            <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
 
-                    <p class="text-xs text-slate-500">
-                        Hôm nay
-                    </p>
+                {{-- Cột trái --}}
+                <div class="min-w-0 space-y-8">
 
-                    <p class="mt-1 font-semibold text-slate-900">
-                        {{ now()->format('d/m/Y') }}
-                    </p>
+                    {{-- Ảnh Homestay --}}
+                    <div class="overflow-hidden rounded-3xl bg-slate-200 shadow-sm">
 
-                </div>
+                        @if ($homestay->thumbnail)
+                            <img
+                                src="{{ Storage::url($homestay->thumbnail) }}"
+                                alt="{{ $homestay->name }}"
+                                class="h-[320px] w-full object-cover sm:h-[450px] lg:h-[520px]"
+                            >
+                        @else
+                            <div
+                                class="flex h-[320px] items-center justify-center bg-slate-200 text-center sm:h-[450px] lg:h-[520px]"
+                            >
+                                <div>
+                                    <div class="text-6xl">
+                                        🏡
+                                    </div>
 
-            </div>
-
-        </div>
-
-        {{-- Thống kê tổng quan --}}
-        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-
-            {{-- Người dùng --}}
-            <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                <div class="p-5 sm:p-6">
-
-                    <div class="flex items-start justify-between gap-4">
-
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">
-                                Người dùng
-                            </p>
-
-                            <p class="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                                {{ number_format($totalUsers ?? 0) }}
-                            </p>
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                    d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                        </div>
+                                    <p class="mt-4 font-semibold text-slate-500">
+                                        Homestay chưa có hình ảnh
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
 
-                    <div class="mt-4 flex items-center justify-between gap-3 text-sm">
+                    {{-- Thông tin chính --}}
+                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 
-                        <span class="text-slate-500">
-                            {{ number_format($activeUsers) }} đang hoạt động
-                        </span>
+                        <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
 
-                        <span class="font-semibold text-blue-600">
-                            +{{ number_format($newUsersThisMonth) }} tháng này
-                        </span>
+                            <div class="min-w-0">
 
-                    </div>
+                                @if ($homestay->category)
+                                    <span class="inline-flex rounded-full bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-600">
+                                        {{ $homestay->category->name }}
+                                    </span>
+                                @endif
 
-                </div>
+                                <h1 class="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                                    {{ $homestay->name }}
+                                </h1>
 
-                <div class="h-1 bg-blue-500"></div>
+                                <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-slate-500">
 
-            </section>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">
+                                            🗺️
+                                        </span>
 
-            {{-- Homestay --}}
-            <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                                        <span>
+                                            {{ $homestay->address }}
 
-                <div class="p-5 sm:p-6">
+                                            @if ($homestay->city)
+                                                , {{ $homestay->city }}
+                                            @endif
+                                        </span>
+                                    </div>
 
-                    <div class="flex items-start justify-between gap-4">
+                                    @if ($homestay->phone)
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-lg">
+                                                📞
+                                            </span>
 
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">
-                                Homestay
-                            </p>
+                                            <span>
+                                                {{ $homestay->phone }}
+                                            </span>
+                                        </div>
+                                    @endif
 
-                            <p class="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                                {{ number_format($totalHomestays) }}
-                            </p>
-                        </div>
+                                </div>
 
-                        <div
-                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                    d="M3 11.5 12 4l9 7.5M5 10v10h14V10M9 20v-6h6v6" />
-                            </svg>
-                        </div>
+                            </div>
 
-                    </div>
+                            <button
+                                type="button"
+                                class="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                            >
+                                <span>
+                                    ♡
+                                </span>
 
-                    <div class="mt-4 flex items-center justify-between gap-3 text-sm">
+                                Yêu thích
+                            </button>
 
-                        <span class="text-slate-500">
-                            {{ number_format($activeHomestays) }} đang hoạt động
-                        </span>
-
-                        <span class="font-semibold text-emerald-600">
-                            +{{ number_format($newHomestaysThisMonth) }} tháng này
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <div class="h-1 bg-emerald-500"></div>
-
-            </section>
-
-            {{-- Đơn đặt phòng --}}
-            <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                <div class="p-5 sm:p-6">
-
-                    <div class="flex items-start justify-between gap-4">
-
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">
-                                Đơn đặt phòng
-                            </p>
-
-                            <p class="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                                {{ number_format($totalBookings) }}
-                            </p>
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                    d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z" />
-                            </svg>
                         </div>
 
                     </div>
 
-                    <div class="mt-4 flex items-center justify-between gap-3 text-sm">
+                    {{-- Giới thiệu --}}
+                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 
-                        <span class="text-slate-500">
-                            {{ number_format($pendingBookings) }} đang chờ
-                        </span>
-
-                        <span class="font-semibold text-amber-600">
-                            +{{ number_format($newBookingsThisMonth) }} tháng này
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <div class="h-1 bg-amber-500"></div>
-
-            </section>
-
-            {{-- Đánh giá --}}
-            <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                <div class="p-5 sm:p-6">
-
-                    <div class="flex items-start justify-between gap-4">
-
-                        <div>
-                            <p class="text-sm font-medium text-slate-500">
-                                Đánh giá
-                            </p>
-
-                            <p class="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                                {{ number_format($totalReviews) }}
-                            </p>
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                    d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z" />
-                            </svg>
-                        </div>
-
-                    </div>
-
-                    <div class="mt-4 flex items-center justify-between gap-3 text-sm">
-
-                        <span class="text-slate-500">
-                            {{ number_format($averageRating, 1) }}/5 điểm trung bình
-                        </span>
-
-                        <span class="font-semibold text-violet-600">
-                            {{ number_format($pendingReviews) }} chờ duyệt
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <div class="h-1 bg-violet-500"></div>
-
-            </section>
-
-        </div>
-
-        {{-- Khu vực biểu đồ --}}
-        <div class="mt-8 grid gap-6 xl:grid-cols-3">
-
-            {{-- Biểu đồ Booking và doanh thu --}}
-            <section class="rounded-3xl border border-slate-200 bg-white shadow-sm xl:col-span-2">
-
-                <div
-                    class="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Hoạt động đặt phòng
+                        <h2 class="text-2xl font-bold text-slate-900">
+                            Giới thiệu Homestay
                         </h2>
 
-                        <p class="mt-1 text-sm text-slate-500">
-                            Số lượng đơn đặt phòng và doanh thu trong 7 ngày gần nhất.
+                        <div class="mt-5 leading-8 text-slate-600">
+
+                            @if ($homestay->description)
+                                <p class="whitespace-pre-line">
+                                    {{ $homestay->description }}
+                                </p>
+                            @else
+                                <p>
+                                    Homestay này chưa có nội dung giới thiệu.
+                                </p>
+                            @endif
+
+                        </div>
+
+                    </div>
+
+                    {{-- Danh sách phòng --}}
+                    <div
+                        id="rooms"
+                        class="scroll-mt-28 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+                    >
+
+                        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+
+                            <div>
+                                <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">
+                                    Lựa chọn phòng
+                                </p>
+
+                                <h2 class="mt-2 text-2xl font-bold text-slate-900">
+                                    Phòng đang có sẵn
+                                </h2>
+
+                                <p class="mt-2 text-slate-500">
+                                    Hãy chọn phòng phù hợp với số khách và nhu cầu của bạn.
+                                </p>
+                            </div>
+
+                            <span class="inline-flex w-fit rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-600">
+                                {{ $homestay->rooms->count() }} phòng khả dụng
+                            </span>
+
+                        </div>
+
+                        @if ($homestay->rooms->isEmpty())
+
+                            <div class="mt-7 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
+
+                                <div class="text-5xl">
+                                    🚪
+                                </div>
+
+                                <h3 class="mt-4 text-lg font-bold text-slate-900">
+                                    Hiện chưa có phòng trống
+                                </h3>
+
+                                <p class="mt-2 text-sm text-slate-500">
+                                    Vui lòng quay lại vào thời gian khác.
+                                </p>
+
+                            </div>
+
+                        @else
+
+                            <div class="mt-7 space-y-5">
+
+                                @foreach ($homestay->rooms as $room)
+
+                                    <article class="overflow-hidden rounded-2xl border border-slate-200 transition hover:border-blue-300 hover:shadow-lg">
+
+                                        <div class="grid md:grid-cols-[230px_minmax(0,1fr)]">
+
+                                            {{-- Ảnh phòng --}}
+                                            <div class="bg-slate-100">
+
+                                                @if ($room->image)
+                                                    <img
+                                                        src="{{ Storage::url($room->image) }}"
+                                                        alt="{{ $room->name }}"
+                                                        class="h-56 w-full object-cover md:h-full"
+                                                    >
+                                                @else
+                                                    <div class="flex h-56 items-center justify-center text-center md:h-full md:min-h-64">
+
+                                                        <div>
+                                                            <div class="text-5xl">
+                                                                🚪
+                                                            </div>
+
+                                                            <p class="mt-3 text-sm font-medium text-slate-400">
+                                                                Chưa có ảnh phòng
+                                                            </p>
+                                                        </div>
+
+                                                    </div>
+                                                @endif
+
+                                            </div>
+
+                                            {{-- Nội dung phòng --}}
+                                            <div class="flex flex-col p-5 sm:p-6">
+
+                                                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+
+                                                    <div class="min-w-0">
+
+                                                        <div class="flex flex-wrap items-center gap-2">
+
+                                                            <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600">
+                                                                {{ $room->room_type }}
+                                                            </span>
+
+                                                            <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+                                                                Còn phòng
+                                                            </span>
+
+                                                        </div>
+
+                                                        <h3 class="mt-3 text-xl font-bold text-slate-900">
+                                                            {{ $room->name }}
+                                                        </h3>
+
+                                                        <p class="mt-1 text-sm font-medium text-slate-400">
+                                                            Mã phòng: {{ $room->room_code }}
+                                                        </p>
+
+                                                    </div>
+
+                                                    <div class="shrink-0 sm:text-right">
+
+                                                        <p class="text-sm text-slate-500">
+                                                            Giá mỗi đêm
+                                                        </p>
+
+                                                        <p class="mt-1 text-2xl font-bold text-blue-600">
+                                                            {{ number_format(
+                                                                $room->price_per_night,
+                                                                0,
+                                                                ',',
+                                                                '.'
+                                                            ) }}đ
+                                                        </p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                {{-- Thông số --}}
+                                                <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+
+                                                    <div class="rounded-xl bg-slate-50 p-3">
+                                                        <p class="text-xs text-slate-400">
+                                                            Sức chứa
+                                                        </p>
+
+                                                        <p class="mt-1 text-sm font-semibold text-slate-700">
+                                                            👤 {{ $room->capacity }} khách
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="rounded-xl bg-slate-50 p-3">
+                                                        <p class="text-xs text-slate-400">
+                                                            Số giường
+                                                        </p>
+
+                                                        <p class="mt-1 text-sm font-semibold text-slate-700">
+                                                            🚪 {{ $room->number_of_beds }} giường
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="rounded-xl bg-slate-50 p-3">
+                                                        <p class="text-xs text-slate-400">
+                                                            Diện tích
+                                                        </p>
+
+                                                        <p class="mt-1 text-sm font-semibold text-slate-700">
+                                                            📐 {{ $room->area ?? 0 }} m²
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+
+                                                @if ($room->description)
+                                                    <p class="mt-5 line-clamp-2 text-sm leading-6 text-slate-500">
+                                                        {{ $room->description }}
+                                                    </p>
+                                                @endif
+
+                                                <div class="mt-auto flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
+
+                                                    <p class="text-xs leading-5 text-slate-400">
+                                                        Bạn sẽ chọn ngày nhận và trả phòng ở bước tiếp theo.
+                                                    </p>
+
+                                                    @auth
+                                                        <a
+                                                            href="{{ route('bookings.create', $room) }}"
+                                                            class="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                                        >
+                                                            Đặt phòng ngay
+                                                        </a>
+                                                    @else
+                                                        <a
+                                                            href="{{ route('login', [
+                                                                'redirect' => route('bookings.create', $room),
+                                                            ]) }}"
+                                                            class="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                                        >
+                                                            Đăng nhập để đặt
+                                                        </a>
+                                                    @endauth
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </article>
+
+                                @endforeach
+
+                            </div>
+
+                        @endif
+
+                    </div>
+
+                    {{-- Tiện ích --}}
+                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+                        <h2 class="text-2xl font-bold text-slate-900">
+                            Tiện ích nổi bật
+                        </h2>
+
+                        <p class="mt-2 text-slate-500">
+                            Những dịch vụ và tiện nghi có tại Homestay.
                         </p>
+
+                        @if ($homestay->amenities->isNotEmpty())
+
+                            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                                @foreach ($homestay->amenities as $amenity)
+
+                                    <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+
+                                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-2xl">
+                                            {{ $amenity->icon ?: '💎' }}
+                                        </div>
+
+                                        <div class="min-w-0">
+
+                                            <p class="font-semibold text-slate-800">
+                                                {{ $amenity->name }}
+                                            </p>
+
+                                            @if ($amenity->description)
+                                                <p class="mt-1 line-clamp-1 text-sm text-slate-500">
+                                                    {{ $amenity->description }}
+                                                </p>
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                        @else
+
+                            <div class="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+
+                                <p class="text-sm text-slate-500">
+                                    Homestay này chưa cập nhật tiện ích.
+                                </p>
+
+                            </div>
+
+                        @endif
+
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-4 text-sm">
+                    {{-- Chính sách --}}
+                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 
-                        <div class="flex items-center gap-2">
-                            <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-                            <span class="text-slate-600">
-                                Đơn đặt phòng
-                            </span>
+                        <h2 class="text-2xl font-bold text-slate-900">
+                            Thời gian và chính sách
+                        </h2>
+
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+                            <div class="rounded-2xl bg-slate-50 p-5">
+                                <p class="text-sm text-slate-500">
+                                    Giờ nhận phòng
+                                </p>
+
+                                <p class="mt-2 text-lg font-bold text-slate-900">
+                                    {{ $homestay->check_in_time
+                                        ? \Carbon\Carbon::parse($homestay->check_in_time)->format('H:i')
+                                        : 'Chưa cập nhật' }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-2xl bg-slate-50 p-5">
+                                <p class="text-sm text-slate-500">
+                                    Giờ trả phòng
+                                </p>
+
+                                <p class="mt-2 text-lg font-bold text-slate-900">
+                                    {{ $homestay->check_out_time
+                                        ? \Carbon\Carbon::parse($homestay->check_out_time)->format('H:i')
+                                        : 'Chưa cập nhật' }}
+                                </p>
+                            </div>
+
                         </div>
 
-                        <div class="flex items-center gap-2">
-                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                            <span class="text-slate-600">
-                                Doanh thu
-                            </span>
+                        <div class="mt-5 rounded-2xl border border-slate-200 p-5">
+
+                            <p class="font-semibold text-slate-800">
+                                Chính sách Homestay
+                            </p>
+
+                            <p class="mt-3 whitespace-pre-line leading-7 text-slate-500">
+                                {{ $homestay->policy ?: 'Homestay chưa cập nhật chính sách.' }}
+                            </p>
+
                         </div>
 
                     </div>
+
+                    {{-- Chủ sở hữu --}}
+                    @if ($homestay->owner)
+
+                        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+                            <h2 class="text-2xl font-bold text-slate-900">
+                                Chủ sở hữu
+                            </h2>
+
+                            <div class="mt-6 flex items-center gap-4">
+
+                                <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-600">
+                                    {{ mb_strtoupper(
+                                        mb_substr($homestay->owner->name, 0, 1)
+                                    ) }}
+                                </div>
+
+                                <div class="min-w-0">
+
+                                    <p class="text-lg font-bold text-slate-900">
+                                        {{ $homestay->owner->name }}
+                                    </p>
+
+                                    <p class="mt-1 text-sm text-slate-500">
+                                        Chủ sở hữu Homestay
+                                    </p>
+
+                                    @if ($homestay->owner->email)
+                                        <p class="mt-2 truncate text-sm font-medium text-blue-600">
+                                            {{ $homestay->owner->email }}
+                                        </p>
+                                    @endif
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
 
                 </div>
 
-                <div class="p-5 sm:p-6">
+                {{-- Sidebar --}}
+                <aside class="lg:sticky lg:top-24 lg:self-start">
 
-                    <div class="mb-6 grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
 
-                        <div class="rounded-2xl bg-slate-50 p-4">
+                        <div class="border-b border-slate-200 pb-5">
+
                             <p class="text-sm font-medium text-slate-500">
-                                Tổng doanh thu hoàn thành
+                                Giá phòng từ
                             </p>
 
-                            <p class="mt-2 text-2xl font-bold text-slate-900">
-                                {{ number_format($totalRevenue, 0, ',', '.') }}₫
-                            </p>
+                            <div class="mt-2 flex items-end gap-2">
+
+                                <p class="text-3xl font-bold text-blue-600">
+                                    {{ number_format(
+                                        $homestay->rooms->min('price_per_night')
+                                            ?? $homestay->base_price
+                                            ?? 0,
+                                        0,
+                                        ',',
+                                        '.'
+                                    ) }}đ
+                                </p>
+
+                                <span class="pb-1 text-sm text-slate-500">
+                                    / đêm
+                                </span>
+
+                            </div>
+
                         </div>
 
-                        <div class="rounded-2xl bg-slate-50 p-4">
-                            <p class="text-sm font-medium text-slate-500">
-                                Đơn đặt phòng tháng này
-                            </p>
+                        <div class="mt-6 space-y-4">
 
-                            <p class="mt-2 text-2xl font-bold text-slate-900">
-                                {{ number_format($newBookingsThisMonth) }}
-                            </p>
+                            <div class="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm">
+
+                                <span class="text-slate-500">
+                                    Phòng khả dụng
+                                </span>
+
+                                <span class="font-bold text-slate-800">
+                                    {{ $homestay->rooms->count() }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-sm">
+
+                                <span class="text-slate-500">
+                                    Trạng thái
+                                </span>
+
+                                <span class="inline-flex items-center gap-2 font-semibold text-emerald-600">
+                                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+
+                                    Đang hoạt động
+                                </span>
+
+                            </div>
+
+                            @if ($homestay->rooms->isNotEmpty())
+                                <a
+                                    href="#rooms"
+                                    class="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                >
+                                    Xem phòng và đặt ngay
+                                </a>
+                            @else
+                                <button
+                                    type="button"
+                                    disabled
+                                    class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl bg-slate-300 px-6 py-3.5 text-sm font-semibold text-white"
+                                >
+                                    Hiện chưa có phòng
+                                </button>
+                            @endif
+
                         </div>
+
+                        <p class="mt-4 text-center text-xs leading-5 text-slate-400">
+                            Bạn chỉ thanh toán sau khi hoàn tất các bước xác nhận.
+                        </p>
 
                     </div>
 
-                    <div class="relative h-85">
-                        <canvas id="bookingOverviewChart" data-labels='@json($bookingChartLabels)'
-                            data-bookings='@json($bookingChartData)' data-revenue='@json($revenueChartData)'></canvas>
-                    </div>
-
-                </div>
-
-            </section>
-
-            {{-- Trạng thái Booking --}}
-            <section class="rounded-3xl border border-slate-200 bg-white shadow-sm">
-
-                <div class="border-b border-slate-100 px-6 py-5">
-                    <h2 class="text-lg font-bold text-slate-900">
-                        Trạng thái đặt phòng
-                    </h2>
-
-                    <p class="mt-1 text-sm text-slate-500">
-                        Tỷ lệ các trạng thái đơn hiện tại.
-                    </p>
-                </div>
-
-                <div class="p-5 sm:p-6">
-
-                    <div class="relative mx-auto h-[230px] max-w-[230px]">
-                        <canvas id="bookingStatusChart"
-                            data-statuses='@json(array_values($bookingStatusCounts))'></canvas>
-                    </div>
-
-                    <div class="mt-6 space-y-3">
-
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
-                                <span class="text-sm text-slate-600">Chờ xác nhận</span>
-                            </div>
-
-                            <span class="text-sm font-bold text-slate-900">
-                                {{ number_format($bookingStatusCounts['pending']) }}
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-                                <span class="text-sm text-slate-600">Đã xác nhận</span>
-                            </div>
-
-                            <span class="text-sm font-bold text-slate-900">
-                                {{ number_format($bookingStatusCounts['confirmed']) }}
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-violet-500"></span>
-                                <span class="text-sm text-slate-600">Đang nhận phòng</span>
-                            </div>
-
-                            <span class="text-sm font-bold text-slate-900">
-                                {{ number_format($bookingStatusCounts['checked_in']) }}
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                                <span class="text-sm text-slate-600">Hoàn thành</span>
-                            </div>
-
-                            <span class="text-sm font-bold text-slate-900">
-                                {{ number_format($bookingStatusCounts['completed']) }}
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center gap-2">
-                                <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
-                                <span class="text-sm text-slate-600">Đã hủy</span>
-                            </div>
-
-                            <span class="text-sm font-bold text-slate-900">
-                                {{ number_format($bookingStatusCounts['cancelled']) }}
-                            </span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </div>
-
-        <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-
-            <h2 class="text-xl font-bold text-slate-900">
-                Chức năng quản trị
-            </h2>
-
-            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                <a href="{{ route('admin.categories.index') }}"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50">
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý danh mục
-                    </h3>
-
-                    <p class="mt-2 text-sm text-slate-500">
-                        Thêm, sửa và xóa danh mục Homestay.
-                    </p>
-                </a>
-
-                <a href="{{ route('admin.homestays.index') }}"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50">
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý Homestay
-                    </h3>
-
-                    <p class="mt-2 text-sm text-slate-500">
-                        Quản lý thông tin và trạng thái Homestay.
-                    </p>
-                </a>
-
-                <a href="#"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50">
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý đặt phòng
-                    </h3>
-
-                    <p class="mt-2 text-sm text-slate-500">
-                        Theo dõi và xác nhận các đơn đặt phòng.
-                    </p>
-                </a>
+                </aside>
 
             </div>
 
-        </div>
+        </section>
 
     </main>
 

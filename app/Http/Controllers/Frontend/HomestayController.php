@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Homestay;
 use Illuminate\View\View;
-use App\Models\User;
 
 class HomestayController extends Controller
 {
@@ -27,8 +26,9 @@ class HomestayController extends Controller
             ->where('status', true)
             ->firstOrFail();
 
-        $totalUsers = User::count();
-
-        return view('homestays.show', compact('homestay', 'totalUsers'));
+        return view(
+            'homestays.show',
+            compact('homestay')
+        );
     }
 }

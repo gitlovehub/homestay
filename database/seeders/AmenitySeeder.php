@@ -23,7 +23,7 @@ class AmenitySeeder extends Seeder
             ['name' => 'Tủ lạnh', 'icon' => '🧊'],
             ['name' => 'Sân vườn', 'icon' => '🏕️'],
             ['name' => 'Bình nóng lạnh', 'icon' => '💧'],
-            ['name' => 'Cho phép thú cưng', 'icon' => '🐾'],
+            ['name' => 'Cho phép thú cưng', 'icon' => '🐶'],
             ['name' => 'Phòng không hút thuốc', 'icon' => '🚭'],
         ];
 

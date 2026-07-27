@@ -688,56 +688,265 @@
 
         </div>
 
-        <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        {{-- Truy cập nhanh --}}
+        <section class="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
 
-            <h2 class="text-xl font-bold text-slate-900">
-                Chức năng quản trị
-            </h2>
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Truy cập nhanh
+                    </h2>
 
-            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                <a
-                    href="{{ route('admin.categories.index') }}"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50"
-                >
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý danh mục
-                    </h3>
-
-                    <p class="mt-2 text-sm text-slate-500">
-                        Thêm, sửa và xóa danh mục Homestay.
+                    <p class="mt-1 text-sm text-slate-500">
+                        Chuyển nhanh đến các chức năng quản trị.
                     </p>
-                </a>
+                </div>
 
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.8"
+                        stroke="currentColor"
+                        class="h-6 w-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
+                        />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+
+                {{-- Homestay --}}
                 <a
                     href="{{ route('admin.homestays.index') }}"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-blue-200 hover:bg-blue-50 hover:shadow-md"
                 >
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý Homestay
-                    </h3>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m2.25 12 8.954-8.955a1.125 1.125 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-5.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"
+                            />
+                        </svg>
+                    </div>
 
-                    <p class="mt-2 text-sm text-slate-500">
-                        Quản lý thông tin và trạng thái Homestay.
-                    </p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý Homestay
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Thêm, sửa và quản lý Homestay.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-blue-600">
+                        →
+                    </span>
                 </a>
 
+                {{-- Booking --}}
+                <a
+                    href="{{ route('admin.bookings.index') }}"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-emerald-200 hover:bg-emerald-50 hover:shadow-md"
+                >
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 transition group-hover:bg-emerald-600 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6.75 3v2.25M17.25 3v2.25M3.75 9h16.5M5.25 4.5h13.5A1.5 1.5 0 0 1 20.25 6v13.5A1.5 1.5 0 0 1 18.75 21H5.25a1.5 1.5 0 0 1-1.5-1.5V6a1.5 1.5 0 0 1 1.5-1.5Z"
+                            />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý Booking
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Theo dõi và xử lý đơn đặt phòng.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-emerald-600">
+                        →
+                    </span>
+                </a>
+
+                {{-- Người dùng --}}
                 <a
                     href="#"
-                    class="rounded-2xl border border-slate-200 p-5 transition hover:border-blue-300 hover:bg-blue-50"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-violet-200 hover:bg-violet-50 hover:shadow-md"
                 >
-                    <h3 class="font-bold text-slate-900">
-                        Quản lý đặt phòng
-                    </h3>
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 transition group-hover:bg-violet-600 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M18 18.72a9.094 9.094 0 0 0 3.741 1.479 9.096 9.096 0 0 0-1.879-5.788m-1.862 4.309a9.108 9.108 0 0 1-4.5 1.128 9.108 9.108 0 0 1-4.5-1.128m9 0a5.992 5.992 0 0 0-9 0M15 7.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                        </svg>
+                    </div>
 
-                    <p class="mt-2 text-sm text-slate-500">
-                        Theo dõi và xác nhận các đơn đặt phòng.
-                    </p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý người dùng
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Xem và quản lý tài khoản.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-violet-600">
+                        →
+                    </span>
+                </a>
+
+                {{-- Đánh giá --}}
+                <a
+                    href="{{ route('admin.reviews.index') }}"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-amber-200 hover:bg-amber-50 hover:shadow-md"
+                >
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 transition group-hover:bg-amber-500 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m11.48 3.499 2.014 4.078a.75.75 0 0 0 .564.41l4.501.654c.615.089.86.845.415 1.279l-3.257 3.175a.75.75 0 0 0-.216.664l.769 4.483c.105.613-.539 1.08-1.09.79l-4.026-2.116a.75.75 0 0 0-.698 0L6.43 19.032c-.55.29-1.194-.177-1.09-.79l.77-4.483a.75.75 0 0 0-.216-.664L2.637 9.92c-.445-.434-.2-1.19.415-1.28l4.501-.653a.75.75 0 0 0 .564-.41l2.014-4.078c.275-.557 1.07-.557 1.345 0Z"
+                            />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý đánh giá
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Duyệt và kiểm soát đánh giá.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-amber-600">
+                        →
+                    </span>
+                </a>
+
+                {{-- Danh mục --}}
+                <a
+                    href="{{ route('admin.categories.index') }}"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-cyan-200 hover:bg-cyan-50 hover:shadow-md"
+                >
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-100 text-cyan-600 transition group-hover:bg-cyan-600 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4.5 6.75h15m-15 5.25h15m-15 5.25h15"
+                            />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý danh mục
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Quản lý loại và nhóm Homestay.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-cyan-600">
+                        →
+                    </span>
+                </a>
+
+                {{-- Tiện ích --}}
+                <a
+                    href="#"
+                    class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-rose-200 hover:bg-rose-50 hover:shadow-md"
+                >
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 transition group-hover:bg-rose-600 group-hover:text-white">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.847-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.847a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.847.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.456-2.456L14.25 6l1.035-.259a3.375 3.375 0 0 0 2.456-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"
+                            />
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <h3 class="font-semibold text-slate-900">
+                            Quản lý tiện ích
+                        </h3>
+
+                        <p class="mt-1 truncate text-sm text-slate-500">
+                            Quản lý tiện ích của Homestay.
+                        </p>
+                    </div>
+
+                    <span class="text-xl text-slate-300 transition group-hover:translate-x-1 group-hover:text-rose-600">
+                        →
+                    </span>
                 </a>
 
             </div>
 
-        </div>
+        </section>
 
     </main>
 

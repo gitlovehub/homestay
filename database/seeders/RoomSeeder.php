@@ -10,12 +10,17 @@ class RoomSeeder extends Seeder
 {
     public function run(): void
     {
-        Homestay::query()->each(function (Homestay $homestay) {
+        Room::truncate();
+
+        $homestays = Homestay::where('status', true)
+            ->get();
+
+        foreach ($homestays as $homestay) {
             Room::factory()
-                ->count(4)
+                ->count(rand(3, 6))
                 ->create([
                     'homestay_id' => $homestay->id,
                 ]);
-        });
+        }
     }
 }

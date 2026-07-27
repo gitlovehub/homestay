@@ -12,22 +12,71 @@ class RoomFactory extends Factory
 {
     public function definition(): array
     {
-        $roomType = fake()->randomElement([
+        $roomTypes = [
             'Phòng đơn',
             'Phòng đôi',
-            'Phòng gia đình',
+            'Phòng tiêu chuẩn',
             'Phòng cao cấp',
-            'Phòng hạng sang',
-            'Nhà gỗ'
-        ]);
+            'Phòng gia đình',
+            'Phòng VIP',
+        ];
+
+        $roomType = fake()->randomElement($roomTypes);
+
+        $price = match ($roomType) {
+            'Phòng đơn' => fake()->randomElement([
+                250000,
+                300000,
+                350000,
+                400000,
+            ]),
+
+            'Phòng đôi' => fake()->randomElement([
+                450000,
+                500000,
+                550000,
+                600000,
+            ]),
+
+            'Phòng tiêu chuẩn' => fake()->randomElement([
+                650000,
+                700000,
+                750000,
+                800000,
+            ]),
+
+            'Phòng cao cấp' => fake()->randomElement([
+                900000,
+                1000000,
+                1100000,
+                1300000,
+            ]),
+
+            'Phòng gia đình' => fake()->randomElement([
+                1500000,
+                1700000,
+                1900000,
+                2200000,
+            ]),
+
+            'Phòng VIP' => fake()->randomElement([
+                2500000,
+                2800000,
+                3000000,
+                3500000,
+            ]),
+
+            default => 500000,
+        };
 
         $capacity = match ($roomType) {
             'Phòng đơn' => 1,
             'Phòng đôi' => 2,
-            'Phòng gia đình' => fake()->numberBetween(4, 6),
+            'Phòng tiêu chuẩn' => fake()->numberBetween(1, 2),
             'Phòng cao cấp' => fake()->numberBetween(2, 3),
-            'Phòng hạng sang' => fake()->numberBetween(2, 4),
-            'Nhà gỗ' => fake()->numberBetween(2, 5),
+            'Phòng gia đình' => fake()->numberBetween(4, 6),
+            'Phòng VIP' => fake()->numberBetween(2, 4),
+            default => 2,
         };
 
         return [
@@ -35,54 +84,15 @@ class RoomFactory extends Factory
                 ->inRandomOrder()
                 ->value('id'),
 
-            'name' => $roomType . ' ' . fake()->numberBetween(101, 999),
-
-            'room_code' => strtoupper(fake()->unique()->bothify('R###??')),
+            'name' => 'Phòng ' . fake()->unique()->numberBetween(101, 9999),
 
             'room_type' => $roomType,
 
-            'description' => fake()->randomElement([
-                'Phòng sạch sẽ, thoáng mát và đầy đủ tiện nghi.',
-                'Không gian rộng rãi, phù hợp cho kỳ nghỉ ngắn ngày.',
-                'Phòng có thiết kế hiện đại và ánh sáng tự nhiên.',
-                'Phòng yên tĩnh, phù hợp cho gia đình và nhóm bạn.',
-            ]),
-
-            'image' => null,
-
-            'price_per_night' => fake()->randomElement([
-                300000,
-                450000,
-                600000,
-                800000,
-                1000000,
-                1200000,
-                1500000,
-                1800000,
-                2200000,
-                3000000,
-            ]),
+            'price' => $price,
 
             'capacity' => $capacity,
 
-            'number_of_beds' => match ($roomType) {
-                'Phòng đơn' => 1,
-                'Phòng đôi' => 1,
-                'Phòng gia đình' => fake()->numberBetween(2, 3),
-                'Phòng cao cấp' => fake()->numberBetween(1, 2),
-                'Phòng hạng sang' => fake()->numberBetween(1, 2),
-                'Nhà gỗ' => fake()->numberBetween(1, 3),
-            },
-
-            'area' => fake()->randomFloat(2, 18, 80),
-
-            'status' => fake()->randomElement([
-                'available',
-                'available',
-                'available',
-                'maintenance',
-                'inactive',
-            ]),
+            'status' => true,
         ];
     }
 }

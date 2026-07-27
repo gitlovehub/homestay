@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     public function create(Room $room)
+    {        
         $room->load('homestay');
         abort_unless(
             $room->status === 'available'

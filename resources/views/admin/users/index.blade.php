@@ -107,12 +107,12 @@
                 <div>
 
                     <p class="text-sm font-medium text-slate-500">
-                        Tài khoản mới tháng này
+                        Tài khoản mới tuần này
                     </p>
 
                     <p class="mt-1 text-2xl font-bold text-slate-900">
                         {{ number_format(
-                            $statistics['new_this_month'],
+                            $statistics['new_this_week'],
                             0,
                             ',',
                             '.'

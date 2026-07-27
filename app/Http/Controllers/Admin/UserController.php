@@ -178,15 +178,14 @@ class UserController extends Controller
             'total' => User::query()
                 ->count(),
 
-            'new_this_month' => User::query()
+            'new_this_week' => User::query()
                 ->whereBetween(
                     'created_at',
                     [
-                        now()->startOfMonth(),
-                        now()->endOfMonth(),
+                        now()->startOfWeek(),
+                        now()->endOfWeek(),
                     ]
-                )
-                ->count(),
+                )->count(),
 
             'active' => User::query()
                 ->where('status', 'active')

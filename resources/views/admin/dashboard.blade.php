@@ -175,7 +175,7 @@
                             </p>
                         </div>
 
-                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
                             <svg
                                 class="h-6 w-6"
                                 fill="none"
@@ -199,7 +199,7 @@
                             {{ number_format($pendingBookings) }} đang chờ
                         </span>
 
-                        <span class="font-semibold text-amber-600">
+                        <span class="font-semibold text-violet-600">
                             +{{ number_format($newBookingsThisMonth) }} tháng này
                         </span>
 
@@ -207,7 +207,7 @@
 
                 </div>
 
-                <div class="h-1 bg-amber-500"></div>
+                <div class="h-1 bg-violet-500"></div>
 
             </section>
 
@@ -228,7 +228,7 @@
                             </p>
                         </div>
 
-                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
                             <svg
                                 class="h-6 w-6"
                                 fill="none"
@@ -252,7 +252,7 @@
                             {{ number_format($averageRating, 1) }}/5 điểm trung bình
                         </span>
 
-                        <span class="font-semibold text-violet-600">
+                        <span class="font-semibold text-amber-600">
                             {{ number_format($pendingReviews) }} chờ duyệt
                         </span>
 
@@ -260,7 +260,7 @@
 
                 </div>
 
-                <div class="h-1 bg-violet-500"></div>
+                <div class="h-1 bg-amber-500"></div>
 
             </section>
 

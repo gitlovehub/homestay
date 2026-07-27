@@ -643,7 +643,7 @@
                                                 {{ $reviewUserName }}
                                             </p>
 
-                                            <p class="truncate text-xs text-slate-500">
+                                            <p class="truncate text-xs font-semibold text-blue-500">
                                                 {{ $review->homestay?->name ?? 'Homestay không xác định' }}
                                             </p>
                                         </div>
@@ -654,13 +654,13 @@
 
                                     </div>
 
-                                    <div class="mt-2 flex items-center gap-1 text-amber-400">
+                                    <div class="flex items-center gap-1 text-amber-400">
                                         @for ($star = 1; $star <= 5; $star++)
                                             <span>{{ $star <= $review->rating ? '★' : '☆' }}</span>
                                         @endfor
                                     </div>
 
-                                    <p class="mt-2 line-clamp-2 text-sm text-slate-600">
+                                    <p class="mt-1 line-clamp-2 text-sm text-slate-600">
                                         {{ $review->content ?: $review->title ?: 'Không có nội dung đánh giá.' }}
                                     </p>
 

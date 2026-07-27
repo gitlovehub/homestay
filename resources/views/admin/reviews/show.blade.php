@@ -58,7 +58,7 @@
         $homestay = $review->homestay ?? $room?->homestay;
     @endphp
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
         <x-alert />
 
@@ -68,17 +68,16 @@
             <div class="min-w-0">
                 <a
                     href="{{ route('admin.reviews.index') }}"
-                    class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+                    class="mb-4 block text-sm font-semibold text-blue-600 transition hover:text-blue-700"
                 >
-                    <span aria-hidden="true">←</span>
-                    Quay lại danh sách đánh giá
+                    ← Quay lại danh sách đánh giá
                 </a>
 
-                <h1 class="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900">
                     Chi tiết đánh giá
                 </h1>
 
-                <p class="mt-1.5 text-sm leading-6 text-slate-500">
+                <p class="mt-2 text-sm leading-6 text-slate-500">
                     Kiểm tra thông tin khách hàng, Homestay và nội dung đánh giá.
                 </p>
             </div>

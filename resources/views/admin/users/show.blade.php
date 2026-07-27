@@ -326,6 +326,9 @@
                                             <p class="font-semibold text-slate-900">
                                                 {{ number_format($booking->total_price, 0, ',', '.') }} ₫
                                             </p>
+                                            <p class="mt-0.5 text-xs text-slate-500">
+                                                {{ $paymentStatusLabels[$booking->payment_status] ?? 'Không xác định' }}
+                                            </p>
                                         </td>
                                         <td class="whitespace-nowrap px-5 py-4">
                                             <span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-medium {{ $bookingClass }}">

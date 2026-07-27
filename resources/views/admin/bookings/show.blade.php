@@ -46,27 +46,21 @@
         {{-- Quay lại --}}
         <a
             href="{{ route('admin.bookings.index') }}"
-            class="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
+            class="mb-4 block text-sm font-semibold text-blue-600 transition hover:text-blue-700"
         >
-            <span>←</span>
-            Quay lại danh sách Booking
+            ← Quay lại danh sách Booking
         </a>
 
         {{-- Tiêu đề --}}
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
             <div>
-                <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">
-                    Chi tiết đơn đặt phòng
-                </p>
-
-                <h1 class="mt-2 text-3xl font-bold text-slate-900">
+                <h1 class="text-3xl font-bold text-slate-900">
                     {{ $booking->booking_code }}
                 </h1>
 
-                <p class="mt-2 text-sm text-slate-500">
-                    Được tạo lúc
-                    {{ $booking->created_at->format('H:i, d/m/Y') }}
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Mã Booking dùng để tra cứu đơn đặt phòng
                 </p>
             </div>
 

@@ -11,20 +11,20 @@ class AmenitySeeder extends Seeder
     public function run(): void
     {
         $amenities = [
-            ['name' => 'Wi-Fi miễn phí', 'icon' => 'wifi'],
-            ['name' => 'Điều hòa', 'icon' => 'air-conditioner'],
-            ['name' => 'Bãi đỗ xe', 'icon' => 'parking'],
-            ['name' => 'Hồ bơi', 'icon' => 'pool'],
-            ['name' => 'Nhà bếp', 'icon' => 'kitchen'],
-            ['name' => 'Máy giặt', 'icon' => 'washing-machine'],
-            ['name' => 'Bữa sáng', 'icon' => 'breakfast'],
-            ['name' => 'Ban công', 'icon' => 'balcony'],
-            ['name' => 'Tivi', 'icon' => 'tv'],
-            ['name' => 'Tủ lạnh', 'icon' => 'refrigerator'],
-            ['name' => 'Sân vườn', 'icon' => 'garden'],
-            ['name' => 'Bình nóng lạnh', 'icon' => 'water-heater'],
-            ['name' => 'Cho phép thú cưng', 'icon' => 'pet'],
-            ['name' => 'Phòng không hút thuốc', 'icon' => 'no-smoking'],
+            ['name' => 'Wi-Fi miễn phí', 'icon' => '🌐'],
+            ['name' => 'Điều hòa', 'icon' => '❄️'],
+            ['name' => 'Bãi đỗ xe', 'icon' => '🚗'],
+            ['name' => 'Hồ bơi', 'icon' => '🏊'],
+            ['name' => 'Nhà bếp', 'icon' => '♨️'],
+            ['name' => 'Máy giặt', 'icon' => '🧺'],
+            ['name' => 'Bữa sáng', 'icon' => '🍜'],
+            ['name' => 'Ban công', 'icon' => '🌇'],
+            ['name' => 'Tivi', 'icon' => '📺'],
+            ['name' => 'Tủ lạnh', 'icon' => '🧊'],
+            ['name' => 'Sân vườn', 'icon' => '🏕️'],
+            ['name' => 'Bình nóng lạnh', 'icon' => '💧'],
+            ['name' => 'Cho phép thú cưng', 'icon' => '🐶'],
+            ['name' => 'Phòng không hút thuốc', 'icon' => '🚭'],
         ];
 
         foreach ($amenities as $amenity) {

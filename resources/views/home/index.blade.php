@@ -26,13 +26,17 @@
                 </p>
 
                 <div class="mt-8 flex flex-wrap gap-4">
-                    <a href="#featured"
-                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700">
+                    <a
+                        href="#featured"
+                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    >
                         Khám phá ngay
                     </a>
 
-                    <a href="#about"
-                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600">
+                    <a
+                        href="#about"
+                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
+                    >
                         Tìm hiểu thêm
                     </a>
                 </div>
@@ -69,8 +73,11 @@
 
             <div class="relative">
                 <div class="overflow-hidden rounded-[2rem] bg-white p-3 shadow-2xl shadow-slate-900/15">
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
-                        alt="Homestay nổi bật" class="h-[480px] w-full rounded-[1.5rem] object-cover">
+                    <img
+                        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+                        alt="Homestay nổi bật"
+                        class="h-[480px] w-full rounded-[1.5rem] object-cover"
+                    >
                 </div>
 
                 <div class="absolute -bottom-6 -left-6 hidden rounded-2xl bg-white p-4 shadow-xl sm:block">
@@ -97,118 +104,82 @@
     {{-- Search --}}
     <section class="relative z-10 -mt-5 px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/10">
-            <form action="{{ route('home') }}" method="GET" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {{-- Địa điểm --}}
-                <div>
-                    <label for="location" class="mb-2 block text-sm font-semibold text-slate-700">
+            <form
+                action="{{ route('home') }}"
+                method="GET"
+                class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
+            >
+                <div class="lg:col-span-2">
+                    <label
+                        for="location"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                         Địa điểm
                     </label>
 
-                    <input id="location" type="text" name="location" value="{{ request('location') }}"
+                    <input
+                        id="location"
+                        type="text"
+                        name="location"
+                        value="{{ request('location') }}"
                         placeholder="Đà Lạt, Sa Pa, Hội An..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
                 </div>
 
-                {{-- Ngày nhận phòng --}}
                 <div>
-                    <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                        for="check_in"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                         Ngày nhận phòng
                     </label>
 
-                    <input id="check_in" type="date" name="check_in" value="{{ request('check_in') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                    <input
+                        id="check_in"
+                        type="date"
+                        name="check_in"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
                 </div>
 
-                {{-- Ngày trả phòng --}}
                 <div>
-                    <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
+                    <label
+                        for="check_out"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                         Ngày trả phòng
                     </label>
 
-                    <input id="check_out" type="date" name="check_out" value="{{ request('check_out') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                    <input
+                        id="check_out"
+                        type="date"
+                        name="check_out"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
                 </div>
 
-                {{-- Khoảng giá --}}
-                <div>
-                    <label for="price_range" class="mb-2 block text-sm font-semibold text-slate-700">
-                        Khoảng giá
-                    </label>
-
-                    <select id="price_range" name="price_range"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        <option value="">Tất cả mức giá</option>
-                        <option value="under_500" @selected(request('price_range') === 'under_500')>
-                            Dưới 500.000đ
-                        </option>
-                        <option value="500_1000" @selected(request('price_range') === '500_1000')>
-                            500.000đ - 1.000.000đ
-                        </option>
-                        <option value="1000_2000" @selected(request('price_range') === '1000_2000')>
-                            1.000.000đ - 2.000.000đ
-                        </option>
-                        <option value="over_2000" @selected(request('price_range') === 'over_2000')>
-                            Trên 2.000.000đ
-                        </option>
-                    </select>
-                </div>
-
-                {{-- Loại phòng --}}
-                <div>
-                    <label for="category_id" class="mb-2 block text-sm font-semibold text-slate-700">
-                        Loại phòng
-                    </label>
-
-                    <select id="category_id" name="category_id"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        <option value="">Tất cả loại phòng</option>
-
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @selected((string) request('category_id') === (string) $category->id)>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                {{-- Sắp xếp --}}
-                <div>
-                    <label for="sort_price" class="mb-2 block text-sm font-semibold text-slate-700">
-                        Sắp xếp
-                    </label>
-
-                    <select id="sort_price" name="sort_price"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        <option value="">Mới nhất</option>
-                        <option value="asc" @selected(request('sort_price') === 'asc')>
-                            Giá thấp đến cao
-                        </option>
-                        <option value="desc" @selected(request('sort_price') === 'desc')>
-                            Giá cao đến thấp
-                        </option>
-                    </select>
-                </div>
-
-                {{-- Nút tìm kiếm --}}
                 <div class="flex items-end">
-                    <button type="submit"
-                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700">
+                    <button
+                        type="submit"
+                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+                    >
                         Tìm kiếm
                     </button>
                 </div>
-
-                {{-- Nút xóa lọc --}}
-                <div class="flex items-end">
-                    <a href="{{ route('home') }}"
-                        class="w-full rounded-xl border border-slate-300 px-5 py-3 text-center font-semibold text-slate-600 transition hover:bg-slate-100">
-                        Xóa bộ lọc
-                    </a>
-                </div>
             </form>
+
+            <p class="mt-3 text-xs text-slate-400">
+                Chức năng tìm kiếm sẽ được kết nối ở phần tiếp theo.
+            </p>
+        </div>
     </section>
 
     {{-- Featured --}}
-    <section id="featured" class="py-20">
+    <section
+        id="featured"
+        class="py-20"
+    >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                 <div>
@@ -225,9 +196,25 @@
                     </p>
                 </div>
 
-                <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
-                    Xem tất cả →
-                </a>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a
+                        href="{{ route('home') }}"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                        Xem tất cả
+                    </a>
+
+                    <button
+                        type="button"
+                        id="openFilterModal"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/>
+                        </svg>
+                        Bộ lọc
+                    </button>
+                </div>
             </div>
 
             @if ($homestays->isEmpty())
@@ -243,64 +230,65 @@
             @else
                 <div class="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($homestays as $homestay)
-                            <article
-                                class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                                <div class="relative overflow-hidden">
-                                    <img src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
-                                        alt="{{ $homestay->name }}"
-                                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
+                        <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                            <div class="relative overflow-hidden">
+                                <img
+                                    src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
+                                    alt="{{ $homestay->name }}"
+                                    class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                                >
 
-                                    <span
-                                        class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow">
-                                        {{ $homestay->category?->name ?? 'Homestay' }}
-                                    </span>
+                                <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow">
+                                    {{ $homestay->category?->name ?? 'Homestay' }}
+                                </span>
 
-                                    <span
-                                        class="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white">
-                                        Còn hoạt động
-                                    </span>
-                                </div>
+                                <span class="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white">
+                                    Còn hoạt động
+                                </span>
+                            </div>
 
-                                <div class="p-6">
-                                    <div class="flex items-center justify-between gap-3">
-                                        <p class="text-sm font-medium text-blue-600">
-                                            {{ $homestay->city }}
-                                        </p>
-
-                                        <span class="text-sm text-amber-500">
-                                            ★ 4.8
-                                        </span>
-                                    </div>
-
-                                    <h3 class="mt-2 line-clamp-1 text-xl font-bold text-slate-950">
-                                        {{ $homestay->name }}
-                                    </h3>
-
-                                    <p class="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
-                                        {{ \Illuminate\Support\Str::limit(
-                            $homestay->description ?? 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
-                            100
-                        ) }}
+                            <div class="p-6">
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="text-sm font-medium text-blue-600">
+                                        {{ $homestay->city }}
                                     </p>
 
-                                    <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
-                                        <div>
-                                            <p class="text-xs text-slate-400">
-                                                Địa chỉ
-                                            </p>
-
-                                            <p class="mt-1 max-w-48 truncate text-sm font-semibold text-slate-700">
-                                                {{ $homestay->address }}
-                                            </p>
-                                        </div>
-
-                                        <a href="{{ route('homestays.show', $homestay->slug) }}"
-                                            class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white">
-                                            Xem chi tiết
-                                        </a>
-                                    </div>
+                                    <span class="text-sm text-amber-500">
+                                        ★ 4.8
+                                    </span>
                                 </div>
-                            </article>
+
+                                <h3 class="mt-2 line-clamp-1 text-xl font-bold text-slate-950">
+                                    {{ $homestay->name }}
+                                </h3>
+
+                                <p class="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
+                                    {{ \Illuminate\Support\Str::limit(
+                                        $homestay->description ?? 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
+                                        100
+                                    ) }}
+                                </p>
+
+                                <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
+                                    <div>
+                                        <p class="text-xs text-slate-400">
+                                            Địa chỉ
+                                        </p>
+
+                                        <p class="mt-1 max-w-48 truncate text-sm font-semibold text-slate-700">
+                                            {{ $homestay->address }}
+                                        </p>
+                                    </div>
+
+                                    <a
+                                        href="{{ route('homestays.show', $homestay->slug) }}"
+                                        class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white"
+                                    >
+                                        Xem chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
                     @endforeach
                 </div>
 
@@ -312,7 +300,10 @@
     </section>
 
     {{-- About --}}
-    <section id="about" class="bg-slate-100 py-20">
+    <section
+        id="about"
+        class="bg-slate-100 py-20"
+    >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <p class="font-semibold uppercase tracking-widest text-blue-600">
@@ -373,4 +364,289 @@
             </div>
         </div>
     </section>
+
+    {{-- Filter Modal --}}
+    <div
+        id="filterModal"
+        class="fixed inset-0 z-[100] hidden"
+        aria-labelledby="filterModalTitle"
+        role="dialog"
+        aria-modal="true"
+    >
+        <div id="filterOverlay" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+
+        <div class="relative flex min-h-full items-center justify-center p-3 sm:p-6">
+            <div
+                id="filterPanel"
+                class="flex h-[90vh] max-h-[760px] min-h-[560px] w-full max-w-5xl scale-95 flex-col overflow-hidden rounded-3xl border border-white/60 bg-white opacity-0 shadow-2xl transition duration-200"
+            >
+                <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7">
+                    <div>
+                        <h3 id="filterModalTitle" class="text-xl font-bold text-slate-950 sm:text-2xl">
+                            Bộ lọc Homestay
+                        </h3>
+                        <p class="mt-1 text-sm text-slate-500">
+                            Chọn các tiêu chí phù hợp với chuyến đi của bạn.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeFilterModal"
+                        class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                        aria-label="Đóng bộ lọc"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <form action="{{ route('home') }}" method="GET" class="flex min-h-0 flex-1 flex-col overflow-hidden">
+                    <div id="filterContent" class="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
+                        <div class="grid gap-6 lg:grid-cols-2">
+                            <div>
+                                <label for="filter_keyword" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Tên Homestay
+                                </label>
+                                <div class="relative">
+                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                        <circle cx="11" cy="11" r="7"></circle>
+                                        <path stroke-linecap="round" d="m20 20-3.5-3.5"></path>
+                                    </svg>
+                                    <input
+                                        id="filter_keyword"
+                                        type="text"
+                                        name="keyword"
+                                        value="{{ request('keyword') }}"
+                                        placeholder="Nhập tên Homestay..."
+                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="filter_location" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Địa điểm
+                                </label>
+                                <div class="relative">
+                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                        <circle cx="12" cy="10" r="2.5"/>
+                                    </svg>
+                                    <input
+                                        id="filter_location"
+                                        type="text"
+                                        name="location"
+                                        value="{{ request('location') }}"
+                                        placeholder="Đà Lạt, Sa Pa, Hội An..."
+                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-7 border-t border-slate-100 pt-6">
+                            <p class="mb-3 text-sm font-semibold text-slate-800">
+                                Khoảng giá
+                            </p>
+
+                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                @php
+                                    $priceOptions = [
+                                        'under_500' => 'Dưới 500.000đ',
+                                        '500_1000' => '500.000đ - 1 triệu',
+                                        '1000_2000' => '1 - 2 triệu',
+                                        'over_2000' => 'Trên 2 triệu',
+                                    ];
+                                @endphp
+
+                                @foreach ($priceOptions as $value => $label)
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="price_range"
+                                            value="{{ $value }}"
+                                            class="peer sr-only"
+                                            @checked(request('price_range') === $value)
+                                        >
+                                        <span class="flex min-h-12 items-center justify-center rounded-2xl border border-slate-300 px-3 text-center text-sm font-semibold text-slate-600 transition peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-blue-300">
+                                            {{ $label }}
+                                        </span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="mt-7 grid gap-6 border-t border-slate-100 pt-6 md:grid-cols-2 lg:grid-cols-3">
+                            <div>
+                                <label for="room_type" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Loại phòng
+                                </label>
+                                <select
+                                    id="room_type"
+                                    name="room_type"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Tất cả loại phòng</option>
+                                    @foreach (($roomTypes ?? []) as $roomType)
+                                        <option value="{{ $roomType }}" @selected(request('room_type') === $roomType)>
+                                            {{ $roomType }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="guests" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Số người
+                                </label>
+                                <select
+                                    id="guests"
+                                    name="guests"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Không giới hạn</option>
+                                    @for ($guest = 1; $guest <= 10; $guest++)
+                                        <option value="{{ $guest }}" @selected((string) request('guests') === (string) $guest)>
+                                            {{ $guest }} người
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="sort_price" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Sắp xếp theo giá
+                                </label>
+                                <select
+                                    id="sort_price"
+                                    name="sort_price"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Mới nhất</option>
+                                    <option value="asc" @selected(request('sort_price') === 'asc')>
+                                        Giá thấp đến cao
+                                    </option>
+                                    <option value="desc" @selected(request('sort_price') === 'desc')>
+                                        Giá cao đến thấp
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-7 border-t border-slate-100 pt-6">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-sm font-semibold text-slate-800">
+                                    Tiện ích
+                                </p>
+                                <span class="text-xs text-slate-400">
+                                    Có thể chọn nhiều
+                                </span>
+                            </div>
+
+                            <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+                                @forelse (($amenities ?? []) as $amenity)
+<label
+    class="flex h-12 cursor-pointer items-center gap-2 rounded-xl
+           border border-slate-300 px-3 text-sm font-medium text-slate-600
+           transition hover:border-blue-400
+           has-[:checked]:border-blue-600
+           has-[:checked]:bg-blue-50
+           has-[:checked]:text-blue-700"
+>
+    <input
+        type="checkbox"
+        name="amenities[]"
+        value="{{ $amenity->id }}"
+        class="h-5 w-5 shrink-0 cursor-pointer accent-blue-600"
+        @checked(
+            in_array(
+                (string) $amenity->id,
+                array_map('strval', (array) request('amenities', [])),
+                true
+            )
+        )
+    >
+
+    <span class="leading-5">
+        {{ $amenity->name }}
+    </span>
+</label>
+                                @empty
+                                    <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500 sm:col-span-2 lg:col-span-3">
+                                        Chưa có dữ liệu tiện ích.
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shrink-0 flex flex-col-reverse gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-7">
+                        <a
+                            href="{{ route('home') }}"
+                            class="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
+                        >
+                            Xóa bộ lọc
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
+                        >
+                            Xem kết quả
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('filterModal');
+            const panel = document.getElementById('filterPanel');
+            const openButton = document.getElementById('openFilterModal');
+            const closeButton = document.getElementById('closeFilterModal');
+            const overlay = document.getElementById('filterOverlay');
+            const filterContent = document.getElementById('filterContent');
+
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                if (filterContent) filterContent.scrollTop = 0;
+
+                requestAnimationFrame(() => {
+                    panel.classList.remove('scale-95', 'opacity-0');
+                    panel.classList.add('scale-100', 'opacity-100');
+                });
+            };
+
+            const closeModal = () => {
+                panel.classList.remove('scale-100', 'opacity-100');
+                panel.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }, 180);
+            };
+
+            openButton?.addEventListener('click', openModal);
+            closeButton?.addEventListener('click', closeModal);
+            overlay?.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+
 @endsection

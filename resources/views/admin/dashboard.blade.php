@@ -798,22 +798,23 @@
 
                 {{-- Người dùng --}}
                 <a
-                    href="#"
+                    href="{{ route('admin.users.index') }}"
                     class="group flex items-center gap-4 rounded-2xl border border-slate-200 p-4 transition duration-200 hover:-translate-y-1 hover:border-violet-200 hover:bg-violet-50 hover:shadow-md"
                 >
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-600 transition group-hover:bg-violet-600 group-hover:text-white">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.8"
+                            fill="none"
                             stroke="currentColor"
-                            class="h-6 w-6"
+                            class="h-7 w-7"
+                            aria-hidden="true"
                         >
                             <path
+                                d="M3 19V18C3 15.7909 4.79086 14 7 14H11C13.2091 14 15 15.7909 15 18V19M15 11C16.6569 11 18 9.65685 18 8C18 6.34315 16.6569 5 15 5M21 19V18C21 15.7909 19.2091 14 17 14H16.5M12 8C12 9.65685 10.6569 11 9 11C7.34315 11 6 9.65685 6 8C6 6.34315 7.34315 5 9 5C10.6569 5 12 6.34315 12 8Z"
+                                stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                d="M18 18.72a9.094 9.094 0 0 0 3.741 1.479 9.096 9.096 0 0 0-1.879-5.788m-1.862 4.309a9.108 9.108 0 0 1-4.5 1.128 9.108 9.108 0 0 1-4.5-1.128m9 0a5.992 5.992 0 0 0-9 0M15 7.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                             />
                         </svg>
                     </div>

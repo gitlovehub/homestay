@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\HomestayController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
@@ -58,6 +59,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // --- Dashboard Admin ---
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // --- Quản lý tài khoản ---
+    Route::get(
+        '/users',
+        [UserController::class, 'index']
+    )->name('users.index');
+
+    Route::get(
+        '/users/{user}',
+        [UserController::class, 'show']
+    )->name('users.show');
+
+    Route::patch(
+        '/users/{user}/status',
+        [UserController::class, 'updateStatus']
+    )->name('users.update-status');
 
     // --- Quản lý Category ---
     Route::resource('categories', CategoryController::class);

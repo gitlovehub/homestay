@@ -14,9 +14,14 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::when($request->search, function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -36,7 +41,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        $data['slug'] = $data['slug']
+        $data['slug'] = !empty($data['slug'])
             ? Str::slug($data['slug'])
             : Str::slug($data['name']);
 
@@ -70,7 +75,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        $data['slug'] = $data['slug']
+        $data['slug'] = !empty($data['slug'])
             ? Str::slug($data['slug'])
             : Str::slug($data['name']);
 

@@ -47,16 +47,9 @@
                             Họ và tên
                         </label>
 
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            value="{{ old('name') }}"
-                            autofocus
-                            autocomplete="name"
-                            placeholder="Nhập họ và tên"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" autofocus
+                            autocomplete="name" placeholder="Nhập họ và tên"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                         @error('name')
                             <p class="mt-2 text-sm font-medium text-red-600">
@@ -71,15 +64,9 @@
                             Địa chỉ email
                         </label>
 
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value="{{ old('email') }}"
-                            autocomplete="username"
-                            placeholder="example@gmail.com"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                        <input id="email" name="email" type="email" value="{{ old('email') }}"
+                            autocomplete="username" placeholder="example@gmail.com"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                         @error('email')
                             <p class="mt-2 text-sm font-medium text-red-600">
@@ -94,14 +81,9 @@
                             Mật khẩu
                         </label>
 
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            autocomplete="new-password"
+                        <input id="password" name="password" type="password" autocomplete="new-password"
                             placeholder="Tối thiểu 8 ký tự"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                         @error('password')
                             <p class="mt-2 text-sm font-medium text-red-600">
@@ -116,24 +98,16 @@
                             Xác nhận mật khẩu
                         </label>
 
-                        <input
-                            id="password_confirmation"
-                            name="password_confirmation"
-                            type="password"
-                            autocomplete="new-password"
-                            placeholder="Nhập lại mật khẩu"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                        <input id="password_confirmation" name="password_confirmation" type="password"
+                            autocomplete="new-password" placeholder="Nhập lại mật khẩu"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                     </div>
 
                     {{-- Điều khoản --}}
                     <label class="flex items-start gap-3">
 
-                        <input
-                            type="checkbox"
-                            name="terms"
-                            class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                        >
+                        <input type="checkbox" name="terms"
+                            class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
 
                         <span class="text-sm leading-6 text-slate-600">
                             Tôi đồng ý với
@@ -148,10 +122,8 @@
 
                     </label>
 
-                    <button
-                        type="submit"
-                        class="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                    >
+                    <button type="submit"
+                        class="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
                         Đăng ký tài khoản
                     </button>
 
@@ -162,10 +134,8 @@
                     <p class="text-sm text-slate-600">
                         Đã có tài khoản?
 
-                        <a
-                            href="{{ route('login') }}"
-                            class="font-semibold text-blue-600 transition hover:text-blue-700"
-                        >
+                        <a href="{{ route('login') }}"
+                            class="font-semibold text-blue-600 transition hover:text-blue-700">
                             Đăng nhập ngay
                         </a>
                     </p>

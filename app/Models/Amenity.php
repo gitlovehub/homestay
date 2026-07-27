@@ -2,24 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Amenity extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
-        'icon',
+        'slug',
         'description',
+        'icon',
         'status',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'status' => 'boolean',
-        ];
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | Quan hệ với Homestay
+    |--------------------------------------------------------------------------
+    | Một tiện nghi có thể thuộc nhiều Homestay.
+    */
 
     public function homestays(): BelongsToMany
     {
@@ -29,5 +33,12 @@ class Amenity extends Model
             'amenity_id',
             'homestay_id'
         );
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'status' => 'boolean',
+        ];
     }
 }

@@ -2,26 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'phone',
+        'address',
+        'avatar',
+        'role',
+        'status',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -30,10 +35,69 @@ class User extends Authenticatable
         ];
     }
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-    ];
+    /*
+    |--------------------------------------------------------------------------
+    | Homestay do người dùng sở hữu
+    |--------------------------------------------------------------------------
+    */
+
+    public function homestays(): HasMany
+    {
+        return $this->hasMany(Homestay::class, 'owner_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Đơn đặt phòng của người dùng
+    |--------------------------------------------------------------------------
+    */
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Đánh giá của người dùng
+    |--------------------------------------------------------------------------
+    */
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kiểm tra quyền Admin
+    |--------------------------------------------------------------------------
+    */
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kiểm tra quyền User
+    |--------------------------------------------------------------------------
+    */
+
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kiểm tra tài khoản hoạt động
+    |--------------------------------------------------------------------------
+    */
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
 }

@@ -16,7 +16,7 @@
             <a href="{{ route('home') }}" class="font-medium text-blue-600 transition hover:text-blue-700">
                 Trang chủ
             </a>
-            <a href="#featured" class="font-medium text-slate-600 transition hover:text-blue-600">
+            <a href="{{ route('homestays.index') }}" class="font-medium text-slate-600 transition hover:text-blue-600">
                 Homestay
             </a>
             <a href="#about" class="font-medium text-slate-600 transition hover:text-blue-600">

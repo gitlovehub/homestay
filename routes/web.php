@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 // ROUTE CÔNG KHAI (Public Routes)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get(
+    '/homestays',
+    [FrontendHomestayController::class, 'index']
+)->name('homestays.index');
+Route::get(
     '/homestays/{slug}',
     [FrontendHomestayController::class, 'show']
 )->name('homestays.show');

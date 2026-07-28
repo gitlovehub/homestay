@@ -11,7 +11,7 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-90"
-        class="fixed left-1/2 top-8 z-[9999] -translate-x-1/2"
+        class="fixed left-1/2 top-8 z-9999 -translate-x-1/2"
         style="display:none;"
     >
 
@@ -48,7 +48,7 @@
         "
         x-show="show"
         x-transition
-        class="fixed left-1/2 top-8 z-[9999] -translate-x-1/2"
+        class="fixed left-1/2 top-8 z-9999 -translate-x-1/2"
         style="display:none;"
     >
 

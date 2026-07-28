@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
+use App\Http\Controllers\Frontend\ReviewController as FrontendReviewController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTE CÔNG KHAI (Public Routes)
@@ -51,6 +52,17 @@ Route::middleware('auth')->group(function () {
             [FrontendBookingController::class, 'show']
         )->name('show');
     });
+
+    // Reviews phía người dùng
+    Route::get(
+        '/homestays/{homestay:slug}/reviews/create',
+        [FrontendReviewController::class, 'create']
+    )->name('reviews.create');
+
+    Route::post(
+        '/bookings/{booking}/reviews',
+        [FrontendReviewController::class, 'store']
+    )->name('reviews.store');
 
 });
 

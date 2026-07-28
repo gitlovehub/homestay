@@ -129,6 +129,7 @@ class BookingController extends Controller
         $bookings = Booking::query()
             ->with([
                 'room.homestay',
+                'reviews:id,booking_id,status',
             ])
             ->where('user_id', auth()->id())
             ->latest()

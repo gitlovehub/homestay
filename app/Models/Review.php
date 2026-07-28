@@ -19,6 +19,7 @@ class Review extends Model
         'title',
         'content',
         'status',
+        'edited_at',
     ];
 
     protected function casts(): array
@@ -26,6 +27,7 @@ class Review extends Model
         return [
             'review_number' => 'integer',
             'rating' => 'integer',
+            'edited_at' => 'datetime',
         ];
     }
 
@@ -60,5 +62,16 @@ class Review extends Model
     public function homestay(): BelongsTo
     {
         return $this->belongsTo(Homestay::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kiểm tra đánh giá đã chỉnh sửa
+    |--------------------------------------------------------------------------
+    */
+
+    public function isEdited(): bool
+    {
+        return $this->edited_at !== null;
     }
 }

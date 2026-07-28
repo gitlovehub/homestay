@@ -196,12 +196,25 @@
                     </p>
                 </div>
 
-                <a
-                    href="#"
-                    class="font-semibold text-blue-600 hover:text-blue-700"
-                >
-                    Xem tất cả →
-                </a>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a
+                        href="{{ route('home') }}"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                    >
+                        Xem tất cả
+                    </a>
+
+                    <button
+                        type="button"
+                        id="openFilterModal"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/>
+                        </svg>
+                        Bộ lọc
+                    </button>
+                </div>
             </div>
 
             @if ($homestays->isEmpty())
@@ -351,4 +364,289 @@
             </div>
         </div>
     </section>
+
+    {{-- Filter Modal --}}
+    <div
+        id="filterModal"
+        class="fixed inset-0 z-[100] hidden"
+        aria-labelledby="filterModalTitle"
+        role="dialog"
+        aria-modal="true"
+    >
+        <div id="filterOverlay" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
+
+        <div class="relative flex min-h-full items-center justify-center p-3 sm:p-6">
+            <div
+                id="filterPanel"
+                class="flex h-[90vh] max-h-[760px] min-h-[560px] w-full max-w-5xl scale-95 flex-col overflow-hidden rounded-3xl border border-white/60 bg-white opacity-0 shadow-2xl transition duration-200"
+            >
+                <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7">
+                    <div>
+                        <h3 id="filterModalTitle" class="text-xl font-bold text-slate-950 sm:text-2xl">
+                            Bộ lọc Homestay
+                        </h3>
+                        <p class="mt-1 text-sm text-slate-500">
+                            Chọn các tiêu chí phù hợp với chuyến đi của bạn.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeFilterModal"
+                        class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                        aria-label="Đóng bộ lọc"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <form action="{{ route('home') }}" method="GET" class="flex min-h-0 flex-1 flex-col overflow-hidden">
+                    <div id="filterContent" class="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
+                        <div class="grid gap-6 lg:grid-cols-2">
+                            <div>
+                                <label for="filter_keyword" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Tên Homestay
+                                </label>
+                                <div class="relative">
+                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                        <circle cx="11" cy="11" r="7"></circle>
+                                        <path stroke-linecap="round" d="m20 20-3.5-3.5"></path>
+                                    </svg>
+                                    <input
+                                        id="filter_keyword"
+                                        type="text"
+                                        name="keyword"
+                                        value="{{ request('keyword') }}"
+                                        placeholder="Nhập tên Homestay..."
+                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="filter_location" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Địa điểm
+                                </label>
+                                <div class="relative">
+                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                        <circle cx="12" cy="10" r="2.5"/>
+                                    </svg>
+                                    <input
+                                        id="filter_location"
+                                        type="text"
+                                        name="location"
+                                        value="{{ request('location') }}"
+                                        placeholder="Đà Lạt, Sa Pa, Hội An..."
+                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-7 border-t border-slate-100 pt-6">
+                            <p class="mb-3 text-sm font-semibold text-slate-800">
+                                Khoảng giá
+                            </p>
+
+                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                @php
+                                    $priceOptions = [
+                                        'under_500' => 'Dưới 500.000đ',
+                                        '500_1000' => '500.000đ - 1 triệu',
+                                        '1000_2000' => '1 - 2 triệu',
+                                        'over_2000' => 'Trên 2 triệu',
+                                    ];
+                                @endphp
+
+                                @foreach ($priceOptions as $value => $label)
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="price_range"
+                                            value="{{ $value }}"
+                                            class="peer sr-only"
+                                            @checked(request('price_range') === $value)
+                                        >
+                                        <span class="flex min-h-12 items-center justify-center rounded-2xl border border-slate-300 px-3 text-center text-sm font-semibold text-slate-600 transition peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-blue-300">
+                                            {{ $label }}
+                                        </span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="mt-7 grid gap-6 border-t border-slate-100 pt-6 md:grid-cols-2 lg:grid-cols-3">
+                            <div>
+                                <label for="room_type" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Loại phòng
+                                </label>
+                                <select
+                                    id="room_type"
+                                    name="room_type"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Tất cả loại phòng</option>
+                                    @foreach (($roomTypes ?? []) as $roomType)
+                                        <option value="{{ $roomType }}" @selected(request('room_type') === $roomType)>
+                                            {{ $roomType }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="guests" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Số người
+                                </label>
+                                <select
+                                    id="guests"
+                                    name="guests"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Không giới hạn</option>
+                                    @for ($guest = 1; $guest <= 10; $guest++)
+                                        <option value="{{ $guest }}" @selected((string) request('guests') === (string) $guest)>
+                                            {{ $guest }} người
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="sort_price" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Sắp xếp theo giá
+                                </label>
+                                <select
+                                    id="sort_price"
+                                    name="sort_price"
+                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                >
+                                    <option value="">Mới nhất</option>
+                                    <option value="asc" @selected(request('sort_price') === 'asc')>
+                                        Giá thấp đến cao
+                                    </option>
+                                    <option value="desc" @selected(request('sort_price') === 'desc')>
+                                        Giá cao đến thấp
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-7 border-t border-slate-100 pt-6">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-sm font-semibold text-slate-800">
+                                    Tiện ích
+                                </p>
+                                <span class="text-xs text-slate-400">
+                                    Có thể chọn nhiều
+                                </span>
+                            </div>
+
+                            <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+                                @forelse (($amenities ?? []) as $amenity)
+<label
+    class="flex h-12 cursor-pointer items-center gap-2 rounded-xl
+           border border-slate-300 px-3 text-sm font-medium text-slate-600
+           transition hover:border-blue-400
+           has-[:checked]:border-blue-600
+           has-[:checked]:bg-blue-50
+           has-[:checked]:text-blue-700"
+>
+    <input
+        type="checkbox"
+        name="amenities[]"
+        value="{{ $amenity->id }}"
+        class="h-5 w-5 shrink-0 cursor-pointer accent-blue-600"
+        @checked(
+            in_array(
+                (string) $amenity->id,
+                array_map('strval', (array) request('amenities', [])),
+                true
+            )
+        )
+    >
+
+    <span class="leading-5">
+        {{ $amenity->name }}
+    </span>
+</label>
+                                @empty
+                                    <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500 sm:col-span-2 lg:col-span-3">
+                                        Chưa có dữ liệu tiện ích.
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shrink-0 flex flex-col-reverse gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-7">
+                        <a
+                            href="{{ route('home') }}"
+                            class="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
+                        >
+                            Xóa bộ lọc
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
+                        >
+                            Xem kết quả
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('filterModal');
+            const panel = document.getElementById('filterPanel');
+            const openButton = document.getElementById('openFilterModal');
+            const closeButton = document.getElementById('closeFilterModal');
+            const overlay = document.getElementById('filterOverlay');
+            const filterContent = document.getElementById('filterContent');
+
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                if (filterContent) filterContent.scrollTop = 0;
+
+                requestAnimationFrame(() => {
+                    panel.classList.remove('scale-95', 'opacity-0');
+                    panel.classList.add('scale-100', 'opacity-100');
+                });
+            };
+
+            const closeModal = () => {
+                panel.classList.remove('scale-100', 'opacity-100');
+                panel.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }, 180);
+            };
+
+            openButton?.addEventListener('click', openModal);
+            closeButton?.addEventListener('click', closeModal);
+            overlay?.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+
 @endsection

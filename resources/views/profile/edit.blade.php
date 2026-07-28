@@ -33,11 +33,11 @@
         ];
 
         $bookingStatusClasses = [
-            'pending' => 'bg-amber-100 text-amber-700',
-            'confirmed' => 'bg-blue-100 text-blue-700',
-            'checked_in' => 'bg-indigo-100 text-indigo-700',
-            'completed' => 'bg-emerald-100 text-emerald-700',
-            'cancelled' => 'bg-red-100 text-red-700',
+            'pending' => 'bg-amber-50 text-amber-700 border border-amber-200',
+            'confirmed' => 'bg-blue-50 text-blue-700 border border-blue-200',
+            'checked_in' => 'bg-violet-50 text-violet-700 border border-violet-200',
+            'completed' => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            'cancelled' => 'bg-red-50 text-red-700 border border-red-200',
         ];
 
         $avatarUrl = $user->avatar ? Storage::url($user->avatar) : null;
@@ -48,27 +48,17 @@
     <main>
 
         {{-- Breadcrumb --}}
-        <section class="border-b border-slate-200 bg-white">
-
-            <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-
-                <nav class="flex items-center gap-2 text-sm text-slate-500">
-
-                    <a href="{{ route('home') }}" class="font-medium transition hover:text-blue-600">
-                        Trang chủ
-                    </a>
-
-                    <span>/</span>
-
-                    <span class="font-semibold text-slate-800">
-                        Hồ sơ cá nhân
-                    </span>
-
-                </nav>
-
-            </div>
-
-        </section>
+        <x-frontend-breadcrumb
+            :items="[
+                [
+                    'label' => 'Trang chủ',
+                    'url' => route('home'),
+                ],
+                [
+                    'label' => 'Hồ sơ cá nhân',
+                ],
+            ]"
+        />
 
         <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 

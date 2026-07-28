@@ -31,11 +31,11 @@
         ];
 
         $statusClasses = [
-            'pending' => 'bg-amber-100 text-amber-800',
-            'confirmed' => 'bg-blue-100 text-blue-800',
-            'checked_in' => 'bg-indigo-100 text-indigo-800',
-            'completed' => 'bg-emerald-100 text-emerald-800',
-            'cancelled' => 'bg-red-100 text-red-800',
+            'pending' => 'bg-amber-50 text-amber-700 border border-amber-200',
+            'confirmed' => 'bg-blue-50 text-blue-700 border border-blue-200',
+            'checked_in' => 'bg-violet-50 text-violet-700 border border-violet-200',
+            'completed' => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            'cancelled' => 'bg-red-50 text-red-700 border border-red-200',
         ];
 
         $paymentLabels = [
@@ -50,35 +50,25 @@
     <main>
 
         {{-- Breadcrumb --}}
-        <section class="border-b border-slate-200 bg-white">
-            <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-
-                <nav class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-                    <a
-                        href="{{ route('home') }}"
-                        class="font-medium transition hover:text-blue-600"
-                    >
-                        Trang chủ
-                    </a>
-
-                    <span>/</span>
-
-                    <a
-                        href="{{ route('bookings.history') }}"
-                        class="font-medium transition hover:text-blue-600"
-                    >
-                        Lịch sử đặt phòng
-                    </a>
-
-                    <span>/</span>
-
-                    <span class="font-semibold text-slate-800">
-                        {{ $booking->booking_code }}
-                    </span>
-                </nav>
-
-            </div>
-        </section>
+        <x-frontend-breadcrumb
+            :items="[
+                [
+                    'label' => 'Trang chủ',
+                    'url' => route('home'),
+                ],
+                [
+                    'label' => 'Hồ sơ cá nhân',
+                    'url' => route('profile.edit'),
+                ],
+                [
+                    'label' => 'Lịch sử đặt phòng',
+                    'url' => route('bookings.history'),
+                ],
+                [
+                    'label' => 'Chi tiết đơn'
+                ],
+            ]"
+        />
 
         <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
@@ -104,7 +94,7 @@
                     </p>
                 </div>
 
-                <span class="inline-flex w-fit rounded-full px-4 py-2 text-sm font-semibold {{ $statusClasses[$booking->status] ?? 'bg-slate-100 text-slate-700' }}">
+                <span class="inline-flex w-fit rounded-full px-6 py-2 text-sm font-semibold {{ $statusClasses[$booking->status] ?? 'bg-slate-100 text-slate-700' }}">
                     {{ $statusLabels[$booking->status] ?? $booking->status }}
                 </span>
 

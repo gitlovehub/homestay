@@ -178,7 +178,7 @@
     {{-- Featured --}}
     <section
         id="featured"
-        class="py-20"
+        class="py-25"
     >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -289,7 +289,7 @@
     {{-- About --}}
     <section
         id="about"
-        class="bg-slate-100 py-20"
+        class="bg-slate-100 py-25"
     >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">

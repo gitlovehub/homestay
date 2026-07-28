@@ -394,7 +394,7 @@
                 {{-- Bảng --}}
                 <div class="overflow-x-auto">
 
-                    <table class="w-full border-collapse text-left">
+                    <table class="w-full min-h-120 border-collapse text-left">
 
                         <thead>
 

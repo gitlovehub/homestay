@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
 use App\Http\Controllers\Frontend\ReviewController as FrontendReviewController;
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 // ROUTE CÔNG KHAI (Public Routes)
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get(
+    '/categories/{category:slug}',
+    [FrontendCategoryController::class, 'show']
+)->name('categories.show');
 Route::get(
     '/homestays',
     [FrontendHomestayController::class, 'index']

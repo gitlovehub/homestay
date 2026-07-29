@@ -34,16 +34,14 @@
             <p class="font-semibold uppercase tracking-widest text-blue-600">
                 Khám phá nơi lưu trú
             </p>
-            <div class="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
-                        Danh sách Homestay
-                    </h1>
-                    <p class="mt-2 max-w-2xl text-slate-500">
-                        Tìm kiếm và lựa chọn Homestay phù hợp với địa điểm,
-                        ngân sách và nhu cầu của bạn.
-                    </p>
-                </div>
+            <div class="mt-2">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                    Danh sách Homestay
+                </h1>
+                <p class="mt-2 max-w-2xl text-slate-500">
+                    Tìm kiếm và lựa chọn Homestay phù hợp với địa điểm,
+                    ngân sách và nhu cầu của bạn.
+                </p>
             </div>
         </div>
     </section>
@@ -65,112 +63,10 @@
                         @endif
                     </div>
 
-                    <form method="GET" action="{{ route('homestays.index') }}" class="space-y-4">
-                        <div>
-                            <label for="search" class="text-sm font-semibold text-slate-700">Tên Homestay</label>
-                            <input type="text" id="search" name="search" value="{{ request('search') }}"
-                                placeholder="Nhập tên..."
-                                class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        </div>
+                    @include('homestays.partials.filter-form', [
+                        'prefix' => 'desktop',
+                    ])
 
-                        <div>
-                            <label for="location" class="text-sm font-semibold text-slate-700">Địa điểm</label>
-                            <input type="text" id="location" name="location" value="{{ request('location') }}"
-                                placeholder="Thành phố..."
-                                class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        </div>
-
-                        <div>
-                            <p class="text-sm font-semibold text-slate-700">Khoảng giá / đêm</p>
-                            <div class="mt-2 grid grid-cols-2 gap-3">
-
-                                <input
-                                    type="number"
-                                    name="min_price"
-                                    value="{{ request('min_price') }}"
-                                    min="0"
-                                    step="50000"
-                                    placeholder="Giá từ"
-                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                >
-
-                                <input
-                                    type="number"
-                                    name="max_price"
-                                    value="{{ request('max_price') }}"
-                                    min="0"
-                                    step="50000"
-                                    placeholder="Giá đến"
-                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                >
-
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="guests" class="text-sm font-semibold text-slate-700">Số khách</label>
-                            <input type="number" id="guests" name="guests" value="{{ request('guests') }}"
-                                min="1" max="50" placeholder="Ví dụ: 4"
-                                class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                        </div>
-
-                        <div>
-                            <label for="room-type" class="text-sm font-semibold text-slate-700">Loại phòng</label>
-                            <select id="room-type" name="room_type"
-                                class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                                <option value="">Tất cả</option>
-                                @foreach ($roomTypes as $roomType)
-                                    <option value="{{ $roomType }}" @selected(request('room_type') === $roomType)>
-                                        {{ $roomType }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div>
-                            <label for="rating" class="text-sm font-semibold text-slate-700">Đánh giá</label>
-                            <select id="rating" name="rating"
-                                class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                                <option value="">Tất cả</option>
-                                @for ($star = 5; $star >= 1; $star--)
-                                    <option value="{{ $star }}" @selected((int) request('rating') === $star)>
-                                        Từ {{ $star }} sao
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
-
-                        @if ($amenities->isNotEmpty())
-                            <div>
-                                <p class="text-sm font-semibold text-slate-700">Tiện ích</p>
-                                <div class="mt-1.5 max-h-44 space-y-1 overflow-y-auto pr-1">
-                                    @foreach ($amenities as $amenity)
-                                        <label class="flex cursor-pointer items-center gap-2 rounded-lg px-1.5 py-1.5 hover:bg-slate-50">
-                                            <input type="checkbox" name="amenities[]" value="{{ $amenity->id }}"
-                                                @checked(in_array($amenity->id, $selectedAmenities))
-                                                class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
-                                            <span class="min-w-0 truncate text-sm text-slate-600">
-                                                {{ $amenity->icon ?: '✨' }} {{ $amenity->name }}
-                                            </span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-
-                        <input type="hidden" name="sort" value="{{ request('sort', 'popular') }}">
-
-                        <div class="space-y-2 border-t border-slate-200 pt-4">
-                            <button type="submit"
-                                class="w-full cursor-pointer rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
-                                Áp dụng bộ lọc
-                            </button>
-                            <a href="{{ route('homestays.index') }}"
-                                class="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-                                Xóa tất cả
-                            </a>
-                        </div>
-                    </form>
                 </div>
             </aside>
 
@@ -178,7 +74,7 @@
             <section class="min-w-0 flex-1">
 
                 {{-- Sort bar --}}
-                <div class="mb-5 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <div class="mb-6 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="font-bold text-slate-900">Kết quả tìm kiếm</p>
                         <p class="mt-0.5 text-sm text-slate-500">

@@ -12,16 +12,19 @@ use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     public function create(Room $room)
-    {        
+    {
         $room->load('homestay');
+
         abort_unless(
             $room->status === 'available'
             && $room->homestay
             && $room->homestay->status,
             404
         );
+
         return view('bookings.create', compact('room'));
     }
+
     public function store(StoreBookingRequest $request)
     {
         $data = $request->validated();
@@ -47,7 +50,7 @@ class BookingController extends Controller
                 ->withInput()
                 ->withErrors([
                     'number_of_guests' =>
-                    "Phòng chỉ chứa tối đa {$room->capacity} người.",
+                        "Phòng chỉ chứa tối đa {$room->capacity} người.",
                 ]);
         }
 
@@ -70,7 +73,7 @@ class BookingController extends Controller
                 ->withInput()
                 ->withErrors([
                     'check_in' =>
-                    'Phòng đã được đặt trong khoảng thời gian này.',
+                        'Phòng đã được đặt trong khoảng thời gian này.',
                 ]);
         }
 
@@ -126,6 +129,7 @@ class BookingController extends Controller
         $bookings = Booking::query()
             ->with([
                 'room.homestay',
+                'reviews:id,booking_id,status',
             ])
             ->where('user_id', auth()->id())
             ->latest()
@@ -159,8 +163,8 @@ class BookingController extends Controller
                 strtoupper(Str::random(6));
         } while (
             Booking::query()
-            ->where('booking_code', $code)
-            ->exists()
+                ->where('booking_code', $code)
+                ->exists()
         );
 
         return $code;

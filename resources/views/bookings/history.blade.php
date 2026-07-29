@@ -31,11 +31,23 @@
         ];
 
         $statusClasses = [
-            'pending' => 'bg-amber-100 text-amber-800',
-            'confirmed' => 'bg-blue-100 text-blue-800',
-            'checked_in' => 'bg-indigo-100 text-indigo-800',
-            'completed' => 'bg-emerald-100 text-emerald-800',
-            'cancelled' => 'bg-red-100 text-red-800',
+            'pending' => 'bg-amber-50 text-amber-700',
+            'confirmed' => 'bg-blue-50 text-blue-700',
+            'checked_in' => 'bg-violet-50 text-violet-700',
+            'completed' => 'bg-emerald-50 text-emerald-700',
+            'cancelled' => 'bg-red-50 text-red-700',
+        ];
+
+        $reviewStatusLabels = [
+            'pending' => 'Đang chờ duyệt',
+            'approved' => 'Đã đánh giá',
+            'hidden' => 'Đánh giá đã ẩn',
+        ];
+
+        $reviewStatusClasses = [
+            'pending' => 'border-amber-200 bg-amber-50 text-amber-700',
+            'approved' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'hidden' => 'border-slate-200 bg-slate-100 text-slate-600',
         ];
     @endphp
 
@@ -248,18 +260,61 @@
 
                                     </div>
 
+                                    @php
+                                        $bookingReview = $booking->reviews->first();
+
+                                        $canReview =
+                                            $booking->status === 'completed'
+                                            && $bookingReview === null
+                                            && $booking->room?->homestay;
+                                    @endphp
+
                                     <div class="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
 
                                         <p class="text-sm text-slate-400">
                                             Đặt lúc {{ $booking->created_at->format('H:i d/m/Y') }}
                                         </p>
 
-                                        <a
-                                            href="{{ route('bookings.show', $booking) }}"
-                                            class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
-                                        >
-                                            Xem chi tiết
-                                        </a>
+                                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+
+                                            {{-- Đã gửi đánh giá --}}
+                                            @if ($bookingReview)
+
+                                                <span class="inline-flex items-center justify-center rounded-xl border px-4 py-3 text-sm font-semibold
+                                                    {{ $reviewStatusClasses[$bookingReview->status]
+                                                        ?? 'border-slate-200 bg-slate-100 text-slate-600' }}"
+                                                >
+                                                    {{ $reviewStatusLabels[$bookingReview->status]
+                                                        ?? 'Đã đánh giá' }}
+                                                </span>
+
+                                            {{-- Đủ điều kiện đánh giá --}}
+                                            @elseif ($canReview)
+
+                                                <button
+                                                    type="button"
+                                                    data-open-review-modal
+                                                    data-booking-id="{{ $booking->id }}"
+                                                    data-booking-code="{{ $booking->booking_code }}"
+                                                    data-homestay-name="{{ $booking->room->homestay->name }}"
+                                                    data-review-action="{{ route('reviews.store', $booking) }}"
+                                                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-amber-600 hover:text-amber-600"
+                                                >
+                                                    <x-icon-star class="h-4 w-4 text-amber-400" />
+
+                                                    Đánh giá ngay
+                                                </button>
+
+                                            @endif
+
+                                            <a
+                                                href="{{ route('bookings.show', $booking) }}"
+                                                class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
+                                            >
+                                                Xem chi tiết
+                                            </a>
+
+                                        </div>
 
                                     </div>
 
@@ -283,7 +338,458 @@
 
         </section>
 
+        {{-- Modal đánh giá Booking --}}
+        <div
+            id="history-review-modal"
+            class="fixed inset-0 z-100 hidden items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="history-review-title"
+        >
+            {{-- Nhấn vùng tối để đóng --}}
+            <button
+                type="button"
+                data-close-history-review
+                class="absolute inset-0 cursor-default bg-slate-950/50 backdrop-blur-[2px]"
+                aria-label="Đóng modal"
+            ></button>
+
+            <div class="relative z-10 w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl sm:p-7">
+
+                <div class="flex items-start justify-between gap-4">
+
+                    <div class="min-w-0">
+
+                        <h2
+                            id="history-review-title"
+                            class="text-xl font-bold text-slate-900"
+                        >
+                            Đánh giá Homestay
+                        </h2>
+
+                        <p
+                            id="history-review-homestay"
+                            class="mt-1 truncate text-sm font-semibold text-slate-500"
+                        ></p>
+
+                        <p
+                            id="history-review-booking"
+                            class="mt-1 text-xs font-semibold text-blue-600"
+                        ></p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        data-close-history-review
+                        class="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-xl text-slate-500 transition hover:bg-red-50 hover:text-red-500"
+                        aria-label="Đóng"
+                    >
+                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                </div>
+
+                <form
+                    id="history-review-form"
+                    method="POST"
+                    action=""
+                    class="mt-6"
+                >
+                    @csrf
+
+                    <input
+                        type="hidden"
+                        name="review_booking_id"
+                        id="history-review-booking-id"
+                        value="{{ old('review_booking_id') }}"
+                    >
+
+                    {{-- Chọn sao --}}
+                    <div class="text-center">
+
+                        <label class="text-sm font-semibold text-slate-700">
+                            Mức độ hài lòng
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="hidden"
+                            name="rating"
+                            id="history-review-rating"
+                            value="{{ old('rating', 0) }}"
+                        >
+
+                        <div class="mt-3 flex justify-center gap-2">
+
+                            @for ($star = 1; $star <= 5; $star++)
+
+                                <button
+                                    type="button"
+                                    data-history-rating="{{ $star }}"
+                                    class="group cursor-pointer rounded-xl p-1 transition focus:outline-none"
+                                    aria-label="{{ $star }} sao"
+                                >
+                                    <x-icon-star class="history-review-star h-9 w-9 text-slate-200 transition duration-150 group-hover:scale-110 sm:h-10 sm:w-10" />
+                                </button>
+
+                            @endfor
+
+                        </div>
+
+                        <p
+                            id="history-review-rating-label"
+                            class="mt-2 text-sm font-semibold text-slate-400"
+                        >
+                            Chọn số sao
+                        </p>
+
+                        @error('rating')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+                    {{-- Tiêu đề --}}
+                    <div class="mt-5">
+
+                        <label
+                            for="history-review-input-title"
+                            class="text-sm font-semibold text-slate-700"
+                        >
+                            Tiêu đề
+
+                            <span class="font-normal text-slate-400">
+                                (không bắt buộc)
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="history-review-input-title"
+                            name="title"
+                            value="{{ old('title') }}"
+                            maxlength="150"
+                            placeholder="Ví dụ: Trải nghiệm tuyệt vời"
+                            class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >
+
+                        @error('title')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+                    {{-- Nội dung --}}
+                    <div class="mt-4">
+
+                        <div class="flex items-center justify-between gap-3">
+
+                            <label
+                                for="history-review-content"
+                                class="text-sm font-semibold text-slate-700"
+                            >
+                                Nội dung đánh giá
+                                <span class="text-red-500">*</span>
+                            </label>
+
+                            <span
+                                id="history-review-count"
+                                class="text-xs text-slate-400"
+                            >
+                                0/1000
+                            </span>
+
+                        </div>
+
+                        <textarea
+                            id="history-review-content"
+                            name="content"
+                            rows="4"
+                            minlength="10"
+                            maxlength="1000"
+                            required
+                            placeholder="Chia sẻ cảm nhận của bạn..."
+                            class="mt-2 w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >{{ old('content') }}</textarea>
+
+                        @error('content')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-2 gap-3">
+
+                        <button
+                            type="button"
+                            data-close-history-review
+                            class="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                        >
+                            Để sau
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="cursor-pointer rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:ring-4 focus:ring-blue-200"
+                        >
+                            Gửi đánh giá
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById(
+                'history-review-modal'
+            );
+
+            const form = document.getElementById(
+                'history-review-form'
+            );
+
+            const bookingInput = document.getElementById(
+                'history-review-booking-id'
+            );
+
+            const bookingText = document.getElementById(
+                'history-review-booking'
+            );
+
+            const homestayText = document.getElementById(
+                'history-review-homestay'
+            );
+
+            const ratingInput = document.getElementById(
+                'history-review-rating'
+            );
+
+            const ratingLabel = document.getElementById(
+                'history-review-rating-label'
+            );
+
+            const ratingButtons = document.querySelectorAll(
+                '[data-history-rating]'
+            );
+
+            const openButtons = document.querySelectorAll(
+                '[data-open-review-modal]'
+            );
+
+            const closeButtons = document.querySelectorAll(
+                '[data-close-history-review]'
+            );
+
+            const contentInput = document.getElementById(
+                'history-review-content'
+            );
+
+            const contentCount = document.getElementById(
+                'history-review-count'
+            );
+
+            const ratingMessages = {
+                0: 'Chọn số sao',
+                1: 'Rất không hài lòng',
+                2: 'Chưa hài lòng',
+                3: 'Bình thường',
+                4: 'Hài lòng',
+                5: 'Tuyệt vời',
+            };
+
+            function renderStars(value) {
+                ratingButtons.forEach(function (button) {
+                    const starValue = Number(
+                        button.dataset.historyRating
+                    );
+
+                    const icon = button.querySelector(
+                        '.history-review-star'
+                    );
+
+                    const active = starValue <= value;
+
+                    icon.classList.toggle(
+                        'text-amber-400',
+                        active
+                    );
+
+                    icon.classList.toggle(
+                        'text-slate-200',
+                        !active
+                    );
+
+                    icon.classList.toggle(
+                        'scale-110',
+                        active
+                    );
+                });
+
+                ratingLabel.textContent =
+                    ratingMessages[value] ?? ratingMessages[0];
+
+                ratingLabel.classList.toggle(
+                    'text-amber-600',
+                    value > 0
+                );
+
+                ratingLabel.classList.toggle(
+                    'text-slate-400',
+                    value === 0
+                );
+            }
+
+            function openModal(button, preserveValues = false) {
+                if (!preserveValues) {
+                    form.reset();
+                    ratingInput.value = 0;
+                    renderStars(0);
+                }
+
+                form.action = button.dataset.reviewAction;
+
+                bookingInput.value =
+                    button.dataset.bookingId;
+
+                bookingText.textContent =
+                    'Mã Booking: ' +
+                    button.dataset.bookingCode;
+
+                homestayText.textContent =
+                    button.dataset.homestayName;
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                document.body.classList.add('overflow-hidden');
+
+                updateCount();
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+
+                document.body.classList.remove('overflow-hidden');
+            }
+
+            ratingButtons.forEach(function (button) {
+                const value = Number(
+                    button.dataset.historyRating
+                );
+
+                button.addEventListener(
+                    'mouseenter',
+                    function () {
+                        renderStars(value);
+                    }
+                );
+
+                button.addEventListener(
+                    'mouseleave',
+                    function () {
+                        renderStars(
+                            Number(ratingInput.value || 0)
+                        );
+                    }
+                );
+
+                button.addEventListener(
+                    'click',
+                    function () {
+                        ratingInput.value = value;
+                        renderStars(value);
+                    }
+                );
+            });
+
+            openButtons.forEach(function (button) {
+                button.addEventListener(
+                    'click',
+                    function () {
+                        openModal(button);
+                    }
+                );
+            });
+
+            closeButtons.forEach(function (button) {
+                button.addEventListener(
+                    'click',
+                    closeModal
+                );
+            });
+
+            document.addEventListener(
+                'keydown',
+                function (event) {
+                    if (
+                        event.key === 'Escape'
+                        && !modal.classList.contains('hidden')
+                    ) {
+                        closeModal();
+                    }
+                }
+            );
+
+            function updateCount() {
+                contentCount.textContent =
+                    contentInput.value.length + '/1000';
+            }
+
+            contentInput.addEventListener(
+                'input',
+                updateCount
+            );
+
+            updateCount();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Validation lỗi thì mở lại đúng Booking
+            |--------------------------------------------------------------------------
+            */
+
+            const oldBookingId = @json(
+                old('review_booking_id')
+            );
+
+            const hasValidationErrors = @json(
+                $errors->any()
+            );
+
+            if (hasValidationErrors && oldBookingId) {
+                const oldButton = document.querySelector(
+                    '[data-open-review-modal][data-booking-id="' +
+                    oldBookingId +
+                    '"]'
+                );
+
+                if (oldButton) {
+                    openModal(oldButton, true);
+
+                    renderStars(
+                        Number(ratingInput.value || 0)
+                    );
+                }
+            }
+        });
+    </script>
 
 </body>
 

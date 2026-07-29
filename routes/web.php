@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomestayController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
@@ -55,10 +58,29 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // --- Dashboard Admin ---
-    Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // --- Quản lý tài khoản ---
+    Route::get(
+        '/users',
+        [UserController::class, 'index']
+    )->name('users.index');
+
+    Route::get(
+        '/users/{user}',
+        [UserController::class, 'show']
+    )->name('users.show');
+
+    Route::patch(
+        '/users/{user}/status',
+        [UserController::class, 'updateStatus']
+    )->name('users.update-status');
 
     // --- Quản lý Category ---
     Route::resource('categories', CategoryController::class);
+
+    // --- Quản lý Amenity ---
+    Route::resource('amenities', AmenityController::class);
 
     // --- Quản lý Homestay ---
     Route::resource('homestays', HomestayController::class);

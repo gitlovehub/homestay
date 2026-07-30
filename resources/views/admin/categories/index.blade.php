@@ -84,7 +84,7 @@
                                 Trạng thái
                             </th>
 
-                            <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <th class="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 Thao tác
                             </th>
                         </tr>
@@ -126,36 +126,73 @@
                                     @endif
                                 </td>
 
-                                <td class="whitespace-nowrap px-6 py-4 text-right text-sm">
+                                <td class="whitespace-nowrap px-6 py-4 text-center">
 
-                                    <div class="flex justify-end gap-2">
+                                    <details class="group relative inline-block text-left">
 
-                                        <a
-                                            href="{{ route('admin.categories.edit', $category) }}"
-                                            class="rounded-lg border border-amber-300 px-3 py-2 font-semibold text-amber-600 transition hover:bg-amber-50"
+                                        {{-- Nút ba chấm --}}
+                                        <summary
+                                            class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-bold text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+                                            title="Thao tác"
                                         >
-                                            Sửa
-                                        </a>
+                                            ⋮
+                                        </summary>
 
-                                        <form
-                                            action="{{ route('admin.categories.destroy', $category) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?\nHành động này không thể hoàn tác.')"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
+                                        {{-- Menu thao tác --}}
+                                        <div class="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
 
-                                            <button
-                                                type="submit"
-                                                class="cursor-pointer rounded-lg border border-red-300 px-3 py-2 font-semibold text-red-600 transition hover:bg-red-50">
-                                                Xóa
-                                            </button>
-                                        </form>
+                                            {{-- Xem chi tiết --}}
+                                            <a
+                                                href="{{ route('admin.categories.show', $category) }}"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                                            >
+                                                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
+                                                    👁
+                                                </span>
 
-                                    </div>
+                                                Xem chi tiết
+                                            </a>
+
+                                            {{-- Sửa danh mục --}}
+                                            <a
+                                                href="{{ route('admin.categories.edit', $category) }}"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-amber-700 transition hover:bg-amber-50"
+                                            >
+                                                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50">
+                                                    ✏️
+                                                </span>
+
+                                                Chỉnh sửa
+                                            </a>
+
+                                            <div class="border-t border-slate-100"></div>
+
+                                            {{-- Xóa danh mục --}}
+                                            <form
+                                                action="{{ route('admin.categories.destroy', $category) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục {{ $category->name }} không?\nHành động này không thể hoàn tác.')"
+                                            >
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button
+                                                    type="submit"
+                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
+                                                >
+                                                    <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
+                                                        🗑
+                                                    </span>
+
+                                                    Xóa danh mục
+                                                </button>
+                                            </form>
+
+                                        </div>
+
+                                    </details>
 
                                 </td>
-
                             </tr>
 
                         @empty

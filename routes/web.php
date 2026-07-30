@@ -7,12 +7,10 @@ use App\Http\Controllers\Admin\HomestayController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
-use App\Http\Controllers\Frontend\ReviewController as FrontendReviewController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTE CÔNG KHAI (Public Routes)
@@ -53,17 +51,6 @@ Route::middleware('auth')->group(function () {
         )->name('show');
     });
 
-    // Reviews phía người dùng
-    Route::get(
-        '/homestays/{homestay:slug}/reviews/create',
-        [FrontendReviewController::class, 'create']
-    )->name('reviews.create');
-
-    Route::post(
-        '/bookings/{booking}/reviews',
-        [FrontendReviewController::class, 'store']
-    )->name('reviews.store');
-
 });
 
 // ROUTE DÀNH CHO ADMIN (Admin Routes)
@@ -71,22 +58,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // --- Dashboard Admin ---
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // --- Quản lý tài khoản ---
-    Route::get(
-        '/users',
-        [UserController::class, 'index']
-    )->name('users.index');
-
-    Route::get(
-        '/users/{user}',
-        [UserController::class, 'show']
-    )->name('users.show');
-
-    Route::patch(
-        '/users/{user}/status',
-        [UserController::class, 'updateStatus']
-    )->name('users.update-status');
 
     // --- Quản lý Category ---
     Route::resource('categories', CategoryController::class);

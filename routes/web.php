@@ -21,6 +21,10 @@ Route::get(
     '/homestays/{slug}',
     [FrontendHomestayController::class, 'show']
 )->name('homestays.show');
+Route::get(
+    '/homestays',
+    [FrontendHomestayController::class, 'index']
+)->name('homestays.index');
 
 // ROUTE CẦN ĐĂNG NHẬP (Authenticated Routes)
 Route::middleware('auth')->group(function () {

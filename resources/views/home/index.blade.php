@@ -326,6 +326,7 @@
                     </p>
                 </div>
 
+
                 <div class="flex flex-wrap items-center gap-3">
                     <a
                         href="{{ route('home') }}"

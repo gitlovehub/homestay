@@ -1,75 +1,215 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // ===== Mobile Sidebar =====
-    const openBtn = document.getElementById("mobile-menu-button");
-    const closeBtn = document.getElementById("close-sidebar-btn");
-    const sidebar = document.getElementById("mobile-sidebar");
-    const overlay = document.getElementById("mobile-overlay");
+document.addEventListener('DOMContentLoaded', () => {
+    /*
+    |--------------------------------------------------------------------------
+    | Menu mobile
+    |--------------------------------------------------------------------------
+    */
 
-    function openSidebar() {
-        sidebar.classList.remove("translate-x-full");
-        overlay.classList.remove("opacity-0", "pointer-events-none");
-        overlay.classList.add("opacity-100");
-        document.body.style.overflow = "hidden";
-        openBtn?.setAttribute("aria-expanded", "true");
-    }
+    const mobileMenuButton = document.getElementById(
+        'mobile-menu-button'
+    );
 
-    function closeSidebar() {
-        sidebar.classList.add("translate-x-full");
-        overlay.classList.add("opacity-0", "pointer-events-none");
-        overlay.classList.remove("opacity-100");
-        document.body.style.overflow = "";
-        openBtn?.setAttribute("aria-expanded", "false");
-    }
+    const mobileSidebar = document.getElementById(
+        'mobile-sidebar'
+    );
 
-    openBtn?.addEventListener("click", openSidebar);
-    closeBtn?.addEventListener("click", closeSidebar);
-    overlay?.addEventListener("click", closeSidebar);
-    sidebar
-        ?.querySelectorAll("a")
-        .forEach((link) => link.addEventListener("click", closeSidebar));
+    const mobileOverlay = document.getElementById(
+        'mobile-overlay'
+    );
 
-    // ===== Desktop User Dropdown =====
-    const userBtn = document.getElementById("user-menu-button");
-    const userMenu = document.getElementById("user-menu");
-    const chevron = document.getElementById("user-chevron");
+    const closeSidebarButton = document.getElementById(
+        'close-sidebar-btn'
+    );
 
-    function toggleUserMenu() {
-        const isOpen = !userMenu.classList.contains("hidden");
-        if (isOpen) {
-            userMenu.classList.add("hidden");
-            chevron?.classList.remove("rotate-180");
-            userBtn?.setAttribute("aria-expanded", "false");
-        } else {
-            userMenu.classList.remove("hidden");
-            chevron?.classList.add("rotate-180");
-            userBtn?.setAttribute("aria-expanded", "true");
-        }
-    }
-
-    function closeUserMenu() {
-        userMenu?.classList.add("hidden");
-        chevron?.classList.remove("rotate-180");
-        userBtn?.setAttribute("aria-expanded", "false");
-    }
-
-    userBtn?.addEventListener("click", function (e) {
-        e.stopPropagation();
-        toggleUserMenu();
-    });
-
-    // Đóng khi click ra ngoài
-    document.addEventListener("click", function (e) {
+    const openMobileMenu = () => {
         if (
-            userMenu &&
-            !userMenu.contains(e.target) &&
-            !userBtn?.contains(e.target)
+            !mobileSidebar ||
+            !mobileOverlay ||
+            !mobileMenuButton
         ) {
-            closeUserMenu();
+            return;
         }
-    });
 
-    // Đóng khi nhấn Escape
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") closeUserMenu();
-    });
+        mobileSidebar.classList.remove(
+            'translate-x-full'
+        );
+
+        mobileSidebar.classList.add(
+            'translate-x-0'
+        );
+
+        mobileOverlay.classList.remove(
+            'pointer-events-none',
+            'opacity-0'
+        );
+
+        mobileOverlay.classList.add(
+            'pointer-events-auto',
+            'opacity-100'
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        document.body.classList.add(
+            'overflow-hidden'
+        );
+    };
+
+    const closeMobileMenu = () => {
+        if (
+            !mobileSidebar ||
+            !mobileOverlay ||
+            !mobileMenuButton
+        ) {
+            return;
+        }
+
+        mobileSidebar.classList.remove(
+            'translate-x-0'
+        );
+
+        mobileSidebar.classList.add(
+            'translate-x-full'
+        );
+
+        mobileOverlay.classList.remove(
+            'pointer-events-auto',
+            'opacity-100'
+        );
+
+        mobileOverlay.classList.add(
+            'pointer-events-none',
+            'opacity-0'
+        );
+
+        mobileMenuButton.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        document.body.classList.remove(
+            'overflow-hidden'
+        );
+    };
+
+    mobileMenuButton?.addEventListener(
+        'click',
+        openMobileMenu
+    );
+
+    closeSidebarButton?.addEventListener(
+        'click',
+        closeMobileMenu
+    );
+
+    mobileOverlay?.addEventListener(
+        'click',
+        closeMobileMenu
+    );
+
+    mobileSidebar
+        ?.querySelectorAll('a')
+        .forEach((link) => {
+            link.addEventListener(
+                'click',
+                closeMobileMenu
+            );
+        });
+
+    document.addEventListener(
+        'keydown',
+        (event) => {
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+            }
+        }
+    );
+
+    window.addEventListener(
+        'resize',
+        () => {
+            if (window.innerWidth >= 768) {
+                closeMobileMenu();
+            }
+        }
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dropdown tài khoản Desktop
+    |--------------------------------------------------------------------------
+    */
+
+    const userMenuButton = document.getElementById(
+        'user-menu-button'
+    );
+
+    const userMenu = document.getElementById(
+        'user-menu'
+    );
+
+    const userChevron = document.getElementById(
+        'user-chevron'
+    );
+
+    const closeUserMenu = () => {
+        if (!userMenu || !userMenuButton) {
+            return;
+        }
+
+        userMenu.classList.add('hidden');
+
+        userMenuButton.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        userChevron?.classList.remove(
+            'rotate-180'
+        );
+    };
+
+    const toggleUserMenu = () => {
+        if (!userMenu || !userMenuButton) {
+            return;
+        }
+
+        const isHidden =
+            userMenu.classList.contains('hidden');
+
+        userMenu.classList.toggle('hidden');
+
+        userMenuButton.setAttribute(
+            'aria-expanded',
+            String(isHidden)
+        );
+
+        userChevron?.classList.toggle(
+            'rotate-180',
+            isHidden
+        );
+    };
+
+    userMenuButton?.addEventListener(
+        'click',
+        (event) => {
+            event.stopPropagation();
+            toggleUserMenu();
+        }
+    );
+
+    userMenu?.addEventListener(
+        'click',
+        (event) => {
+            event.stopPropagation();
+        }
+    );
+
+    document.addEventListener(
+        'click',
+        closeUserMenu
+    );
 });

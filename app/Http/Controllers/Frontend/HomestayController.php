@@ -284,6 +284,17 @@ class HomestayController extends Controller
             ? max(0, (int) $request->input('max_price'))
             : null;
 
+        if (
+            $minPrice !== null
+            && $maxPrice !== null
+            && $minPrice > $maxPrice
+        ) {
+            [$minPrice, $maxPrice] = [
+                $maxPrice,
+                $minPrice,
+            ];
+        }
+
         $guests = $request->filled('guests')
             ? max(1, (int) $request->input('guests'))
             : null;
@@ -335,11 +346,32 @@ class HomestayController extends Controller
             */
 
             ->withMin([
-                'rooms as min_room_price' => function (Builder $query) {
+                'rooms as min_room_price' => function (
+                    Builder $query
+                ) use (
+                    $minPrice,
+                    $maxPrice
+                ) {
                     $query->where(
                         'rooms.status',
                         'available'
                     );
+
+                    if ($minPrice !== null) {
+                        $query->where(
+                            'rooms.price_per_night',
+                            '>=',
+                            $minPrice
+                        );
+                    }
+
+                    if ($maxPrice !== null) {
+                        $query->where(
+                            'rooms.price_per_night',
+                            '<=',
+                            $maxPrice
+                        );
+                    }
                 },
             ], 'price_per_night')
 

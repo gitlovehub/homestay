@@ -221,7 +221,7 @@
                                 name="search"
                                 type="search"
                                 value="{{ request('search') }}"
-                                placeholder="Tìm tiêu đề, nội dung, khách hàng, Homestay hoặc mã đơn..."
+                                placeholder="Tên khách, email, Homestay, nội dung..."
                                 class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                                 onsearch="this.form.submit()"
                                 oninput="if(this.value === '') this.form.submit()"
@@ -366,7 +366,7 @@
                 {{-- Table --}}
                 <div class="overflow-x-auto">
 
-                    <table class="w-full border-collapse text-left min-h-90">
+                    <table class="w-full min-h-120 border-collapse text-left">
 
                         <thead>
 

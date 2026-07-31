@@ -148,7 +148,7 @@
 
             <div class="overflow-x-auto rounded-2xl">
 
-                <table class="min-w-full divide-y divide-slate-200">
+                <table class="min-w-full min-h-120 divide-y divide-slate-200">
 
                     <thead class="bg-slate-50">
 

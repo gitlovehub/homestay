@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreHomestayRequest extends FormRequest
 {
@@ -11,16 +12,46 @@ class StoreHomestayRequest extends FormRequest
         return true;
     }
 
+    /**
+     * Chuẩn hóa dữ liệu trước khi kiểm tra.
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name' => is_string($this->name)
+                ? trim($this->name)
+                : $this->name,
+
+            'slug' => is_string($this->slug)
+                ? trim($this->slug)
+                : $this->slug,
+
+            'address' => is_string($this->address)
+                ? trim($this->address)
+                : $this->address,
+
+            'city' => is_string($this->city)
+                ? trim($this->city)
+                : $this->city,
+
+            'phone' => is_string($this->phone)
+                ? trim($this->phone)
+                : $this->phone,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
             'category_id' => [
                 'required',
+                'integer',
                 'exists:categories,id',
             ],
 
             'owner_id' => [
                 'required',
+                'integer',
                 'exists:users,id',
             ],
 
@@ -47,6 +78,7 @@ class StoreHomestayRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
+                Rule::in(config('homestay_locations', [])),
             ],
 
             'phone' => [
@@ -113,6 +145,7 @@ class StoreHomestayRequest extends FormRequest
 
             'amenities.*' => [
                 'integer',
+                'distinct',
                 'exists:amenities,id',
             ],
         ];
@@ -122,25 +155,33 @@ class StoreHomestayRequest extends FormRequest
     {
         return [
             'category_id.required' => 'Vui lòng chọn danh mục.',
+            'category_id.integer' => 'Danh mục không hợp lệ.',
             'category_id.exists' => 'Danh mục được chọn không tồn tại.',
 
             'owner_id.required' => 'Vui lòng chọn chủ sở hữu.',
+            'owner_id.integer' => 'Chủ sở hữu không hợp lệ.',
             'owner_id.exists' => 'Chủ sở hữu được chọn không tồn tại.',
 
             'name.required' => 'Vui lòng nhập tên Homestay.',
+            'name.string' => 'Tên Homestay không hợp lệ.',
             'name.max' => 'Tên Homestay không được quá 255 ký tự.',
 
+            'slug.string' => 'Slug không hợp lệ.',
             'slug.unique' => 'Slug này đã được sử dụng.',
             'slug.max' => 'Slug không được quá 255 ký tự.',
 
             'address.required' => 'Vui lòng nhập địa chỉ.',
+            'address.string' => 'Địa chỉ không hợp lệ.',
             'address.max' => 'Địa chỉ không được quá 255 ký tự.',
 
-            'city.required' => 'Vui lòng nhập thành phố.',
-            'city.max' => 'Tên thành phố không được quá 100 ký tự.',
+            'city.required' => 'Vui lòng chọn tỉnh/thành phố.',
+            'city.string' => 'Tỉnh/thành phố không hợp lệ.',
+            'city.max' => 'Tên tỉnh/thành phố không được quá 100 ký tự.',
+            'city.in' => 'Tỉnh/thành phố được chọn không nằm trong danh sách.',
 
             'phone.regex' => 'Số điện thoại phải gồm 10 đến 11 chữ số.',
 
+            'description.string' => 'Mô tả không hợp lệ.',
             'description.max' => 'Mô tả không được quá 3000 ký tự.',
 
             'base_price.required' => 'Vui lòng nhập giá cơ bản.',
@@ -156,6 +197,7 @@ class StoreHomestayRequest extends FormRequest
             'check_in_time.date_format' => 'Giờ nhận phòng không đúng định dạng.',
             'check_out_time.date_format' => 'Giờ trả phòng không đúng định dạng.',
 
+            'policy.string' => 'Chính sách không hợp lệ.',
             'policy.max' => 'Chính sách không được quá 3000 ký tự.',
 
             'thumbnail.image' => 'Ảnh đại diện phải là tệp hình ảnh.',
@@ -164,6 +206,11 @@ class StoreHomestayRequest extends FormRequest
 
             'status.required' => 'Vui lòng chọn trạng thái.',
             'status.boolean' => 'Trạng thái không hợp lệ.',
+
+            'amenities.array' => 'Danh sách tiện ích không hợp lệ.',
+            'amenities.*.integer' => 'Tiện ích không hợp lệ.',
+            'amenities.*.distinct' => 'Tiện ích đang bị chọn trùng.',
+            'amenities.*.exists' => 'Tiện ích được chọn không tồn tại.',
         ];
     }
 }

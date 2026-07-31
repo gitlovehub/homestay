@@ -1,60 +1,33 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Quản lý danh mục | HomeStayGo')
 
-    <title>Quản lý danh mục | HomeStay</title>
+@section('page-title', 'Quản lý danh mục')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="min-h-screen bg-slate-100">
-
-    @include('partials.navbar')
-
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
         <x-alert />
 
-        <a
-            href="{{ route('admin.dashboard') }}"
-            class="block mb-4 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-        >
-            ← Quay lại bảng điều khiển
-        </a>
-
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-            <div>
-                <h1 class="text-3xl font-bold text-slate-900">
-                    Quản lý danh mục
-                </h1>
-
-                <p class="mt-2 text-slate-500">
-                    Danh sách các loại Homestay trong hệ thống.
-                </p>
-            </div>
+            <p class="text-sm font-semibold md:text-lg text-slate-500">
+                Danh sách các loại Homestay trong hệ thống.
+            </p>
 
             <div class="flex items-center justify-between gap-4">
                 <form method="GET">
-                    <input
-                        type="search"
-                        name="search"
-                        value="{{ request('search') }}"
-                        placeholder="Tìm kiếm danh mục..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-2"
-                        onsearch="this.form.submit()"
-                        oninput="if(this.value === '') this.form.submit()"
-                    >
+                    <input type="search" name="search" value="{{ request('search') }}" placeholder="Tìm kiếm danh mục..."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-2" onsearch="this.form.submit()"
+                        oninput="if(this.value === '') this.form.submit()">
                 </form>
 
-                <a
-                    href="{{ route('admin.categories.create') }}"
-                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                    + Thêm danh mục
+                <a href="{{ route('admin.categories.create') }}"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Thêm mới
                 </a>
             </div>
 
@@ -93,7 +66,6 @@
                     <tbody class="divide-y divide-slate-200 bg-white">
 
                         @forelse ($categories as $category)
-
                             <tr class="transition hover:bg-slate-50">
 
                                 <td class="whitespace-nowrap px-6 py-4">
@@ -114,12 +86,14 @@
 
                                 <td class="whitespace-nowrap px-6 py-4">
                                     @if ($category->status)
-                                        <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                        <span
+                                            class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                                             <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                                             Hoạt động
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                                        <span
+                                            class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
                                             <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                             Tạm khóa
                                         </span>
@@ -133,58 +107,49 @@
                                         {{-- Nút ba chấm --}}
                                         <summary
                                             class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-bold text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
-                                            title="Thao tác"
-                                        >
+                                            title="Thao tác">
                                             ⋮
                                         </summary>
 
                                         {{-- Menu thao tác --}}
-                                        <div class="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
+                                        <div
+                                            class="absolute right-0 z-50 mt-2 w-35 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
 
                                             {{-- Xem chi tiết --}}
-                                            <a
-                                                href="{{ route('admin.categories.show', $category) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                                            >
-                                                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
-                                                    👁
-                                                </span>
-
-                                                Xem chi tiết
+                                            <a href="{{ route('admin.categories.show', $category) }}"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                  <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                                Xem
                                             </a>
 
                                             {{-- Sửa danh mục --}}
-                                            <a
-                                                href="{{ route('admin.categories.edit', $category) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-amber-700 transition hover:bg-amber-50"
-                                            >
-                                                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50">
-                                                    ✏️
-                                                </span>
-
-                                                Chỉnh sửa
+                                            <a href="{{ route('admin.categories.edit', $category) }}"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-amber-500 transition hover:bg-amber-50">
+                                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                                Sửa
                                             </a>
 
                                             <div class="border-t border-slate-100"></div>
 
                                             {{-- Xóa danh mục --}}
-                                            <form
-                                                action="{{ route('admin.categories.destroy', $category) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục {{ $category->name }} không?\nHành động này không thể hoàn tác.')"
-                                            >
+                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục {{ $category->name }} không?\nHành động này không thể hoàn tác.')">
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button
-                                                    type="submit"
-                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
-                                                >
-                                                    <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                                                        🗑
-                                                    </span>
-
-                                                    Xóa danh mục
+                                                <button type="submit"
+                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50">
+                                                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                      <polyline points="3 6 5 6 21 6"/>
+                                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                    </svg>
+                                                    Xóa
                                                 </button>
                                             </form>
 
@@ -214,7 +179,6 @@
 
                                 </td>
                             </tr>
-
                         @endforelse
 
                     </tbody>
@@ -231,8 +195,5 @@
 
         </div>
 
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection

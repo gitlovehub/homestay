@@ -1,55 +1,26 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Chi tiết danh mục | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('page-title', 'Chi tiết danh mục')
 
-    <title>Chi tiết danh mục | HomeStay</title>
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-<body class="min-h-screen bg-slate-100">
+            <p class="text-sm font-semibold md:text-lg text-slate-500">
+                Xem toàn bộ thông tin của danh mục Homestay.
+            </p>
 
-    @include('partials.navbar')
-
-    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-
-        <x-alert />
-
-        {{-- Phần tiêu đề --}}
-        <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-
-            <div>
-                <a
-                    href="{{ route('admin.categories.index') }}"
-                    class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-                >
-                    ← Quay lại danh sách danh mục
-                </a>
-
-                <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                    Chi tiết danh mục
-                </h1>
-
-                <p class="mt-2 text-slate-500">
-                    Xem toàn bộ thông tin của danh mục Homestay.
-                </p>
-            </div>
-
-            <a
-                href="{{ route('admin.categories.edit', $category) }}"
-                class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600"
-            >
-                Chỉnh sửa danh mục
+            <a href="{{ route('admin.categories.edit', $category) }}"
+                class="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Chỉnh sửa
             </a>
 
         </div>
@@ -75,13 +46,15 @@
 
                         <div>
                             @if ($category->status)
-                                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                                <span
+                                    class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
                                     <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
 
                                     Hoạt động
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
+                                <span
+                                    class="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
                                     <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
 
                                     Tạm khóa
@@ -116,7 +89,8 @@
                         </p>
 
                         <div class="mt-2">
-                            <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+                            <span
+                                class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
                                 {{ $category->slug }}
                             </span>
                         </div>
@@ -203,11 +177,7 @@
 
             </section>
 
-
         </div>
 
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection

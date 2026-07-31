@@ -1,46 +1,18 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Thêm danh mục | HomeStayGo')
 
-    <title>Thêm danh mục | HomeStay</title>
+@section('page-title', 'Thêm danh mục')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
+    <div class="mx-auto max-w-4xl">
 
-<body class="min-h-screen bg-slate-100">
+        <p class="mb-4 text-sm font-semibold md:text-lg text-slate-500">
+            Tạo một loại Homestay mới trong hệ thống.
+        </p>
 
-    @include('partials.navbar')
-
-    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-
-        <div class="mb-8">
-
-            <a
-                href="{{ route('admin.categories.index') }}"
-                class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-            >
-                <span aria-hidden="true">←</span>
-                Quay lại danh sách
-            </a>
-
-            <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                Thêm danh mục
-            </h1>
-
-            <p class="mt-2 text-slate-500">
-                Tạo một loại Homestay mới trong hệ thống.
-            </p>
-
-        </div>
-
-        <form
-            method="POST"
-            action="{{ route('admin.categories.store') }}"
-            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
-        >
+        <form method="POST" action="{{ route('admin.categories.store') }}"
+            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
 
             @csrf
 
@@ -50,28 +22,17 @@
                 <section>
                     <div>
 
-                        <label
-                            for="name"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
                             Tên danh mục
                             <span class="text-red-500">*</span>
                         </label>
 
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            value="{{ old('name') }}"
-                            autofocus
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" autofocus
                             placeholder="Ví dụ: Villa, Nhà gỗ, Căn hộ..."
-                            
                             class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('name')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                }}"
-                        >
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                         @error('name')
                             <p class="mt-2 text-sm font-medium text-red-600">
@@ -86,26 +47,16 @@
                 <section>
                     <div>
 
-                        <label
-                            for="slug"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="slug" class="mb-2 block text-sm font-semibold text-slate-700">
                             Slug
                         </label>
 
-                        <input
-                            id="slug"
-                            name="slug"
-                            type="text"
-                            value="{{ old('slug') }}"
+                        <input id="slug" name="slug" type="text" value="{{ old('slug') }}"
                             placeholder="Để trống để hệ thống tự tạo"
-                            
                             class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('slug')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                }}"
-                        >
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                         <p class="mt-2 text-xs text-slate-500">
                             Ví dụ: “Nhà gỗ” sẽ có slug là “nha-go”.
@@ -126,33 +77,21 @@
 
                         <div class="mb-2 flex items-center justify-between gap-4">
 
-                            <label
-                                for="description"
-                                class="block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="description" class="block text-sm font-semibold text-slate-700">
                                 Mô tả
                             </label>
 
-                            <span
-                                id="description-counter"
-                                class="text-xs font-medium text-slate-400"
-                            >
+                            <span id="description-counter" class="text-xs font-medium text-slate-400">
                                 0 ký tự
                             </span>
 
                         </div>
 
-                        <textarea
-                            id="description"
-                            name="description"
-                            rows="5"
-                            placeholder="Nhập mô tả ngắn cho danh mục..."
+                        <textarea id="description" name="description" rows="5" placeholder="Nhập mô tả ngắn cho danh mục..."
                             class="w-full resize-y rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('description')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                }}"                            
-                        >{{ old('description') }}</textarea>
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description') }}</textarea>
 
                         @error('description')
                             <p class="mt-2 text-sm font-medium text-red-600">
@@ -173,19 +112,12 @@
 
                         <div class="grid gap-3 sm:grid-cols-2">
 
-                            <label
-                                for="status-active"
-                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-emerald-400 hover:bg-emerald-50"
-                            >
+                            <label for="status-active"
+                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-emerald-400 hover:bg-emerald-50">
                                 <div class="flex items-start gap-3">
-                                    <input
-                                        id="status-active"
-                                        name="status"
-                                        type="radio"
-                                        value="1"
+                                    <input id="status-active" name="status" type="radio" value="1"
                                         {{ old('status', '1') == '1' ? 'checked' : '' }}
-                                        class="mt-1 h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                                    >
+                                        class="mt-1 h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500">
 
                                     <div>
                                         <p class="text-sm font-semibold text-slate-900">
@@ -199,19 +131,12 @@
                                 </div>
                             </label>
 
-                            <label
-                                for="status-inactive"
-                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-red-400 hover:bg-red-50"
-                            >
+                            <label for="status-inactive"
+                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-red-400 hover:bg-red-50">
                                 <div class="flex items-start gap-3">
-                                    <input
-                                        id="status-inactive"
-                                        name="status"
-                                        type="radio"
-                                        value="0"
+                                    <input id="status-inactive" name="status" type="radio" value="0"
                                         {{ old('status') == '0' ? 'checked' : '' }}
-                                        class="mt-1 h-4 w-4 border-slate-300 text-red-600 focus:ring-red-500"
-                                    >
+                                        class="mt-1 h-4 w-4 border-slate-300 text-red-600 focus:ring-red-500">
 
                                     <div>
                                         <p class="text-sm font-semibold text-slate-900">
@@ -237,19 +162,16 @@
 
             </div>
 
-            <div class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
+            <div
+                class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
 
-                <a
-                    href="{{ route('admin.categories.index') }}"
-                    class="rounded-xl border border-slate-300 px-6 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                >
+                <a href="{{ route('admin.categories.index') }}"
+                    class="rounded-xl border border-slate-300 px-6 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                     Hủy
                 </a>
 
-                <button
-                    type="submit"
-                    class="cursor-pointer rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                >
+                <button type="submit"
+                    class="cursor-pointer rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
                     Thêm danh mục
                 </button>
 
@@ -257,7 +179,7 @@
 
         </form>
 
-    </main>
+    </div>
 
     <script>
         const description = document.getElementById('description');
@@ -270,6 +192,4 @@
         description.addEventListener('input', updateCounter);
         updateCounter();
     </script>
-</body>
-
-</html>
+@endsection

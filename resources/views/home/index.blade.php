@@ -327,7 +327,7 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                    <
+                    <a
                         href="{{ route('home') }}"
                         class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
                     >

@@ -225,7 +225,7 @@
                         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
 
                             <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-                                ✓
+                                ✔️
                             </div>
 
                             <p class="mt-4 text-2xl font-bold text-slate-900">

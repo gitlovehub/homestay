@@ -6,9 +6,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        @yield('title', 'Quản trị | HomeStayGo')
-    </title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>@yield('title', 'Quản trị | HomeStayGo')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -16,172 +16,152 @@
         [x-cloak] {
             display: none !important;
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Co giãn Sidebar và nội dung
-        |--------------------------------------------------------------------------
-        */
-
-        .admin-sidebar-desktop {
-            transition:
-                width 300ms ease;
-        }
-
-        .admin-content-wrapper {
-            transition:
-                padding-left 300ms ease;
-        }
-
-        @media (min-width: 1024px) {
-            .admin-sidebar-desktop {
-                width: var(--admin-sidebar-width);
-            }
-
-            .admin-content-wrapper {
-                padding-left: var(--admin-sidebar-width);
-            }
-        }
     </style>
+
+    @stack('styles')
 </head>
 
-<body x-data="{
-    adminSidebarOpen: false,
+<body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
 
-    adminSidebarCollapsed: localStorage.getItem('adminSidebarCollapsed') === 'true',
-
-    toggleAdminSidebar() {
-        this.adminSidebarCollapsed = !this.adminSidebarCollapsed;
-
-        localStorage.setItem(
-            'adminSidebarCollapsed',
-            String(this.adminSidebarCollapsed)
-        );
-
-        /*
-         * Yêu cầu Chart.js tính lại kích thước
-         * sau khi Sidebar co giãn hoàn tất.
-         */
-        setTimeout(() => {
-            window.dispatchEvent(
-                new Event('resize')
+    <div x-data="{
+        adminSidebarOpen: false,
+    
+        adminSidebarCollapsed: localStorage.getItem('adminSidebarCollapsed') === 'true',
+    
+        toggleAdminSidebar() {
+            this.adminSidebarCollapsed = !this.adminSidebarCollapsed;
+    
+            localStorage.setItem(
+                'adminSidebarCollapsed',
+                this.adminSidebarCollapsed
             );
-        }, 320);
-    },
-
-    openMobileSidebar() {
-        this.adminSidebarOpen = true;
-    },
-
-    closeMobileSidebar() {
-        this.adminSidebarOpen = false;
-    }
-}"
-    :style="{
-        '--admin-sidebar-width': adminSidebarCollapsed ?
-            '72px' :
-            '240px'
+        },
+    
+        closeMobileSidebar() {
+            this.adminSidebarOpen = false;
+        }
     }"
-    @keydown.escape.window="closeMobileSidebar()" class="min-h-screen overflow-x-hidden bg-slate-100 text-slate-900">
-    {{-- ========================================================= --}}
-    {{-- SIDEBAR MOBILE --}}
-    {{-- ========================================================= --}}
+        x-effect="
+            document.documentElement.classList.toggle(
+                'overflow-hidden',
+                adminSidebarOpen
+            );
 
-    <div x-show="adminSidebarOpen" x-cloak class="fixed inset-0 z-50 lg:hidden">
-        {{-- Overlay --}}
-        <button type="button" x-transition.opacity @click="closeMobileSidebar()"
-            class="absolute inset-0 cursor-default bg-slate-950/60 backdrop-blur-sm"
-            aria-label="Đóng menu quản trị"></button>
+            document.body.classList.toggle(
+                'overflow-hidden',
+                adminSidebarOpen
+            );
+        "
+        @keydown.escape.window="closeMobileSidebar()"
+        @resize.window="
+            if (window.innerWidth >= 1024) {
+                closeMobileSidebar();
+            }
+        "
+        class="min-h-screen">
 
-        {{-- Sidebar mobile luôn mở rộng --}}
-        <aside x-data="{
-            adminSidebarCollapsed: false
-        }" x-show="adminSidebarOpen"
-            x-transition:enter="transform transition duration-300 ease-out" x-transition:enter-start="-translate-x-full"
-            x-transition:enter-end="translate-x-0" x-transition:leave="transform transition duration-200 ease-in"
-            x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
-            class="absolute inset-y-0 left-0 w-[280px] max-w-[86vw] bg-white shadow-2xl">
+        {{-- Overlay khi mở Sidebar trên điện thoại --}}
+        <div x-show="adminSidebarOpen" x-cloak x-transition:enter="transition-opacity duration-300 ease-out"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity duration-200 ease-in" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" @click="closeMobileSidebar()"
+            class="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
+
+        {{-- Sidebar --}}
+        <aside
+            class="fixed inset-y-0 left-0 z-50 w-60 transform transition-all duration-300 ease-in-out lg:translate-x-0"
+            :class="[
+                adminSidebarOpen ?
+                'translate-x-0' :
+                '-translate-x-full lg:translate-x-0',
+            
+                adminSidebarCollapsed ?
+                'lg:w-20' :
+                'lg:w-60'
+            ]">
             @include('admin.partials.sidebar')
         </aside>
-    </div>
 
-    {{-- ========================================================= --}}
-    {{-- SIDEBAR DESKTOP --}}
-    {{-- ========================================================= --}}
+        {{-- Phần nội dung bên phải Sidebar --}}
+        <div class="min-h-screen transition-all duration-300 ease-in-out"
+            :class="adminSidebarCollapsed
+                ?
+                'lg:pl-20' :
+                'lg:pl-60'">
 
-    <aside class="admin-sidebar-desktop fixed inset-y-0 left-0 z-40 hidden bg-white shadow-sm lg:block">
-        @include('admin.partials.sidebar')
-    </aside>
-
-    {{-- ========================================================= --}}
-    {{-- NỘI DUNG BÊN PHẢI --}}
-    {{-- ========================================================= --}}
-
-    <div class="admin-content-wrapper min-h-screen min-w-0">
-        {{-- Topbar Admin --}}
-        <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-            <div class="flex min-h-18 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-                {{-- Bên trái --}}
+            {{-- Header Admin --}}
+            <header
+                class="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6 lg:px-8">
+                {{-- Phần bên trái Header --}}
                 <div class="flex min-w-0 items-center gap-3">
-                    {{-- Mở Sidebar mobile --}}
-                    <button type="button" @click="openMobileSidebar()"
-                        class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 lg:hidden"
+
+                    {{-- Nút mở Sidebar trên điện thoại --}}
+                    <button type="button" @click="adminSidebarOpen = true"
+                        class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 lg:hidden"
                         aria-label="Mở menu quản trị">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
 
+                    {{-- Tiêu đề trang --}}
                     <div class="min-w-0">
                         <p class="text-xs font-semibold uppercase tracking-wider text-blue-600">
                             Trang quản trị
                         </p>
 
-                        <h1 class="truncate text-lg font-bold text-slate-950 sm:text-xl">
-                            @yield('page-title', 'Tổng quan')
+                        <h1 class="mt-0.5 truncate text-xl font-bold text-slate-900">
+                            @yield('page-title', 'Quản trị hệ thống')
                         </h1>
                     </div>
                 </div>
 
-                {{-- Bên phải --}}
-                <div class="flex items-center gap-3">
-                    {{-- Xem website --}}
-                    <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer"
-                        class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 sm:inline-flex">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {{-- Phần bên phải Header --}}
+                <div class="flex shrink-0 items-center gap-3">
+
+                    {{-- Nút xem website --}}
+                    <a href="{{ route('home') }}"
+                        class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:inline-flex">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 11.5 12 4l9 7.5M5 10v10h14V10M9 20v-6h6v6" />
+                                d="M3 12l2-2m0 0l7-7 7 7m-14 0v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3m-6 0h6" />
                         </svg>
 
-                        Xem website
+                        <span>Xem website</span>
                     </a>
 
-                    {{-- Tài khoản --}}
+                    {{-- Thông tin tài khoản --}}
                     <div class="flex items-center gap-3">
+
+                        {{-- Avatar --}}
                         <div
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white shadow-md shadow-blue-600/20">
+                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 font-bold text-white shadow-sm shadow-blue-600/25">
                             {{ mb_strtoupper(mb_substr(auth()->user()?->name ?? 'A', 0, 1)) }}
                         </div>
 
-                        <div class="hidden min-w-0 md:block">
+                        {{-- Tên tài khoản --}}
+                        <div class="hidden sm:block">
                             <p class="max-w-36 truncate text-sm font-bold text-slate-900">
-                                {{ auth()->user()?->name ?? 'Quản trị viên' }}
+                                {{ auth()->user()?->name ?? 'Admin' }}
                             </p>
 
-                            <p class="text-xs text-slate-500">
+                            <p class="text-xs text-slate-400">
                                 Quản trị viên
                             </p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        {{-- Nội dung từng trang Admin --}}
-        <main class="min-w-0 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-            @yield('content')
-        </main>
+            {{-- Nội dung của từng trang Admin --}}
+            <main class="p-4 sm:p-6 lg:p-8">
+                @yield('content')
+            </main>
+
+        </div>
     </div>
 
     @stack('scripts')

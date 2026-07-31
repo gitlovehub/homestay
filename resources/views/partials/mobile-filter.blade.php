@@ -1,9 +1,27 @@
 @php
     $filterAction ??= route('homestays.index');
-    $resetUrl     ??= $filterAction;
-    $formId       ??= 'mobile-filter-form';
-    $idPrefix     ??= 'mobile-filter';
-    $cities       ??= collect();
+
+    $resetUrl ??= $filterAction;
+
+    $formId ??= 'mobile-filter-form';
+
+    $idPrefix ??= 'mobile-filter';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dữ liệu mặc định
+    |--------------------------------------------------------------------------
+    */
+
+    $cities ??= collect();
+
+    $roomTypes ??= collect();
+
+    $amenities ??= collect();
+
+    $selectedAmenities ??= [];
+
+    $activeFilterCount ??= 0;
 @endphp
 
 <div
@@ -71,6 +89,24 @@
             {{-- Nội dung form lọc (scroll được) --}}
             <div class="flex-1 overflow-y-auto px-5 py-4">
                 <form method="GET" action="{{ $filterAction }}" class="space-y-4" id="{{ $formId }}">
+
+                    {{-- Giữ điều kiện ngày khi áp dụng bộ lọc phụ --}}
+                    @if (request()->filled('check_in'))
+                        <input
+                            type="hidden"
+                            name="check_in"
+                            value="{{ request('check_in') }}"
+                        >
+                    @endif
+
+                    @if (request()->filled('check_out'))
+                        <input
+                            type="hidden"
+                            name="check_out"
+                            value="{{ request('check_out') }}"
+                        >
+                    @endif
+
                     <div>
                         <label for="{{ $idPrefix }}-search" class="text-sm font-semibold text-slate-700">Tên Homestay</label>
                         <input type="text" id="{{ $idPrefix }}-search" name="search" value="{{ request('search') }}"

@@ -26,17 +26,13 @@
                 </p>
 
                 <div class="mt-8 flex flex-wrap gap-4">
-                    <a
-                        href="{{ route('homestays.index') }}"
-                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
-                    >
+                    <a href="{{ route('homestays.index') }}"
+                        class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700">
                         Khám phá ngay
                     </a>
 
-                    <a
-                        href="#about"
-                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
-                    >
+                    <a href="#about"
+                        class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600">
                         Tìm hiểu thêm
                     </a>
                 </div>
@@ -73,11 +69,8 @@
 
             <div class="relative">
                 <div class="overflow-hidden rounded-[2rem] bg-white p-3 shadow-2xl shadow-slate-900/15">
-                    <img
-                        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
-                        alt="Homestay nổi bật"
-                        class="h-[480px] w-full rounded-[1.5rem] object-cover"
-                    >
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+                        alt="Homestay nổi bật" class="h-[480px] w-full rounded-[1.5rem] object-cover">
                 </div>
 
                 <div class="absolute -bottom-6 -left-6 hidden rounded-2xl bg-white p-4 shadow-xl sm:block">
@@ -103,83 +96,316 @@
 
     {{-- Search --}}
     <section class="relative z-10 -mt-5 px-4 sm:px-6 lg:px-8">
+
+        @php
+            $selectedLocation = old('location', request('location', ''));
+        @endphp
+
         <div class="mx-auto max-w-7xl rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/10">
-            <form
-                action="{{ route('home') }}"
-                method="GET"
-                class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
-            >
-                <div class="lg:col-span-2">
-                    <label
-                        for="location"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
+            <form action="{{ route('homestays.search') }}" method="GET" class="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+
+                {{-- Chọn thành phố --}}
+                @php
+                    $currentLocation = old('location', request('location', ''));
+                @endphp
+
+                <div class="relative z-30 lg:col-span-2" x-data="{
+                    open: false,
+                    selected: @js($currentLocation),
+                
+                    selectLocation(value) {
+                        this.selected = value;
+                        this.open = false;
+                    }
+                }" @click.outside="open = false"
+                    @keydown.escape.window="open = false">
+                    <label for="location" class="mb-2 block text-sm font-semibold text-slate-700">
                         Địa điểm
                     </label>
 
-                    <input
-                        id="location"
-                        type="text"
-                        name="location"
-                        value="{{ request('location') }}"
-                        placeholder="Đà Lạt, Sa Pa, Hội An..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                    {{-- Giá trị thật gửi về Laravel --}}
+                    <input id="location" type="hidden" name="location" :value="selected">
+
+                    {{-- Nút mở dropdown --}}
+                    <button type="button" @click="open = !open" :aria-expanded="open"
+                        class="group flex w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        <span class="flex min-w-0 items-center gap-3">
+                            {{-- Icon vị trí --}}
+                            <svg class="h-5 w-5 shrink-0 text-blue-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                    d="M12 21s7-5.686 7-12A7 7 0 105 9c0 6.314 7 12 7 12z" />
+
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                    d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                            </svg>
+
+                            {{-- Thành phố đang chọn --}}
+                            <span class="truncate text-sm font-semibold"
+                                :class="selected
+                                    ?
+                                    'text-slate-800' :
+                                    'text-slate-600'"
+                                x-text="selected || 'Tất cả thành phố'"></span>
+                        </span>
+
+                        {{-- Mũi tên --}}
+                        <svg class="h-5 w-5 shrink-0 text-blue-600 transition duration-200"
+                            :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    {{-- Dropdown thành phố --}}
+                    <div x-show="open" x-cloak x-transition:enter="transition duration-150 ease-out"
+                        x-transition:enter-start="-translate-y-2 opacity-0"
+                        x-transition:enter-end="translate-y-0 opacity-100"
+                        x-transition:leave="transition duration-100 ease-in"
+                        x-transition:leave-start="translate-y-0 opacity-100"
+                        x-transition:leave-end="-translate-y-2 opacity-0" style="display: none;"
+                        class="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/15">
+                        <div class="max-h-80 overflow-y-auto p-3">
+                            {{-- Tất cả thành phố --}}
+                            <button type="button" @click="selectLocation('')"
+                                class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition"
+                                :class="selected === ''
+                                    ?
+                                    'bg-blue-50 text-blue-700' :
+                                    'text-slate-700 hover:bg-slate-50 hover:text-blue-600'">
+                                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                                    :class="selected === ''
+                                        ?
+                                        'bg-blue-100 text-blue-600' :
+                                        'bg-slate-100 text-slate-500'">
+                                    <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 21h18" />
+                                        <path d="M5 21V7l8-4v18" />
+                                        <path d="M19 21V11l-6-4" />
+                                        <path d="M9 9v.01" />
+                                        <path d="M9 12v.01" />
+                                        <path d="M9 15v.01" />
+                                        <path d="M9 18v.01" />
+                                    </svg>
+                                </span>
+
+                                Tất cả thành phố
+                            </button>
+
+                            {{-- Đường phân cách --}}
+                            <div class="my-2 border-t border-slate-100"></div>
+
+                            @if ($locations->isNotEmpty())
+                                {{-- Danh sách thành phố hai cột --}}
+                                <div class="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                                    @foreach ($locations as $location)
+                                        <button type="button" @click="selectLocation(@js($location))"
+                                            class="flex min-w-0 cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition"
+                                            :class="selected === @js($location) ?
+                                                'bg-blue-50 text-blue-700' :
+                                                'text-slate-700 hover:bg-slate-50 hover:text-blue-600'">
+                                            <svg class="h-5 w-5 shrink-0"
+                                                :class="selected === @js($location) ?
+                                                    'text-blue-600' :
+                                                    'text-slate-400'"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                                    d="M12 21s7-5.686 7-12A7 7 0 105 9c0 6.314 7 12 7 12z" />
+
+                                                <circle cx="12" cy="9" r="2.5" stroke-width="1.8" />
+                                            </svg>
+
+                                            <span class="truncate">
+                                                {{ $location }}
+                                            </span>
+
+                                            {{-- Dấu tích thành phố đang chọn --}}
+                                            <svg x-show="selected === @js($location)"
+                                                class="ml-auto h-4 w-4 shrink-0 text-blue-600" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="px-4 py-8 text-center">
+                                    <div class="text-3xl">
+                                        📍
+                                    </div>
+
+                                    <p class="mt-2 text-sm font-semibold text-slate-600">
+                                        Chưa có thành phố
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label
-                        for="check_in"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Ngày nhận phòng
-                    </label>
+                <div class="contents" x-data="{
+                    checkIn: @js(old('check_in', request('check_in', ''))),
+                    checkOut: @js(old('check_out', request('check_out', ''))),
+                
+                    openDatePicker(input) {
+                        if (!input || input.disabled) {
+                            return;
+                        }
+                
+                        if (typeof input.showPicker === 'function') {
+                            input.showPicker();
+                            return;
+                        }
+                
+                        input.focus();
+                        input.click();
+                    },
+                
+                    formatDate(value) {
+                        if (!value) {
+                            return '';
+                        }
+                
+                        const [year, month, day] = value.split('-');
+                
+                        return `${day}/${month}/${year}`;
+                    },
+                
+                    nextDay(value) {
+                        if (!value) {
+                            return @js(now()->toDateString());
+                        }
+                
+                        const [year, month, day] = value
+                            .split('-')
+                            .map(Number);
+                
+                        const date = new Date(
+                            year,
+                            month - 1,
+                            day
+                        );
+                
+                        date.setDate(date.getDate() + 1);
+                
+                        const nextYear = date.getFullYear();
+                
+                        const nextMonth = String(
+                            date.getMonth() + 1
+                        ).padStart(2, '0');
+                
+                        const nextDate = String(
+                            date.getDate()
+                        ).padStart(2, '0');
+                
+                        return `${nextYear}-${nextMonth}-${nextDate}`;
+                    },
+                
+                    handleCheckInChange() {
+                        if (
+                            this.checkOut &&
+                            this.checkOut < this.nextDay(this.checkIn)
+                        ) {
+                            this.checkOut = '';
+                        }
+                    }
+                }">
+                    {{-- Ngày nhận phòng --}}
+                    <div>
+                        <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
+                            Ngày nhận phòng
+                        </label>
 
-                    <input
-                        id="check_in"
-                        type="date"
-                        name="check_in"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
-                </div>
+                        <div class="relative">
+                            {{-- Input thật dùng để gửi dữ liệu và mở lịch --}}
+                            <input x-ref="checkInInput" id="check_in" type="date" name="check_in" x-model="checkIn"
+                                min="{{ now()->toDateString() }}" @change="handleCheckInChange()" required
+                                class="absolute bottom-0 left-0 h-px w-px opacity-0">
 
-                <div>
-                    <label
-                        for="check_out"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Ngày trả phòng
-                    </label>
+                            {{-- Nút hiển thị --}}
+                            <button type="button" @click="openDatePicker($refs.checkInInput)"
+                                class="group flex min-h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                <span class="text-sm font-medium"
+                                    :class="checkIn
+                                        ?
+                                        'text-slate-700' :
+                                        'text-slate-400'"
+                                    x-text="checkIn
+                                        ? formatDate(checkIn)
+                                        : 'dd/mm/yyyy'"></span>
 
-                    <input
-                        id="check_out"
-                        type="date"
-                        name="check_out"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                    >
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition group-hover:text-blue-600"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        @error('check_in')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Ngày trả phòng --}}
+                    <div>
+                        <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
+                            Ngày trả phòng
+                        </label>
+
+                        <div class="relative" :class="!checkIn ? 'opacity-60' : ''">
+                            {{-- Input thật --}}
+                            <input x-ref="checkOutInput" id="check_out" type="date" name="check_out"
+                                x-model="checkOut" :min="nextDay(checkIn)" :disabled="!checkIn" required
+                                class="absolute bottom-0 left-0 h-px w-px opacity-0">
+
+                            {{-- Nút hiển thị --}}
+                            <button type="button" :disabled="!checkIn" @click="openDatePicker($refs.checkOutInput)"
+                                class="group flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition enabled:cursor-pointer enabled:hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed">
+                                <span class="text-sm font-medium"
+                                    :class="checkOut
+                                        ?
+                                        'text-slate-700' :
+                                        'text-slate-400'"
+                                    x-text="checkOut
+                                        ? formatDate(checkOut)
+                                        : checkIn
+                                            ? 'dd/mm/yyyy'
+                                            : 'dd/mm/yyyy'">
+                                </span>
+
+                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition group-enabled:hover:text-blue-600"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        @error('check_out')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="flex items-end">
-                    <button
-                        type="submit"
-                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
-                    >
+                    <button type="submit"
+                        class="cursor-pointer w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700">
                         Tìm kiếm
                     </button>
                 </div>
             </form>
 
-            <p class="mt-3 text-xs text-slate-400">
-                Chức năng tìm kiếm sẽ được kết nối ở phần tiếp theo.
-            </p>
         </div>
     </section>
 
     {{-- Featured --}}
-    <section
-        id="featured"
-        class="py-25"
-    >
+    <section id="featured" class="py-25">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                 <div>
@@ -196,10 +422,8 @@
                     </p>
                 </div>
 
-                <a
-                    href="{{ route('homestays.index') }}"
-                    class="font-semibold text-blue-600 hover:text-blue-700"
-                >
+                <a href="{{ route('homestays.index') }}"
+                    class="font-semibold text-blue-600 transition hover:text-blue-700 hover:translate-x-1">
                     Xem tất cả →
                 </a>
             </div>
@@ -218,7 +442,6 @@
                 <div class="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
 
                     @foreach ($homestays as $homestay)
-
                         @php
                             $averageRating = (float) ($homestay->average_rating ?? 0);
                             $reviewCount = (int) ($homestay->approved_reviews_count ?? 0);
@@ -226,21 +449,14 @@
                         @endphp
 
                         <article
-                            class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl"
-                        >
+                            class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl">
                             {{-- Hình ảnh --}}
                             <div class="relative overflow-hidden bg-slate-100">
 
                                 @if ($homestay->thumbnail)
-
-                                    <img
-                                        src="{{ Storage::url($homestay->thumbnail) }}"
-                                        alt="{{ $homestay->name }}"
-                                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-                                    >
-
+                                    <img src="{{ Storage::url($homestay->thumbnail) }}" alt="{{ $homestay->name }}"
+                                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
                                 @else
-
                                     <div class="flex h-64 items-center justify-center">
 
                                         <div class="text-center">
@@ -256,13 +472,11 @@
                                         </div>
 
                                     </div>
-
                                 @endif
 
                                 {{-- Danh mục --}}
                                 <span
-                                    class="absolute left-4 top-4 rounded-full px-4 py-1.5 text-xs bg-white/95 text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur"
-                                >
+                                    class="absolute left-4 top-4 rounded-full px-4 py-1.5 text-xs bg-white/95 text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur">
                                     {{ $homestay->category?->name ?? 'Homestay' }}
                                 </span>
 
@@ -279,7 +493,6 @@
                                     </p>
 
                                     @if ($reviewCount > 0)
-
                                         <div class="flex shrink-0 items-center gap-1.5">
 
                                             <x-icon-star class="h-4 w-4 text-amber-400" />
@@ -289,13 +502,10 @@
                                             </span>
 
                                         </div>
-
                                     @else
-
                                         <span class="shrink-0 text-xs font-medium text-slate-400">
                                             Chưa có đánh giá
                                         </span>
-
                                     @endif
 
                                 </div>
@@ -309,14 +519,12 @@
                                 <div class="mt-4 flex flex-wrap gap-2">
 
                                     <span
-                                        class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700"
-                                    >
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700">
                                         {{ $bookingCount }} lượt đặt
                                     </span>
 
                                     <span
-                                        class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-700"
-                                    >
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-700">
                                         <x-icon-star class="h-3.5 w-3.5 text-amber-400" />
 
                                         {{ $reviewCount }} đánh giá
@@ -327,16 +535,13 @@
                                 {{-- Mô tả --}}
                                 <p class="mt-4 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
                                     {{ \Illuminate\Support\Str::limit(
-                                        $homestay->description
-                                            ?: 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
-                                        100
+                                        $homestay->description ?: 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
+                                        100,
                                     ) }}
                                 </p>
 
                                 {{-- Địa chỉ và nút chi tiết --}}
-                                <div
-                                    class="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 pt-5"
-                                >
+                                <div class="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 pt-5">
                                     <div class="min-w-0">
 
                                         <p class="text-xs text-slate-400">
@@ -349,10 +554,8 @@
 
                                     </div>
 
-                                    <a
-                                        href="{{ route('homestays.show', $homestay->slug) }}"
-                                        class="inline-flex shrink-0 items-center justify-center rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-100"
-                                    >
+                                    <a href="{{ route('homestays.show', $homestay->slug) }}"
+                                        class="inline-flex shrink-0 items-center justify-center rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-100">
                                         Xem chi tiết
                                     </a>
 
@@ -361,7 +564,6 @@
                             </div>
 
                         </article>
-
                     @endforeach
 
                 </div>
@@ -374,10 +576,7 @@
     </section>
 
     {{-- About --}}
-    <section
-        id="about"
-        class="bg-slate-100 py-25"
-    >
+    <section id="about" class="bg-slate-100 py-25">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <p class="font-semibold uppercase tracking-widest text-blue-600">

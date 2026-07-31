@@ -3,13 +3,48 @@
 
     $filterAction ??= route('homestays.index');
 
-    $resetUrl ??= route('homestays.index');
+    $resetUrl ??= $filterAction;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dữ liệu mặc định
+    |--------------------------------------------------------------------------
+    |
+    | Giúp partial không báo lỗi nếu một trang chưa truyền đủ dữ liệu.
+    |
+    */
+
+    $cities ??= collect();
+
+    $roomTypes ??= collect();
+
+    $amenities ??= collect();
+
+    $selectedAmenities ??= [];
 @endphp
 
 <form method="GET" action="{{ $filterAction }}" class="space-y-4">
+
+    {{-- Giữ điều kiện ngày khi áp dụng bộ lọc phụ --}}
+    @if (request()->filled('check_in'))
+        <input
+            type="hidden"
+            name="check_in"
+            value="{{ request('check_in') }}"
+        >
+    @endif
+
+    @if (request()->filled('check_out'))
+        <input
+            type="hidden"
+            name="check_out"
+            value="{{ request('check_out') }}"
+        >
+    @endif
+
     <div>
         <label for="search" class="text-sm font-semibold text-slate-700">Tên Homestay</label>
-        <input type="text" id="search" name="search" value="{{ request('search') }}"
+        <input type="text" id="{{ $prefix }}-search" name="search" value="{{ request('search') }}"
             placeholder="Nhập tên..."
             class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
     </div>
@@ -367,8 +402,8 @@
     </div>
 
     <div>
-        <label for="room-type" class="text-sm font-semibold text-slate-700">Loại phòng</label>
-        <select id="room-type" name="room_type"
+        <label for="{{ $prefix }}-room-type" class="text-sm font-semibold text-slate-700">Loại phòng</label>
+        <select id="{{ $prefix }}-room-type" name="room_type"
             class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
             <option value="">Tất cả</option>
             @foreach ($roomTypes as $roomType)
@@ -380,8 +415,8 @@
     </div>
 
     <div>
-        <label for="rating" class="text-sm font-semibold text-slate-700">Đánh giá</label>
-        <select id="rating" name="rating"
+        <label for=for="{{ $prefix }}-rating" class="text-sm font-semibold text-slate-700">Đánh giá</label>
+        <select id=for="{{ $prefix }}-rating" name="rating"
             class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
             <option value="">Tất cả</option>
             @for ($star = 5; $star >= 1; $star--)

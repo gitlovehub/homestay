@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\HomestaySearchController;
 use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
@@ -20,6 +21,12 @@ use Illuminate\Support\Facades\Route;
 
 // --- Trang chủ ---
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// --- Tìm Homestay còn phòng ---
+Route::get(
+    '/search',
+    [HomestaySearchController::class, 'index']
+)->name('homestays.search');
 
 // --- Danh mục ---
 Route::get('/categories', [FrontendCategoryController::class, 'index'])

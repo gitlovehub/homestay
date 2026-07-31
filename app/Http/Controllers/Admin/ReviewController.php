@@ -25,13 +25,21 @@ class ReviewController extends Controller
                     $subQuery
                         ->where('title', 'like', "%{$search}%")
                         ->orWhere('content', 'like', "%{$search}%")
+
                         ->orWhereHas('user', function ($userQuery) use ($search) {
                             $userQuery
                                 ->where('name', 'like', "%{$search}%")
                                 ->orWhere('email', 'like', "%{$search}%");
                         })
+
                         ->orWhereHas('homestay', function ($homestayQuery) use ($search) {
-                            $homestayQuery->where('name', 'like', "%{$search}%");
+                            $homestayQuery
+                                ->where('name', 'like', "%{$search}%");
+                        })
+
+                        ->orWhereHas('booking', function ($bookingQuery) use ($search) {
+                            $bookingQuery
+                                ->where('booking_code', 'like', "%{$search}%");
                         });
                 });
             })

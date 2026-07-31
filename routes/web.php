@@ -10,13 +10,26 @@ use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryController;
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
 use App\Http\Controllers\Frontend\ReviewController as FrontendReviewController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTE CÔNG KHAI (Public Routes)
+
+// --- Trang chủ ---
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// --- Danh mục ---
+Route::get('/categories', [FrontendCategoryController::class, 'index'])
+    ->name('categories.index');
+Route::get(
+    '/categories/{category:slug}',
+    [FrontendCategoryController::class, 'show']
+)->name('categories.show');
+
+// --- Homestays ---
 Route::get(
     '/homestays/{slug}',
     [FrontendHomestayController::class, 'show']
@@ -29,12 +42,12 @@ Route::get(
 // ROUTE CẦN ĐĂNG NHẬP (Authenticated Routes)
 Route::middleware('auth')->group(function () {
 
-    // Profile (Thông tin cá nhân)
+    // Profile (Client)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Bookings (Đặt phòng của người dùng)
+    // Bookings (Client)
     Route::prefix('bookings')->name('bookings.')->group(function () {
         Route::get(
             '/history',
@@ -57,7 +70,7 @@ Route::middleware('auth')->group(function () {
         )->name('show');
     });
 
-    // Reviews phía người dùng
+    // Reviews (Client)
     Route::get(
         '/homestays/{homestay:slug}/reviews/create',
         [FrontendReviewController::class, 'create']
@@ -73,7 +86,7 @@ Route::middleware('auth')->group(function () {
 // ROUTE DÀNH CHO ADMIN (Admin Routes)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
-    // --- Dashboard Admin ---
+    // --- Dashboard ---
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // --- Quản lý tài khoản ---

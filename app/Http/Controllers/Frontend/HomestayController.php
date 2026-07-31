@@ -319,60 +319,73 @@ class HomestayController extends Controller
             'popular'
         );
 
+        $roomFilter = function (Builder $query) use ($minPrice, $maxPrice, $guests, $roomType) {
+            $query->where(
+                'rooms.status',
+                'available'
+            );
+
+            if ($minPrice !== null) {
+                $query->where(
+                    'rooms.price_per_night',
+                    '>=',
+                    $minPrice
+                );
+            }
+
+            if ($maxPrice !== null) {
+                $query->where(
+                    'rooms.price_per_night',
+                    '<=',
+                    $maxPrice
+                );
+            }
+
+            if ($guests !== null) {
+                $query->where(
+                    'rooms.capacity',
+                    '>=',
+                    $guests
+                );
+            }
+
+            if ($roomType !== '') {
+                $query->where(
+                    'rooms.room_type',
+                    $roomType
+                );
+            }
+        };
+
         $homestaysQuery = Homestay::query()
             ->with([
                 'category',
                 'amenities:id,name,icon',
             ])
-            ->where('homestays.status', true)
+            ->where(
+                'homestays.status',
+                true
+            )
 
             /*
             |--------------------------------------------------------------------------
-            | Chỉ lấy Homestay còn phòng hoạt động
+            | Một phòng phải thỏa mãn đồng thời tất cả điều kiện
             |--------------------------------------------------------------------------
             */
 
-            ->whereHas('rooms', function (Builder $query) {
-                $query->where(
-                    'rooms.status',
-                    'available'
-                );
-            })
+            ->whereHas(
+                'rooms',
+                $roomFilter
+            )
 
             /*
             |--------------------------------------------------------------------------
-            | Giá phòng thấp nhất
+            | Giá thấp nhất của các phòng phù hợp
             |--------------------------------------------------------------------------
             */
 
             ->withMin([
-                'rooms as min_room_price' => function (
-                    Builder $query
-                ) use (
-                    $minPrice,
-                    $maxPrice
-                ) {
-                    $query->where(
-                        'rooms.status',
-                        'available'
-                    );
-
-                    if ($minPrice !== null) {
-                        $query->where(
-                            'rooms.price_per_night',
-                            '>=',
-                            $minPrice
-                        );
-                    }
-
-                    if ($maxPrice !== null) {
-                        $query->where(
-                            'rooms.price_per_night',
-                            '<=',
-                            $maxPrice
-                        );
-                    }
-                },
+                'rooms as min_room_price' => $roomFilter,
             ], 'price_per_night')
 
             /*
@@ -442,22 +455,15 @@ class HomestayController extends Controller
             | Tìm theo địa điểm
             |--------------------------------------------------------------------------
             */
-
-            ->when($location !== '', function (Builder $query) use ($location) {
-                $query->where(function (Builder $subQuery) use ($location) {
-                    $subQuery
-                        ->where(
-                            'homestays.city',
-                            'like',
-                            "%{$location}%"
-                        )
-                        ->orWhere(
-                            'homestays.address',
-                            'like',
-                            "%{$location}%"
-                        );
-                });
-            })
+            ->when(
+                $location !== '',
+                function (Builder $query) use ($location) {
+                    $query->whereRaw(
+                        'TRIM(homestays.city) = ?',
+                        [$location]
+                    );
+                }
+            )
 
             /*
             |--------------------------------------------------------------------------
@@ -652,12 +658,28 @@ class HomestayController extends Controller
             ->orderBy('room_type')
             ->pluck('room_type');
 
+        $cities = Homestay::query()
+            ->where('status', true)
+            ->whereNotNull('city')
+            ->whereRaw("TRIM(city) <> ''")
+            ->whereHas('rooms', function (Builder $query) {
+                $query->where(
+                    'rooms.status',
+                    'available'
+                );
+            })
+            ->selectRaw('TRIM(city) as city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
         return view(
             'homestays.index',
             compact(
                 'homestays',
                 'amenities',
                 'roomTypes',
+                'cities',
                 'sort'
             )
         );

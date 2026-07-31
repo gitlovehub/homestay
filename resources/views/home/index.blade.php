@@ -290,28 +290,13 @@
                 </div>
 
                 <div class="flex items-end">
-                <button
-                    type="submit"
-                    class="inline-flex h-[50px] items-center justify-center gap-2 rounded-full bg-blue-500 px-6 font-semibold text-white shadow-sm transition hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-200"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.5"
+                    <button
+                        type="submit"
+                        class="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
                     >
-                        <circle cx="11" cy="11" r="7"></circle>
-
-                        <path
-                            stroke-linecap="round"
-                            d="m20 20-3.5-3.5"
-                        ></path>
-                    </svg>
-
-                    <span>Tìm kiếm</span>
-                </button>
-</div>
+                        Tìm kiếm
+                    </button>
+                </div>
             </form>
 
             <p class="mt-3 text-xs text-slate-400">

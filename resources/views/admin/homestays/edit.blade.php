@@ -391,29 +391,39 @@
 
                         </div>
 
-                        {{-- Thành phố --}}
+                        {{-- Tỉnh/Thành phố --}}
                         <div>
 
                             <label
                                 for="city"
                                 class="mb-2 block text-sm font-semibold text-slate-700"
                             >
-                                Thành phố
+                                Tỉnh/Thành phố
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <input
+                            <select
                                 id="city"
                                 name="city"
-                                type="text"
-                                value="{{ old('city', $homestay->city) }}"
-                                placeholder="Ví dụ: Đà Lạt"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
                                     {{ $errors->has('city')
                                         ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                         : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
                                     }}"
                             >
+                                <option value="">
+                                    -- Chọn tỉnh/thành phố --
+                                </option>
+
+                                @foreach (config('homestay_locations') as $location)
+                                    <option
+                                        value="{{ $location }}"
+                                        @selected(old('city', $homestay->city) === $location)
+                                    >
+                                        {{ $location }}
+                                    </option>
+                                @endforeach
+                            </select>
 
                             @error('city')
                                 <p class="mt-2 text-sm font-medium text-red-600">

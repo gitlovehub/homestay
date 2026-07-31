@@ -27,7 +27,7 @@
 
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a
-                        href="#featured"
+                        href="{{ route('homestays.index') }}"
                         class="rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
                     >
                         Khám phá ngay
@@ -197,7 +197,7 @@
                 </div>
 
                 <a
-                    href="#"
+                    href="{{ route('homestays.index') }}"
                     class="font-semibold text-blue-600 hover:text-blue-700"
                 >
                     Xem tất cả →

@@ -16,7 +16,7 @@
             <a href="{{ route('home') }}" class="font-medium text-blue-600 transition hover:text-blue-700">
                 Trang chủ
             </a>
-            <a href="#featured" class="font-medium text-slate-600 transition hover:text-blue-600">
+            <a href="{{ route('homestays.index') }}" class="font-medium text-slate-600 transition hover:text-blue-600">
                 Homestay
             </a>
             <a href="#about" class="font-medium text-slate-600 transition hover:text-blue-600">
@@ -175,7 +175,7 @@
 
 {{-- Overlay --}}
 <div id="mobile-overlay"
-    class="pointer-events-none fixed inset-0 z-60 bg-black/50 opacity-0 transition-opacity duration-300 md:hidden">
+    class="pointer-events-none fixed inset-0 z-60 opacity-0 transition-opacity duration-300 backdrop-blur-sm md:hidden">
 </div>
 
 {{-- Sidebar trượt từ phải sang trái --}}

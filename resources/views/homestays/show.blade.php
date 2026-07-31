@@ -1066,7 +1066,7 @@
                 type="button"
                 data-review-overlay
                 data-close-review-modal
-                class="absolute inset-0 cursor-default bg-slate-950/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-200"
+                class="absolute inset-0 cursor-default opacity-0 backdrop-blur-sm transition-opacity duration-200"
                 aria-label="Đóng modal"
             ></button>
 
@@ -1096,10 +1096,10 @@
                     <button
                         type="button"
                         data-close-review-modal
-                        class="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-xl text-slate-500 transition hover:bg-red-50 hover:text-red-500"
+                        class="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full p-2 bg-slate-100 text-slate-500 transition hover:bg-red-50 hover:text-red-500"
                         aria-label="Đóng"
                     >
-                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
                             <path d="M18 6L6 18M6 6l12 12"/>
                         </svg>
                     </button>

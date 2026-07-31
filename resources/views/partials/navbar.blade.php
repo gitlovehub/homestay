@@ -175,7 +175,7 @@
 
 {{-- Overlay --}}
 <div id="mobile-overlay"
-    class="pointer-events-none fixed inset-0 z-60 bg-black/50 opacity-0 transition-opacity duration-300 md:hidden">
+    class="pointer-events-none fixed inset-0 z-60 opacity-0 transition-opacity duration-300 backdrop-blur-sm md:hidden">
 </div>
 
 {{-- Sidebar trượt từ phải sang trái --}}

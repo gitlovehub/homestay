@@ -200,7 +200,7 @@
                 class="block rounded-lg px-3 py-2.5 text-base font-medium text-blue-600 hover:bg-blue-50">
                 Trang chủ
             </a>
-            <a href="#featured"
+            <a href="{{ route('homestays.index') }}"
                 class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
                 Homestay
             </a>

@@ -26,37 +26,21 @@
     <main>
 
         {{-- Breadcrumb --}}
-        <section class="border-b border-slate-200 bg-white">
-            <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-
-                <nav
-                    class="flex flex-wrap items-center gap-2 text-sm text-slate-500"
-                    aria-label="Điều hướng"
-                >
-                    <a
-                        href="{{ route('home') }}"
-                        class="font-medium transition hover:text-blue-600"
-                    >
-                        Trang chủ
-                    </a>
-
-                    <span>/</span>
-
-                    @if ($homestay->category)
-                        <span>
-                            {{ $homestay->category->name }}
-                        </span>
-
-                        <span>/</span>
-                    @endif
-
-                    <span class="font-semibold text-slate-800">
-                        {{ $homestay->name }}
-                    </span>
-                </nav>
-
-            </div>
-        </section>
+        <x-frontend-breadcrumb
+            :items="[
+                [
+                    'label' => 'Trang chủ',
+                    'url' => route('home'),
+                ],
+                [
+                    'label' => 'Homestay',
+                    'url' => route('homestays.index'),
+                ],
+                [
+                    'label' => $homestay->name,
+                ],
+            ]"
+        />
 
         {{-- Nội dung chính --}}
         <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

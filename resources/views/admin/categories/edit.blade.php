@@ -117,7 +117,9 @@
 
                             {{-- Hoạt động --}}
                             <label for="status-active"
-                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-emerald-400 hover:bg-emerald-50">
+                                class="cursor-pointer rounded-2xl border p-4 transition
+                       has-checked:border-emerald-500 has-checked:bg-emerald-50 has-checked:ring-2 has-checked:ring-emerald-200
+                       border-slate-300 bg-white hover:border-emerald-400 hover:bg-emerald-50">
                                 <div class="flex items-start gap-3">
 
                                     <input id="status-active" name="status" type="radio" value="1"
@@ -139,7 +141,9 @@
 
                             {{-- Tạm khóa --}}
                             <label for="status-inactive"
-                                class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition hover:border-red-400 hover:bg-red-50">
+                                class="cursor-pointer rounded-2xl border p-4 transition
+                       has-checked:border-red-500 has-checked:bg-red-50 has-checked:ring-2 has-checked:ring-red-200
+                       border-slate-300 bg-white hover:border-red-400 hover:bg-red-50">
                                 <div class="flex items-start gap-3">
 
                                     <input id="status-inactive" name="status" type="radio" value="0"

@@ -43,30 +43,27 @@
 
                 <div class="mt-10 grid max-w-lg grid-cols-3 gap-5">
                     <div>
-                        <p class="text-2xl font-bold text-slate-950">
+                        <p class="text-2xl font-bold text-blue-600">
                             {{ number_format($totalHomestays) }}+
                         </p>
-
                         <p class="text-sm text-slate-500">
                             Homestay
                         </p>
                     </div>
 
                     <div>
-                        <p class="text-2xl font-bold text-slate-950">
+                        <p class="text-2xl font-bold text-violet-500">
                             {{ number_format($totalLocations) }}+
                         </p>
-
                         <p class="text-sm text-slate-500">
-                            Thành phố
+                            Địa điểm
                         </p>
                     </div>
 
                     <div>
-                        <p class="text-2xl font-bold text-slate-950">
+                        <p class="text-2xl font-bold text-amber-500">
                             {{ number_format($averageRating, 1) }}/5
                         </p>
-
                         <p class="text-sm text-slate-500">
                             Đánh giá
                         </p>
@@ -112,149 +109,22 @@
                 method="GET"
                 class="grid gap-4 md:grid-cols-2 lg:grid-cols-5"
             >
-                {{-- Chọn địa điểm --}}
                 <div class="lg:col-span-2">
                     <label
-                        for="location-trigger"
+                        for="location"
                         class="mb-2 block text-sm font-semibold text-slate-700"
                     >
                         Địa điểm
                     </label>
 
-                    <div
-                        id="location-picker"
-                        class="relative w-full"
+                    <input
+                        id="location"
+                        type="text"
+                        name="location"
+                        value="{{ request('location') }}"
+                        placeholder="Đà Lạt, Sa Pa, Hội An..."
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     >
-                        {{-- Giá trị gửi lên Controller --}}
-                        <input
-                            id="location-input"
-                            type="hidden"
-                            name="location"
-                            value="{{ request('location') }}"
-                        >
-
-                        {{-- Ô hiển thị địa điểm --}}
-                        <button
-                            id="location-trigger"
-                            type="button"
-                            class="flex min-h-[50px] w-full items-center gap-3 rounded-xl border border-slate-300 bg-white px-4 py-3 pr-20 text-left outline-none transition hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
-                            {{-- Icon địa điểm --}}
-                            <svg
-                                class="h-5 w-5 shrink-0 text-slate-500"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.8"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
-                                />
-
-                                <circle
-                                    cx="12"
-                                    cy="10"
-                                    r="2.5"
-                                />
-                            </svg>
-
-                            <span
-                                id="location-text"
-                                class="min-w-0 flex-1 truncate text-base text-slate-500"
-                            >
-                                {{ request('location') ?: 'Bạn muốn đi đâu?' }}
-                            </span>
-                        </button>
-
-                        {{-- Nút X xóa địa điểm --}}
-                        <button
-                            id="clear-location"
-                            type="button"
-                            aria-label="Xóa địa điểm đã chọn"
-                            class="absolute right-10 top-1/2 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-lg text-slate-400 transition hover:bg-red-50 hover:text-red-600
-                                {{ request('location') ? '' : 'hidden' }}"
-                        >
-                            ×
-                        </button>
-
-                        {{-- Mũi tên --}}
-                        <svg
-                            id="location-arrow"
-                            class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition duration-200"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="m6 9 6 6 6-6"
-                            />
-                        </svg>
-
-                        {{-- Danh sách địa điểm --}}
-                        <div
-                            id="location-menu"
-                            class="absolute left-0 right-0 top-full z-50 mt-2 hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl"
-                        >
-                            <button
-                                type="button"
-                                data-location=""
-                                class="location-option mb-2 flex w-full items-center rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
-                            >
-                                Tất cả địa điểm
-                            </button>
-
-                            <div class="border-t border-slate-100 pt-2">
-                                <div class="grid max-h-64 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-
-                                    @forelse ($locations as $location)
-                                        <button
-                                            type="button"
-                                            data-location="{{ $location }}"
-                                            class="location-option flex items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition
-                                                {{ request('location') === $location
-                                                    ? 'bg-blue-50 text-blue-700'
-                                                    : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'
-                                                }}"
-                                        >
-                                            <svg
-                                                class="h-4 w-4 shrink-0"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="1.8"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"
-                                                />
-
-                                                <circle
-                                                    cx="12"
-                                                    cy="10"
-                                                    r="2.5"
-                                                />
-                                            </svg>
-
-                                            <span class="truncate">
-                                                {{ $location }}
-                                            </span>
-                                        </button>
-                                    @empty
-                                        <p class="col-span-full px-3 py-4 text-center text-sm text-slate-500">
-                                            Chưa có địa điểm
-                                        </p>
-                                    @endforelse
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div>
@@ -308,7 +178,7 @@
     {{-- Featured --}}
     <section
         id="featured"
-        class="py-20"
+        class="py-25"
     >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -322,30 +192,16 @@
                     </h2>
 
                     <p class="mt-3 text-slate-600">
-                        Những địa điểm lưu trú mới nhất trên hệ thống.
+                        Những Homestay được đặt nhiều và nhận đánh giá tốt từ khách hàng.
                     </p>
                 </div>
 
-
-                <div class="flex flex-wrap items-center gap-3">
-                    <a
-                        href="{{ route('home') }}"
-                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                    >
-                        Xem tất cả
-                    </a>
-
-                    <button
-                        type="button"
-                        id="openFilterModal"
-                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
-                    >
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4"/>
-                        </svg>
-                        Bộ lọc
-                    </button>
-                </div>
+                <a
+                    href="{{ route('homestays.index') }}"
+                    class="font-semibold text-blue-600 hover:text-blue-700"
+                >
+                    Xem tất cả →
+                </a>
             </div>
 
             @if ($homestays->isEmpty())
@@ -360,67 +216,154 @@
                 </div>
             @else
                 <div class="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($homestays as $homestay)
-                        <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                            <div class="relative overflow-hidden">
-                                <img
-                                    src="{{ $homestay->image ?: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80' }}"
-                                    alt="{{ $homestay->name }}"
-                                    class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
-                                >
 
-                                <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow">
+                    @foreach ($homestays as $homestay)
+
+                        @php
+                            $averageRating = (float) ($homestay->average_rating ?? 0);
+                            $reviewCount = (int) ($homestay->approved_reviews_count ?? 0);
+                            $bookingCount = (int) ($homestay->bookings_count ?? 0);
+                        @endphp
+
+                        <article
+                            class="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl"
+                        >
+                            {{-- Hình ảnh --}}
+                            <div class="relative overflow-hidden bg-slate-100">
+
+                                @if ($homestay->thumbnail)
+
+                                    <img
+                                        src="{{ Storage::url($homestay->thumbnail) }}"
+                                        alt="{{ $homestay->name }}"
+                                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                                    >
+
+                                @else
+
+                                    <div class="flex h-64 items-center justify-center">
+
+                                        <div class="text-center">
+
+                                            <div class="text-5xl">
+                                                🏡
+                                            </div>
+
+                                            <p class="mt-3 text-sm font-medium text-slate-400">
+                                                Chưa có hình ảnh
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                @endif
+
+                                {{-- Danh mục --}}
+                                <span
+                                    class="absolute left-4 top-4 rounded-full px-4 py-1.5 text-xs bg-white/95 text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur"
+                                >
                                     {{ $homestay->category?->name ?? 'Homestay' }}
                                 </span>
 
-                                <span class="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white">
-                                    Còn hoạt động
-                                </span>
                             </div>
 
-                            <div class="p-6">
+                            {{-- Nội dung --}}
+                            <div class="flex flex-1 flex-col p-6">
+
+                                {{-- Địa điểm và đánh giá --}}
                                 <div class="flex items-center justify-between gap-3">
-                                    <p class="text-sm font-medium text-blue-600">
-                                        {{ $homestay->city }}
+
+                                    <p class="min-w-0 truncate text-sm font-semibold text-blue-600">
+                                        {{ $homestay->city ?: 'Chưa cập nhật địa điểm' }}
                                     </p>
 
-                                    <span class="text-sm text-amber-500">
-                                        ★ 4.8
-                                    </span>
+                                    @if ($reviewCount > 0)
+
+                                        <div class="flex shrink-0 items-center gap-1.5">
+
+                                            <x-icon-star class="h-4 w-4 text-amber-400" />
+
+                                            <span class="text-sm font-bold text-slate-800">
+                                                {{ number_format($averageRating, 1) }}
+                                            </span>
+
+                                        </div>
+
+                                    @else
+
+                                        <span class="shrink-0 text-xs font-medium text-slate-400">
+                                            Chưa có đánh giá
+                                        </span>
+
+                                    @endif
+
                                 </div>
 
+                                {{-- Tên Homestay --}}
                                 <h3 class="mt-2 line-clamp-1 text-xl font-bold text-slate-950">
                                     {{ $homestay->name }}
                                 </h3>
 
-                                <p class="mt-2 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
+                                {{-- Thống kê --}}
+                                <div class="mt-4 flex flex-wrap gap-2">
+
+                                    <span
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700"
+                                    >
+                                        {{ $bookingCount }} lượt đặt
+                                    </span>
+
+                                    <span
+                                        class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-700"
+                                    >
+                                        <x-icon-star class="h-3.5 w-3.5 text-amber-400" />
+
+                                        {{ $reviewCount }} đánh giá
+                                    </span>
+
+                                </div>
+
+                                {{-- Mô tả --}}
+                                <p class="mt-4 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
                                     {{ \Illuminate\Support\Str::limit(
-                                        $homestay->description ?? 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
+                                        $homestay->description
+                                            ?: 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
                                         100
                                     ) }}
                                 </p>
 
-                                <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-5">
-                                    <div>
+                                {{-- Địa chỉ và nút chi tiết --}}
+                                <div
+                                    class="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 pt-5"
+                                >
+                                    <div class="min-w-0">
+
                                         <p class="text-xs text-slate-400">
                                             Địa chỉ
                                         </p>
 
-                                        <p class="mt-1 max-w-48 truncate text-sm font-semibold text-slate-700">
-                                            {{ $homestay->address }}
+                                        <p class="mt-1 truncate text-sm font-semibold text-slate-700">
+                                            {{ $homestay->address ?: 'Chưa cập nhật địa chỉ' }}
                                         </p>
+
                                     </div>
 
                                     <a
                                         href="{{ route('homestays.show', $homestay->slug) }}"
-                                        class="rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white"
+                                        class="inline-flex shrink-0 items-center justify-center rounded-xl border border-blue-600 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-100"
                                     >
                                         Xem chi tiết
                                     </a>
+
                                 </div>
+
                             </div>
+
                         </article>
+
                     @endforeach
+
                 </div>
 
                 <div class="mt-12 flex justify-center">
@@ -433,7 +376,7 @@
     {{-- About --}}
     <section
         id="about"
-        class="bg-slate-100 py-20"
+        class="bg-slate-100 py-25"
     >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
@@ -495,396 +438,4 @@
             </div>
         </div>
     </section>
-
-    {{-- Filter Modal --}}
-    <div
-        id="filterModal"
-        class="fixed inset-0 z-[100] hidden"
-        aria-labelledby="filterModalTitle"
-        role="dialog"
-        aria-modal="true"
-    >
-        <div id="filterOverlay" class="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"></div>
-
-        <div class="relative flex min-h-full items-center justify-center p-3 sm:p-6">
-            <div
-                id="filterPanel"
-                class="flex h-[90vh] max-h-[760px] min-h-[560px] w-full max-w-5xl scale-95 flex-col overflow-hidden rounded-3xl border border-white/60 bg-white opacity-0 shadow-2xl transition duration-200"
-            >
-                <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7">
-                    <div>
-                        <h3 id="filterModalTitle" class="text-xl font-bold text-slate-950 sm:text-2xl">
-                            Bộ lọc Homestay
-                        </h3>
-                        <p class="mt-1 text-sm text-slate-500">
-                            Chọn các tiêu chí phù hợp với chuyến đi của bạn.
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        id="closeFilterModal"
-                        class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                        aria-label="Đóng bộ lọc"
-                    >
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <form action="{{ route('home') }}" method="GET" class="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <div id="filterContent" class="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-                        <div class="grid gap-6 lg:grid-cols-2">
-                            <div>
-                                <label for="filter_keyword" class="mb-2 block text-sm font-semibold text-slate-700">
-                                    Tên Homestay
-                                </label>
-                                <div class="relative">
-                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <circle cx="11" cy="11" r="7"></circle>
-                                        <path stroke-linecap="round" d="m20 20-3.5-3.5"></path>
-                                    </svg>
-                                    <input
-                                        id="filter_keyword"
-                                        type="text"
-                                        name="keyword"
-                                        value="{{ request('keyword') }}"
-                                        placeholder="Nhập tên Homestay..."
-                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                    >
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="filter_location" class="mb-2 block text-sm font-semibold text-slate-700">
-                                    Địa điểm
-                                </label>
-                                <div class="relative">
-                                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
-                                        <circle cx="12" cy="10" r="2.5"/>
-                                    </svg>
-                                    <input
-                                        id="filter_location"
-                                        type="text"
-                                        name="location"
-                                        value="{{ request('location') }}"
-                                        placeholder="Đà Lạt, Sa Pa, Hội An..."
-                                        class="w-full rounded-2xl border border-slate-300 py-3 pl-12 pr-4 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                    >
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-7 border-t border-slate-100 pt-6">
-                            <p class="mb-3 text-sm font-semibold text-slate-800">
-                                Khoảng giá
-                            </p>
-
-                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                                @php
-                                    $priceOptions = [
-                                        'under_500' => 'Dưới 500.000đ',
-                                        '500_1000' => '500.000đ - 1 triệu',
-                                        '1000_2000' => '1 - 2 triệu',
-                                        'over_2000' => 'Trên 2 triệu',
-                                    ];
-                                @endphp
-
-                                @foreach ($priceOptions as $value => $label)
-                                    <label class="cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="price_range"
-                                            value="{{ $value }}"
-                                            class="peer sr-only"
-                                            @checked(request('price_range') === $value)
-                                        >
-                                        <span class="flex min-h-12 items-center justify-center rounded-2xl border border-slate-300 px-3 text-center text-sm font-semibold text-slate-600 transition peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-blue-300">
-                                            {{ $label }}
-                                        </span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="mt-7 grid gap-6 border-t border-slate-100 pt-6 md:grid-cols-2 lg:grid-cols-3">
-                            <div>
-                                <label for="room_type" class="mb-2 block text-sm font-semibold text-slate-700">
-                                    Loại phòng
-                                </label>
-                                <select
-                                    id="room_type"
-                                    name="room_type"
-                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                >
-                                    <option value="">Tất cả loại phòng</option>
-                                    @foreach (($roomTypes ?? []) as $roomType)
-                                        <option value="{{ $roomType }}" @selected(request('room_type') === $roomType)>
-                                            {{ $roomType }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="guests" class="mb-2 block text-sm font-semibold text-slate-700">
-                                    Số người
-                                </label>
-                                <select
-                                    id="guests"
-                                    name="guests"
-                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                >
-                                    <option value="">Không giới hạn</option>
-                                    @for ($guest = 1; $guest <= 10; $guest++)
-                                        <option value="{{ $guest }}" @selected((string) request('guests') === (string) $guest)>
-                                            {{ $guest }} người
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="sort_price" class="mb-2 block text-sm font-semibold text-slate-700">
-                                    Sắp xếp theo giá
-                                </label>
-                                <select
-                                    id="sort_price"
-                                    name="sort_price"
-                                    class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                >
-                                    <option value="">Mới nhất</option>
-                                    <option value="asc" @selected(request('sort_price') === 'asc')>
-                                        Giá thấp đến cao
-                                    </option>
-                                    <option value="desc" @selected(request('sort_price') === 'desc')>
-                                        Giá cao đến thấp
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mt-7 border-t border-slate-100 pt-6">
-                            <div class="flex items-center justify-between gap-3">
-                                <p class="text-sm font-semibold text-slate-800">
-                                    Tiện ích
-                                </p>
-                                <span class="text-xs text-slate-400">
-                                    Có thể chọn nhiều
-                                </span>
-                            </div>
-
-                            <div class="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-                                @forelse (($amenities ?? []) as $amenity)
-<label
-    class="flex h-12 cursor-pointer items-center gap-2 rounded-xl
-           border border-slate-300 px-3 text-sm font-medium text-slate-600
-           transition hover:border-blue-400
-           has-[:checked]:border-blue-600
-           has-[:checked]:bg-blue-50
-           has-[:checked]:text-blue-700"
->
-    <input
-        type="checkbox"
-        name="amenities[]"
-        value="{{ $amenity->id }}"
-        class="h-5 w-5 shrink-0 cursor-pointer accent-blue-600"
-        @checked(
-            in_array(
-                (string) $amenity->id,
-                array_map('strval', (array) request('amenities', [])),
-                true
-            )
-        )
-    >
-
-    <span class="leading-5">
-        {{ $amenity->name }}
-    </span>
-</label>
-                                @empty
-                                    <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500 sm:col-span-2 lg:col-span-3">
-                                        Chưa có dữ liệu tiện ích.
-                                    </div>
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="shrink-0 flex flex-col-reverse gap-3 border-t border-slate-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-7">
-                        <a
-                            href="{{ route('home') }}"
-                            class="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 px-6 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
-                        >
-                            Xóa bộ lọc
-                        </a>
-
-                        <button
-                            type="submit"
-                            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
-                        >
-                            Xem kết quả
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>
-                            </svg>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('filterModal');
-            const panel = document.getElementById('filterPanel');
-            const openButton = document.getElementById('openFilterModal');
-            const closeButton = document.getElementById('closeFilterModal');
-            const overlay = document.getElementById('filterOverlay');
-            const filterContent = document.getElementById('filterContent');
-
-            const openModal = () => {
-                modal.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden');
-                if (filterContent) filterContent.scrollTop = 0;
-
-                requestAnimationFrame(() => {
-                    panel.classList.remove('scale-95', 'opacity-0');
-                    panel.classList.add('scale-100', 'opacity-100');
-                });
-            };
-
-            const closeModal = () => {
-                panel.classList.remove('scale-100', 'opacity-100');
-                panel.classList.add('scale-95', 'opacity-0');
-
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    document.body.classList.remove('overflow-hidden');
-                }, 180);
-            };
-
-            openButton?.addEventListener('click', openModal);
-            closeButton?.addEventListener('click', closeModal);
-            overlay?.addEventListener('click', closeModal);
-
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
-                    closeModal();
-                }
-            });
-        });
-    </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const picker = document.getElementById('location-picker');
-        const trigger = document.getElementById('location-trigger');
-        const menu = document.getElementById('location-menu');
-        const input = document.getElementById('location-input');
-        const text = document.getElementById('location-text');
-        const arrow = document.getElementById('location-arrow');
-        const clearButton = document.getElementById('clear-location');
-        const options = document.querySelectorAll('.location-option');
-
-        if (!picker || !trigger || !menu || !input || !text) {
-            return;
-        }
-
-        let closeTimer = null;
-
-        function openMenu() {
-            clearTimeout(closeTimer);
-
-            menu.classList.remove('hidden');
-            arrow?.classList.add('rotate-180');
-        }
-
-        function closeMenu() {
-            clearTimeout(closeTimer);
-
-            menu.classList.add('hidden');
-            arrow?.classList.remove('rotate-180');
-        }
-
-        function closeMenuWithDelay() {
-            closeTimer = setTimeout(closeMenu, 150);
-        }
-
-        function removeSelectedStyle() {
-            options.forEach(function (option) {
-                option.classList.remove(
-                    'bg-blue-50',
-                    'text-blue-700'
-                );
-            });
-        }
-
-        picker.addEventListener('mouseenter', openMenu);
-        picker.addEventListener('mouseleave', closeMenuWithDelay);
-
-        trigger.addEventListener('click', function () {
-            if (menu.classList.contains('hidden')) {
-                openMenu();
-            } else {
-                closeMenu();
-            }
-        });
-
-        options.forEach(function (option) {
-            option.addEventListener('click', function () {
-                const selectedLocation = this.dataset.location ?? '';
-
-                input.value = selectedLocation;
-                text.textContent =
-                    selectedLocation || 'Bạn muốn đi đâu?';
-
-                removeSelectedStyle();
-
-                if (selectedLocation !== '') {
-                    this.classList.add(
-                        'bg-blue-50',
-                        'text-blue-700'
-                    );
-
-                    clearButton?.classList.remove('hidden');
-                } else {
-                    clearButton?.classList.add('hidden');
-                }
-
-                closeMenu();
-            });
-        });
-
-        // Nhấn dấu X để xóa địa điểm
-        clearButton?.addEventListener('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            input.value = '';
-            text.textContent = 'Bạn muốn đi đâu?';
-
-            removeSelectedStyle();
-
-            clearButton.classList.add('hidden');
-
-            closeMenu();
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!picker.contains(event.target)) {
-                closeMenu();
-            }
-        });
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeMenu();
-            }
-        });
-    });
-</script>
 @endsection

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Homestay extends Model
@@ -17,7 +18,6 @@ class Homestay extends Model
         'owner_id',
         'name',
         'slug',
-        'price',
         'address',
         'city',
         'phone',
@@ -117,5 +117,17 @@ class Homestay extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function bookings(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Booking::class,
+            Room::class,
+            'homestay_id',
+            'room_id',
+            'id',
+            'id'
+        );
     }
 }

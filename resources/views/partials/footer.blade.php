@@ -70,7 +70,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#about" class="group inline-flex items-center gap-2 text-slate-400 transition hover:text-white">
+                        <a href="{{ route('about') }}" class="group inline-flex items-center gap-2 text-slate-400 transition hover:text-white">
                             <span class="h-px w-0 bg-blue-500 transition-all group-hover:w-3"></span>
                             Giới thiệu
                         </a>

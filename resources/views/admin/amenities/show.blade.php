@@ -103,7 +103,7 @@
                                 </span>
                             @else
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700">
+                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
 
                                     <span class="h-2 w-2 rounded-full bg-red-500"></span>
 
@@ -156,7 +156,7 @@
                             Slug
                         </p>
 
-                        <p class="mt-2 break-all font-semibold text-slate-900">
+                        <p class="mt-2 break-all font-semibold text-blue-700">
                             {{ $amenity->slug }}
                         </p>
 
@@ -187,7 +187,7 @@
                         </p>
 
                         @if ($amenity->status)
-                            <p class="mt-2 font-semibold text-emerald-600">
+                            <p class="mt-2 text-2xl font-semibold text-emerald-600">
                                 Hoạt động
                             </p>
 
@@ -195,7 +195,7 @@
                                 Tiện ích được phép hiển thị và sử dụng.
                             </p>
                         @else
-                            <p class="mt-2 font-semibold text-red-600">
+                            <p class="mt-2 text-2xl font-semibold text-red-600">
                                 Tạm khóa
                             </p>
 

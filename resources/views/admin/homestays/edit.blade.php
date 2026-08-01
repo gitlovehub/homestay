@@ -1,48 +1,18 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Chỉnh sửa Homestay | HomeStayGo')
 
-    <title>Cập nhật Homestay | HomeStay</title>
+@section('page-title', 'Chỉnh sửa Homestay')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
+    <div class="mx-auto max-w-4xl">
 
-<body class="min-h-screen bg-slate-100">
+        <p class="mb-4 text-sm font-semibold md:text-lg text-slate-500">
+            Chỉnh sửa thông tin Homestay trong hệ thống.
+        </p>
 
-    @include('partials.navbar')
-
-    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-
-        {{-- Tiêu đề --}}
-        <div class="mb-8">
-
-            <a
-                href="{{ route('admin.homestays.index') }}"
-                class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-            >
-                <span aria-hidden="true">←</span>
-                Quay lại danh sách Homestay
-            </a>
-
-            <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                Cập nhật Homestay
-            </h1>
-
-            <p class="mt-2 text-slate-500">
-                Chỉnh sửa thông tin Homestay trong hệ thống.
-            </p>
-
-        </div>
-
-        <form
-            action="{{ route('admin.homestays.update', $homestay) }}"
-            method="POST"
-            enctype="multipart/form-data"
-            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
-        >
+        <form action="{{ route('admin.homestays.update', $homestay) }}" method="POST" enctype="multipart/form-data"
+            class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
             @csrf
             @method('PUT')
 
@@ -66,27 +36,18 @@
                         {{-- Tên Homestay --}}
                         <div class="md:col-span-2">
 
-                            <label
-                                for="name"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Tên Homestay
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                value="{{ old('name', $homestay->name) }}"
-                                autofocus
+                            <input id="name" name="name" type="text"
+                                value="{{ old('name', $homestay->name) }}" autofocus
                                 placeholder="Ví dụ: Ocean View Homestay"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('name')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('name')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('name')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -99,25 +60,17 @@
                         {{-- Slug --}}
                         <div class="md:col-span-2">
 
-                            <label
-                                for="slug"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="slug" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Slug
                             </label>
 
-                            <input
-                                id="slug"
-                                name="slug"
-                                type="text"
+                            <input id="slug" name="slug" type="text"
                                 value="{{ old('slug', $homestay->slug) }}"
                                 placeholder="Để trống để hệ thống tự tạo từ tên Homestay"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('slug')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('slug')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             <p class="mt-2 text-xs text-slate-500">
                                 Ví dụ: “Ocean View Homestay” sẽ có slug là “ocean-view-homestay”.
@@ -134,30 +87,20 @@
                         {{-- Danh mục --}}
                         <div>
 
-                            <label
-                                for="category_id"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="category_id" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Danh mục
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <select
-                                id="category_id"
-                                name="category_id"
+                            <select id="category_id" name="category_id"
                                 class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
-                                    {{ $errors->has('category_id')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('category_id')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
                                 <option value="">-- Chọn danh mục --</option>
 
                                 @foreach ($categories as $category)
-                                    <option
-                                        value="{{ $category->id }}"
-                                        @selected(old('category_id', $homestay->category_id) == $category->id)
-                                    >
+                                    <option value="{{ $category->id }}" @selected(old('category_id', $homestay->category_id) == $category->id)>
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -174,30 +117,20 @@
                         {{-- Chủ sở hữu --}}
                         <div>
 
-                            <label
-                                for="owner_id"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="owner_id" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Chủ sở hữu
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <select
-                                id="owner_id"
-                                name="owner_id"
+                            <select id="owner_id" name="owner_id"
                                 class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
-                                    {{ $errors->has('owner_id')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('owner_id')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
                                 <option value="">-- Chọn chủ sở hữu --</option>
 
                                 @foreach ($owners as $owner)
-                                    <option
-                                        value="{{ $owner->id }}"
-                                        @selected(old('owner_id', $homestay->owner_id) == $owner->id)
-                                    >
+                                    <option value="{{ $owner->id }}" @selected(old('owner_id', $homestay->owner_id) == $owner->id)>
                                         {{ $owner->name }} — {{ $owner->email }}
                                     </option>
                                 @endforeach
@@ -237,32 +170,22 @@
                         {{-- Giá cơ bản --}}
                         <div>
 
-                            <label
-                                for="base_price"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="base_price" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Giá cơ bản
                                 <span class="text-red-500">*</span>
                             </label>
 
                             <div class="relative">
 
-                                <input
-                                    id="base_price"
-                                    name="base_price"
-                                    type="number"
-                                    min="0"
-                                    step="1000"
-                                    value="{{ old('base_price', $homestay->base_price) }}"
-                                    placeholder="Ví dụ: 1500000"
+                                <input id="base_price" name="base_price" type="number" min="0" step="1000"
+                                    value="{{ old('base_price', $homestay->base_price) }}" placeholder="Ví dụ: 1500000"
                                     class="w-full rounded-xl border px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                        {{ $errors->has('base_price')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                        }}"
-                                >
+                                    {{ $errors->has('base_price')
+                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
-                                <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm font-medium text-slate-400">
+                                <span
+                                    class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm font-medium text-slate-400">
                                     VNĐ
                                 </span>
 
@@ -279,24 +202,16 @@
                         {{-- Giờ nhận phòng --}}
                         <div>
 
-                            <label
-                                for="check_in_time"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="check_in_time" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Giờ nhận phòng
                             </label>
 
-                            <input
-                                id="check_in_time"
-                                name="check_in_time"
-                                type="time"
+                            <input id="check_in_time" name="check_in_time" type="time"
                                 value="{{ old('check_in_time', '14:00') }}"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
-                                    {{ $errors->has('check_in_time')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('check_in_time')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('check_in_time')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -309,24 +224,16 @@
                         {{-- Giờ trả phòng --}}
                         <div>
 
-                            <label
-                                for="check_out_time"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="check_out_time" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Giờ trả phòng
                             </label>
 
-                            <input
-                                id="check_out_time"
-                                name="check_out_time"
-                                type="time"
+                            <input id="check_out_time" name="check_out_time" type="time"
                                 value="{{ old('check_out_time', '12:00') }}"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
-                                    {{ $errors->has('check_out_time')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('check_out_time')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('check_out_time')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -362,26 +269,18 @@
                         {{-- Địa chỉ --}}
                         <div class="md:col-span-2">
 
-                            <label
-                                for="address"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="address" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Địa chỉ
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <input
-                                id="address"
-                                name="address"
-                                type="text"
+                            <input id="address" name="address" type="text"
                                 value="{{ old('address', $homestay->address) }}"
                                 placeholder="Ví dụ: 123 đường Trần Phú"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('address')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('address')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('address')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -394,32 +293,22 @@
                         {{-- Tỉnh/Thành phố --}}
                         <div>
 
-                            <label
-                                for="city"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="city" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Tỉnh/Thành phố
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <select
-                                id="city"
-                                name="city"
+                            <select id="city" name="city"
                                 class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
-                                    {{ $errors->has('city')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('city')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
                                 <option value="">
                                     -- Chọn tỉnh/thành phố --
                                 </option>
 
                                 @foreach (config('homestay_locations') as $location)
-                                    <option
-                                        value="{{ $location }}"
-                                        @selected(old('city', $homestay->city) === $location)
-                                    >
+                                    <option value="{{ $location }}" @selected(old('city', $homestay->city) === $location)>
                                         {{ $location }}
                                     </option>
                                 @endforeach
@@ -436,27 +325,16 @@
                         {{-- Số điện thoại --}}
                         <div>
 
-                            <label
-                                for="phone"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="phone" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Số điện thoại
                             </label>
 
-                            <input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                inputmode="numeric"
-                                maxlength="11"
-                                value="{{ old('phone', $homestay->phone) }}"
-                                placeholder="Ví dụ: 0987654321"
+                            <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="11"
+                                value="{{ old('phone', $homestay->phone) }}" placeholder="Ví dụ: 0987654321"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('phone')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('phone')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('phone')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -469,26 +347,16 @@
                         {{-- Vĩ độ --}}
                         <div>
 
-                            <label
-                                for="latitude"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="latitude" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Vĩ độ
                             </label>
 
-                            <input
-                                id="latitude"
-                                name="latitude"
-                                type="number"
-                                step="0.0000001"
-                                value="{{ old('latitude', $homestay->latitude) }}"
-                                placeholder="Ví dụ: 11.940419"
+                            <input id="latitude" name="latitude" type="number" step="0.0000001"
+                                value="{{ old('latitude', $homestay->latitude) }}" placeholder="Ví dụ: 11.940419"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('latitude')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('latitude')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('latitude')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -501,26 +369,16 @@
                         {{-- Kinh độ --}}
                         <div>
 
-                            <label
-                                for="longitude"
-                                class="mb-2 block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="longitude" class="mb-2 block text-sm font-semibold text-slate-700">
                                 Kinh độ
                             </label>
 
-                            <input
-                                id="longitude"
-                                name="longitude"
-                                type="number"
-                                step="0.0000001"
-                                value="{{ old('longitude', $homestay->longitude) }}"
-                                placeholder="Ví dụ: 108.458313"
+                            <input id="longitude" name="longitude" type="number" step="0.0000001"
+                                value="{{ old('longitude', $homestay->longitude) }}" placeholder="Ví dụ: 108.458313"
                                 class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('longitude')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('longitude')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             @error('longitude')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -556,37 +414,23 @@
                         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 
                             @foreach ($amenities as $amenity)
+                                <label for="amenity-{{ $amenity->id }}" class="group cursor-pointer">
 
-                                <label
-                                    for="amenity-{{ $amenity->id }}"
-                                    class="group cursor-pointer"
-                                >
-
-                                    <input
-                                        id="amenity-{{ $amenity->id }}"
-                                        name="amenities[]"
-                                        type="checkbox"
-                                        value="{{ $amenity->id }}"
-                                        class="peer sr-only"
-                                        @checked(
-                                            in_array(
-                                                $amenity->id,
-                                                old('amenities', $homestay->amenities->pluck('id')->toArray())
-                                            )
-                                        )
-                                    >
+                                    <input id="amenity-{{ $amenity->id }}" name="amenities[]" type="checkbox"
+                                        value="{{ $amenity->id }}" class="peer sr-only"
+                                        @checked(in_array($amenity->id, old('amenities', $homestay->amenities->pluck('id')->toArray())))>
 
                                     <div
                                         class="flex h-full items-start gap-3 rounded-2xl border border-slate-300 bg-white p-4 transition
-                                            group-hover:border-blue-300
-                                            group-hover:bg-blue-50/50
-                                            peer-checked:border-blue-500
-                                            peer-checked:bg-blue-50
-                                            peer-focus-visible:ring-4
-                                            peer-focus-visible:ring-blue-100"
-                                    >
+                                        group-hover:border-blue-300
+                                        group-hover:bg-blue-50/50
+                                        peer-checked:border-blue-500
+                                        peer-checked:bg-blue-50
+                                        peer-focus-visible:ring-4
+                                        peer-focus-visible:ring-blue-100">
 
-                                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-xl">
+                                        <div
+                                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-xl">
                                             {{ $amenity->icon ?: '✓' }}
                                         </div>
 
@@ -607,13 +451,10 @@
                                     </div>
 
                                 </label>
-
                             @endforeach
 
                         </div>
-
                     @else
-
                         <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
 
                             <p class="text-sm font-medium text-slate-600">
@@ -665,11 +506,10 @@
                                 </p>
                             </div>
 
-                            <label
-                                for="thumbnail"
-                                class="flex h-64 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-blue-400 hover:bg-blue-50"
-                            >
-                                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-2xl">
+                            <label for="thumbnail"
+                                class="flex h-64 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-blue-400 hover:bg-blue-50">
+                                <div
+                                    class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-2xl">
                                     📷
                                 </div>
 
@@ -677,30 +517,15 @@
                                     Nhấn để chọn ảnh đại diện
                                 </p>
 
-                                <p
-                                    id="thumbnail-name"
-                                    class="mt-2 max-w-full truncate text-xs text-slate-400"
-                                >
-                                    {{ $homestay->thumbnail
-                                        ? basename($homestay->thumbnail)
-                                        : 'JPG, JPEG, PNG hoặc WEBP. Tối đa 3MB.' }}
+                                <p id="thumbnail-name" class="mt-2 max-w-full truncate text-xs text-slate-400">
+                                    {{ $homestay->thumbnail ? basename($homestay->thumbnail) : 'JPG, JPEG, PNG hoặc WEBP. Tối đa 3MB.' }}
                                 </p>
                             </label>
 
-                            <input
-                                id="thumbnail"
-                                name="thumbnail"
-                                type="file"
-                                accept=".jpg,.jpeg,.png,.webp"
-                                class="hidden"
-                            >
+                            <input id="thumbnail" name="thumbnail" type="file" accept=".jpg,.jpeg,.png,.webp"
+                                class="hidden">
 
-                            <input
-                                type="hidden"
-                                name="remove_thumbnail"
-                                id="remove_thumbnail"
-                                value="0"
-                            >
+                            <input type="hidden" name="remove_thumbnail" id="remove_thumbnail" value="0">
 
                             @error('thumbnail')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -717,23 +542,16 @@
                                     Xem trước ảnh
                                 </p>
 
-                                <button
-                                    id="remove-thumbnail"
-                                    type="button"
-                                    class="cursor-pointer text-sm font-semibold text-red-600 transition hover:text-red-700"
-                                >
+                                <button id="remove-thumbnail" type="button"
+                                    class="cursor-pointer text-sm font-semibold text-red-600 transition hover:text-red-700">
                                     Xóa ảnh
                                 </button>
                             </div>
 
-                            <img
-                                id="thumbnail-preview"
-                                src="{{ $homestay->thumbnail
-                                    ? asset('storage/' . $homestay->thumbnail)
-                                    : '' }}"
+                            <img id="thumbnail-preview"
+                                src="{{ $homestay->thumbnail ? asset('storage/' . $homestay->thumbnail) : '' }}"
                                 alt="Ảnh đại diện Homestay"
-                                class="h-64 w-full rounded-2xl border border-slate-200 object-cover"
-                            >
+                                class="h-64 w-full rounded-2xl border border-slate-200 object-cover">
                         </div>
 
                     </div>
@@ -764,34 +582,22 @@
 
                             <div class="mb-2 flex items-center justify-between gap-4">
 
-                                <label
-                                    for="description"
-                                    class="block text-sm font-semibold text-slate-700"
-                                >
+                                <label for="description" class="block text-sm font-semibold text-slate-700">
                                     Mô tả
                                 </label>
 
-                                <span
-                                    id="description-counter"
-                                    class="text-xs font-medium text-slate-400"
-                                >
+                                <span id="description-counter" class="text-xs font-medium text-slate-400">
                                     0/3000 ký tự
                                 </span>
 
                             </div>
 
-                            <textarea
-                                id="description"
-                                name="description"
-                                rows="7"
-                                maxlength="3000"
+                            <textarea id="description" name="description" rows="7" maxlength="3000"
                                 placeholder="Nhập nội dung giới thiệu về Homestay..."
                                 class="w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('description')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >{{ old('description', $homestay->description) }}</textarea>
+                                {{ $errors->has('description')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description', $homestay->description) }}</textarea>
 
                             @error('description')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -806,34 +612,22 @@
 
                             <div class="mb-2 flex items-center justify-between gap-4">
 
-                                <label
-                                    for="policy"
-                                    class="block text-sm font-semibold text-slate-700"
-                                >
+                                <label for="policy" class="block text-sm font-semibold text-slate-700">
                                     Chính sách
                                 </label>
 
-                                <span
-                                    id="policy-counter"
-                                    class="text-xs font-medium text-slate-400"
-                                >
+                                <span id="policy-counter" class="text-xs font-medium text-slate-400">
                                     0/3000 ký tự
                                 </span>
 
                             </div>
 
-                            <textarea
-                                id="policy"
-                                name="policy"
-                                rows="6"
-                                maxlength="3000"
+                            <textarea id="policy" name="policy" rows="6" maxlength="3000"
                                 placeholder="Ví dụ: Không hút thuốc, không mang vật nuôi, giữ yên lặng sau 22 giờ..."
                                 class="w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('policy')
-                                        ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >{{ old('policy', $homestay->policy) }}</textarea>
+                                {{ $errors->has('policy')
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('policy', $homestay->policy) }}</textarea>
 
                             @error('policy')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -867,24 +661,17 @@
                     <div class="grid gap-4 sm:grid-cols-2">
 
                         {{-- Hoạt động --}}
-                        <label
-                            for="status-active"
+                        <label for="status-active"
                             class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition
-                                hover:border-emerald-400 hover:bg-emerald-50
-                                has-[:checked]:border-emerald-500
-                                has-[:checked]:bg-emerald-50"
-                        >
+                            hover:border-emerald-400 hover:bg-emerald-50
+                            has-[:checked]:border-emerald-500
+                            has-[:checked]:bg-emerald-50">
 
                             <div class="flex items-start gap-3">
 
-                                <input
-                                    id="status-active"
-                                    name="status"
-                                    type="radio"
-                                    value="1"
+                                <input id="status-active" name="status" type="radio" value="1"
                                     @checked(old('status', $homestay->status ? '1' : '0') == '1')
-                                    class="mt-1 h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                                >
+                                    class="mt-1 h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500">
 
                                 <div>
 
@@ -903,24 +690,17 @@
                         </label>
 
                         {{-- Tạm khóa --}}
-                        <label
-                            for="status-inactive"
+                        <label for="status-inactive"
                             class="cursor-pointer rounded-2xl border border-slate-300 bg-white p-4 transition
-                                hover:border-red-400 hover:bg-red-50
-                                has-[:checked]:border-red-500
-                                has-[:checked]:bg-red-50"
-                        >
+                            hover:border-red-400 hover:bg-red-50
+                            has-[:checked]:border-red-500
+                            has-[:checked]:bg-red-50">
 
                             <div class="flex items-start gap-3">
 
-                                <input
-                                    id="status-inactive"
-                                    name="status"
-                                    type="radio"
-                                    value="0"
+                                <input id="status-inactive" name="status" type="radio" value="0"
                                     @checked(old('status', $homestay->status ? '1' : '0') == '0')
-                                    class="mt-1 h-4 w-4 border-slate-300 text-red-600 focus:ring-red-500"
-                                >
+                                    class="mt-1 h-4 w-4 border-slate-300 text-red-600 focus:ring-red-500">
 
                                 <div>
 
@@ -951,27 +731,24 @@
             </div>
 
             {{-- Nút hành động --}}
-            <div class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
+            <div
+                class="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end sm:px-8">
 
-                <a
-                    href="{{ route('admin.homestays.index') }}"
-                    class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-                >
+                <a href="{{ route('admin.homestays.index') }}"
+                    class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
                     Hủy
                 </a>
 
-                <button
-                    type="submit"
-                    class="inline-flex cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                >
-                    Cập nhật Homestay
+                <button type="submit"
+                    class="inline-flex cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                    Lưu thay đổi
                 </button>
 
             </div>
 
         </form>
 
-    </main>
+    </div>
 
     <script>
         const thumbnailInput = document.getElementById('thumbnail');
@@ -983,7 +760,7 @@
 
         let previewUrl = null;
 
-        thumbnailInput.addEventListener('change', function () {
+        thumbnailInput.addEventListener('change', function() {
             const file = this.files[0];
 
             if (!file) {
@@ -1004,7 +781,7 @@
             thumbnailPreviewWrapper.classList.remove('hidden');
         });
 
-        removeThumbnailButton.addEventListener('click', function () {
+        removeThumbnailButton.addEventListener('click', function() {
             thumbnailInput.value = '';
             removeThumbnailInput.value = '1';
 
@@ -1033,7 +810,4 @@
             thumbnailPreview.src = '';
         }
     </script>
-
-</body>
-
-</html>
+@endsection

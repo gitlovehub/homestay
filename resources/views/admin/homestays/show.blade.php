@@ -1,49 +1,26 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Chi tiết Homestay | HomeStayGo')
 
-    <title>Chi tiết Homestay | HomeStay</title>
+@section('page-title', 'Chi tiết Homestay')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
-<body class="min-h-screen bg-slate-100">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-    @include('partials.navbar')
+            <p class="text-sm font-semibold md:text-lg text-slate-500">
+                Xem toàn bộ thông tin của Homestay trong hệ thống.
+            </p>
 
-    <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-
-        {{-- Header --}}
-        <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-
-            <div>
-
-                <a
-                    href="{{ route('admin.homestays.index') }}"
-                    class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-                >
-                    <span aria-hidden="true">←</span>
-                    Quay lại danh sách Homestay
-                </a>
-
-                <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                    Chi tiết Homestay
-                </h1>
-
-                <p class="mt-2 text-slate-500">
-                    Xem toàn bộ thông tin của Homestay trong hệ thống.
-                </p>
-
-            </div>
-
-            <a
-                href="{{ route('admin.homestays.edit', $homestay) }}"
-                class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200"
-            >
-                Sửa Homestay
+            <a href="{{ route('admin.homestays.edit', $homestay) }}"
+                class="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Chỉnh sửa
             </a>
 
         </div>
@@ -59,16 +36,14 @@
                     <div class="min-h-80 bg-slate-100">
 
                         @if ($homestay->thumbnail)
-                            <img
-                                src="{{ asset('storage/' . $homestay->thumbnail) }}"
-                                alt="{{ $homestay->name }}"
-                                class="h-full min-h-80 w-full object-cover"
-                            >
+                            <img src="{{ asset('storage/' . $homestay->thumbnail) }}" alt="{{ $homestay->name }}"
+                                class="h-full min-h-80 w-full object-cover">
                         @else
                             <div class="flex min-h-80 h-full items-center justify-center px-6 text-center">
 
                                 <div>
-                                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-3xl shadow-sm">
+                                    <div
+                                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-3xl shadow-sm">
                                         🏡
                                     </div>
 
@@ -93,17 +68,20 @@
 
                             <div class="flex flex-wrap items-center gap-3">
 
-                                <span class="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                                <span
+                                    class="inline-flex rounded-full bg-blue-50 border border-blue-200 px-4 py-1.5 text-xs font-semibold text-blue-700">
                                     {{ $homestay->category?->name ?? 'Chưa phân loại' }}
                                 </span>
 
                                 @if ($homestay->status)
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                    <span
+                                        class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-700">
                                         <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                                         Hoạt động
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                                    <span
+                                        class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-xs font-semibold text-red-700">
                                         <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                         Tạm khóa
                                     </span>
@@ -322,10 +300,10 @@
                     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 
                         @foreach ($homestay->amenities as $amenity)
-
                             <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
 
-                                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm">
+                                <div
+                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm">
                                     {{ $amenity->icon ?: '✓' }}
                                 </div>
 
@@ -344,13 +322,10 @@
                                 </div>
 
                             </div>
-
                         @endforeach
 
                     </div>
-
                 @else
-
                     <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
 
                         <p class="font-semibold text-slate-700">
@@ -379,17 +354,13 @@
                 </div>
 
                 @if ($homestay->description)
-
-                    <div class="whitespace-pre-line leading-7 text-slate-600">
+                    <div class="leading-7 text-slate-600">
                         {{ $homestay->description }}
                     </div>
-
                 @else
-
                     <p class="text-sm italic text-slate-400">
                         Chưa có nội dung mô tả.
                     </p>
-
                 @endif
 
             </section>
@@ -406,44 +377,18 @@
                 </div>
 
                 @if ($homestay->policy)
-
-                    <div class="whitespace-pre-line leading-7 text-slate-600">
+                    <div class="leading-7 text-slate-600">
                         {{ $homestay->policy }}
                     </div>
-
                 @else
-
                     <p class="text-sm italic text-slate-400">
                         Chưa có chính sách lưu trú.
                     </p>
-
                 @endif
 
             </section>
 
-            {{-- Nút cuối trang --}}
-            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-
-                <a
-                    href="{{ route('admin.homestays.index') }}"
-                    class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-                >
-                    Quay lại danh sách
-                </a>
-
-                <a
-                    href="{{ route('admin.homestays.edit', $homestay) }}"
-                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                >
-                    Chỉnh sửa Homestay
-                </a>
-
-            </div>
-
         </div>
 
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection

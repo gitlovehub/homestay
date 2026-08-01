@@ -5,6 +5,8 @@ window.Alpine = Alpine;
 Alpine.start();
 
 import './components/navbar';
+import './admin-action-menu';
+
 import Chart from 'chart.js/auto';
 
 document.addEventListener('DOMContentLoaded', () => {

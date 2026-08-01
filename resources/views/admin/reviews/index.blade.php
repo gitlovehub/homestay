@@ -1,68 +1,29 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Quaản lý đánh giá | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('page-title', 'Quaản lý đánh giá')
 
-    <title>Quản lý đánh giá | HomeStay</title>
-
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-
-    @include('partials.navbar')
-
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
         <x-alert />
 
-        <div class="mb-8">
-
-            <a
-                href="{{ route('admin.dashboard') }}"
-                class="mb-4 block text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-            >
-                ← Quay lại bảng điều khiển
-            </a>
-
-            <h1 class="text-3xl font-bold text-slate-900">
-                Quản lý đánh giá
-            </h1>
-
-            <p class="mt-2 text-slate-500">
-                Kiểm duyệt, theo dõi và quản lý đánh giá của khách hàng sau khi lưu trú.
-            </p>
-
-        </div>
+        <p class="mb-8 text-sm font-semibold md:text-lg text-slate-500">
+            Quản lý đánh giá của khách hàng sau khi lưu trú.
+        </p>
 
         {{-- Thống kê --}}
         <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
             {{-- Tổng đánh giá --}}
-            <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
 
                 <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <svg
-                        class="h-7 w-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                        />
+                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                 </div>
 
@@ -79,21 +40,13 @@
             </div>
 
             {{-- Điểm trung bình --}}
-            <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
 
                 <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                    <svg
-                        class="h-7 w-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118L3.077 10.1c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                        />
+                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118L3.077 10.1c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                 </div>
 
@@ -111,21 +64,13 @@
             </div>
 
             {{-- Chờ duyệt --}}
-            <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
 
                 <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-                    <svg
-                        class="h-7 w-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
+                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
 
@@ -142,21 +87,13 @@
             </div>
 
             {{-- Đã ẩn --}}
-            <div class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <div
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
 
                 <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
-                    <svg
-                        class="h-7 w-7"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
-                        />
+                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
                     </svg>
                 </div>
 
@@ -180,52 +117,31 @@
             {{-- Bộ lọc --}}
             <div class="border-b border-slate-200 bg-slate-50/70 p-5">
 
-                <form
-                    method="GET"
-                    action="{{ route('admin.reviews.index') }}"
-                    class="grid gap-4 lg:grid-cols-12"
-                >
+                <form method="GET" action="{{ route('admin.reviews.index') }}" class="grid gap-4 lg:grid-cols-12">
 
                     {{-- Search --}}
                     <div class="lg:col-span-6">
 
-                        <label
-                            for="search"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">
                             Tìm kiếm
                         </label>
 
                         <div class="relative">
 
-                            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <span
+                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
 
-                                <svg
-                                    class="h-5 w-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="m21 21-4.35-4.35M16.65 11A5.65 5.65 0 1 1 11 5.35 5.65 5.65 0 0 1 16.65 11Z"
-                                    />
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="m21 21-4.35-4.35M16.65 11A5.65 5.65 0 1 1 11 5.35 5.65 5.65 0 0 1 16.65 11Z" />
                                 </svg>
 
                             </span>
 
-                            <input
-                                id="search"
-                                name="search"
-                                type="search"
-                                value="{{ request('search') }}"
+                            <input id="search" name="search" type="search" value="{{ request('search') }}"
                                 placeholder="Tên khách, email, Homestay, nội dung..."
                                 class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                                onsearch="this.form.submit()"
-                                oninput="if(this.value === '') this.form.submit()"
-                            >
+                                onsearch="this.form.submit()" oninput="if(this.value === '') this.form.submit()">
 
                         </div>
 
@@ -234,38 +150,23 @@
                     {{-- Trạng thái --}}
                     <div class="lg:col-span-2">
 
-                        <label
-                            for="status"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="status" class="mb-2 block text-sm font-semibold text-slate-700">
                             Trạng thái
                         </label>
 
-                        <select
-                            id="status"
-                            name="status"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                        <select id="status" name="status"
+                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                             <option value="">Tất cả</option>
 
-                            <option
-                                value="pending"
-                                @selected(request('status') === 'pending')
-                            >
+                            <option value="pending" @selected(request('status') === 'pending')>
                                 Chờ duyệt
                             </option>
 
-                            <option
-                                value="approved"
-                                @selected(request('status') === 'approved')
-                            >
+                            <option value="approved" @selected(request('status') === 'approved')>
                                 Đã duyệt
                             </option>
 
-                            <option
-                                value="hidden"
-                                @selected(request('status') === 'hidden')
-                            >
+                            <option value="hidden" @selected(request('status') === 'hidden')>
                                 Đã ẩn
                             </option>
                         </select>
@@ -275,25 +176,16 @@
                     {{-- Rating --}}
                     <div class="lg:col-span-2">
 
-                        <label
-                            for="rating"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="rating" class="mb-2 block text-sm font-semibold text-slate-700">
                             Số sao
                         </label>
 
-                        <select
-                            id="rating"
-                            name="rating"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
+                        <select id="rating" name="rating"
+                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                             <option value="">Tất cả</option>
 
                             @for ($star = 5; $star >= 1; $star--)
-                                <option
-                                    value="{{ $star }}"
-                                    @selected((string) request('rating') === (string) $star)
-                                >
+                                <option value="{{ $star }}" @selected((string) request('rating') === (string) $star)>
                                     {{ $star }} sao
                                 </option>
                             @endfor
@@ -305,42 +197,19 @@
                     <div class="flex items-end lg:col-span-1">
 
                         @if (request()->hasAny(['search', 'status', 'rating']))
-                            <a
-                                href="{{ route('admin.reviews.index') }}"
-                                class="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50"
-                            >
-                                <svg
-                                    class="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                    />
+                            <a href="{{ route('admin.reviews.index') }}"
+                                class="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
-                            <button
-                                type="button"
-                                disabled
-                                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-400"
-                            >
-                                <svg
-                                    class="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                    />
+                            <button type="button" disabled
+                                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-400">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>
                         @endif
@@ -349,10 +218,8 @@
 
                     {{-- Nút lọc --}}
                     <div class="flex items-end lg:col-span-1">
-                        <button
-                            type="submit"
-                            class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-                        >
+                        <button type="submit"
+                            class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                             Lọc
                         </button>
                     </div>
@@ -370,7 +237,8 @@
 
                         <thead>
 
-                            <tr class="border-b border-slate-200 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-500">
+                            <tr
+                                class="border-b border-slate-200 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-500">
 
                                 <th class="px-6 py-4">
                                     Khách hàng
@@ -388,7 +256,7 @@
                                     Homestay
                                 </th>
 
-                                <th class="px-6 py-4">
+                                <th class="px-6 py-4 text-center">
                                     Trạng thái
                                 </th>
 
@@ -403,7 +271,6 @@
                         <tbody class="divide-y divide-slate-200 text-sm">
 
                             @foreach ($reviews as $review)
-
                                 @php
                                     $userName = $review->user?->name ?? 'Không xác định';
 
@@ -412,7 +279,7 @@
                                     $avatarText = collect($nameParts)
                                         ->filter()
                                         ->take(2)
-                                        ->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))
+                                        ->map(fn($part) => mb_strtoupper(mb_substr($part, 0, 1)))
                                         ->implode('');
                                 @endphp
 
@@ -423,17 +290,18 @@
 
                                         <div class="flex items-center gap-3">
 
-                                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
+                                            <div
+                                                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
                                                 {{ $avatarText ?: '?' }}
                                             </div>
 
                                             <div class="min-w-0">
 
-                                                <p class="max-w-[160px] truncate font-semibold text-slate-900">
+                                                <p class="max-w-[150px] truncate font-semibold text-slate-900">
                                                     {{ $userName }}
                                                 </p>
 
-                                                <p class="mt-0.5 max-w-[160px] truncate text-xs text-slate-500">
+                                                <p class="mt-0.5 max-w-[150px] truncate text-xs text-slate-500">
                                                     {{ $review->user?->email ?? 'Không có email' }}
                                                 </p>
 
@@ -448,16 +316,10 @@
 
                                         <div class="flex items-center gap-2">
 
-                                            <div
-                                                class="flex items-center"
-                                                aria-label="{{ $review->rating }} trên 5 sao"
-                                            >
+                                            <div class="flex items-center" aria-label="{{ $review->rating }} trên 5 sao">
                                                 @for ($star = 1; $star <= 5; $star++)
                                                     <span
-                                                        class="text-lg leading-none {{ $star <= $review->rating
-                                                            ? 'text-amber-400'
-                                                            : 'text-slate-200' }}"
-                                                    >
+                                                        class="text-lg leading-none {{ $star <= $review->rating ? 'text-amber-400' : 'text-slate-200' }}">
                                                         ★
                                                     </span>
                                                 @endfor
@@ -495,7 +357,7 @@
                                     {{-- Homestay --}}
                                     <td class="px-6 py-5">
 
-                                        <div class="max-w-[180px]">
+                                        <div class="max-w-[150px]">
 
                                             <p class="truncate font-semibold text-slate-900">
                                                 {{ $review->homestay?->name ?? 'Không xác định' }}
@@ -515,36 +377,38 @@
                                     </td>
 
                                     {{-- Status --}}
-                                    <td class="whitespace-nowrap px-6 py-5">
+                                    <td class="whitespace-nowrap px-6 py-5 text-center">
 
                                         @switch($review->status)
-
                                             @case('pending')
-                                                <span class="inline-flex items-center gap-2 rounded-full border border-amber-100 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
+                                                <span
+                                                    class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
                                                     Chờ duyệt
                                                 </span>
-                                                @break
+                                            @break
 
                                             @case('approved')
-                                                <span class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
+                                                <span
+                                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                                     Đã duyệt
                                                 </span>
-                                                @break
+                                            @break
 
                                             @case('hidden')
-                                                <span class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700">
+                                                <span
+                                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-xs font-semibold text-red-700">
                                                     <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
                                                     Đã ẩn
                                                 </span>
-                                                @break
+                                            @break
 
                                             @default
-                                                <span class="inline-flex rounded-full bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600">
+                                                <span
+                                                    class="inline-flex rounded-full bg-slate-50 border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-700">
                                                     Không xác định
                                                 </span>
-
                                         @endswitch
 
                                     </td>
@@ -565,138 +429,113 @@
                                     {{-- Actions --}}
                                     <td class="whitespace-nowrap px-6 py-5 text-right">
 
-                                        <details class="review-action-menu relative inline-block text-left">
+                                        <details data-action-menu class="relative inline-block text-left">
 
-                                            <summary class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-700">
+                                            <summary
+                                                class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-700">
                                                 ⋮
                                             </summary>
 
-                                            <div class="absolute right-0 z-40 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
+                                            <div
+                                                class="absolute right-0 z-40 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
 
-                                                <a
-                                                    href="{{ route('admin.reviews.show', $review) }}"
-                                                    class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                                                >
-                                                    <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
-                                                        👁
-                                                    </span>
-                                                    Xem chi tiết
+                                                <a href="{{ route('admin.reviews.show', $review) }}"
+                                                    class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-50">
+                                                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                        <circle cx="12" cy="12" r="3" />
+                                                    </svg>
+                                                    Xem
                                                 </a>
 
                                                 @if ($review->status === 'pending')
-
                                                     {{-- Duyệt đánh giá --}}
-                                                    <form
-                                                        method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}"
-                                                    >
+                                                    <form method="POST"
+                                                        action="{{ route('admin.reviews.update-status', $review) }}">
                                                         @csrf
                                                         @method('PATCH')
 
-                                                        <input
-                                                            type="hidden"
-                                                            name="status"
-                                                            value="approved"
-                                                        >
+                                                        <input type="hidden" name="status" value="approved">
 
-                                                        <button
-                                                            type="submit"
+                                                        <button type="submit"
                                                             onclick="return confirm('Bạn có chắc muốn duyệt đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
-                                                        >
-                                                            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
-                                                                ✓
-                                                            </span>
-
+                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50">
+                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M20 6L9 17l-5-5" />
+                                                            </svg>
                                                             Duyệt đánh giá
                                                         </button>
                                                     </form>
 
                                                     {{-- Ẩn đánh giá --}}
-                                                    <form
-                                                        method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}"
-                                                    >
+                                                    <form method="POST"
+                                                        action="{{ route('admin.reviews.update-status', $review) }}">
                                                         @csrf
                                                         @method('PATCH')
 
-                                                        <input
-                                                            type="hidden"
-                                                            name="status"
-                                                            value="hidden"
-                                                        >
+                                                        <input type="hidden" name="status" value="hidden">
 
-                                                        <button
-                                                            type="submit"
+                                                        <button type="submit"
                                                             onclick="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
-                                                        >
-                                                            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                                                                🚫
-                                                            </span>
-
+                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50">
+                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor"
+                                                                stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round">
+                                                                <path
+                                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                                                <line x1="1" y1="1" x2="23"
+                                                                    y2="23" />
+                                                            </svg>
                                                             Ẩn đánh giá
                                                         </button>
                                                     </form>
-
                                                 @elseif ($review->status === 'approved')
-
                                                     {{-- Ẩn đánh giá --}}
-                                                    <form
-                                                        method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}"
-                                                    >
+                                                    <form method="POST"
+                                                        action="{{ route('admin.reviews.update-status', $review) }}">
                                                         @csrf
                                                         @method('PATCH')
 
-                                                        <input
-                                                            type="hidden"
-                                                            name="status"
-                                                            value="hidden"
-                                                        >
+                                                        <input type="hidden" name="status" value="hidden">
 
-                                                        <button
-                                                            type="submit"
+                                                        <button type="submit"
                                                             onclick="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
-                                                        >
-                                                            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                                                                🚫
-                                                            </span>
-
+                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50">
+                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor"
+                                                                stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round">
+                                                                <path
+                                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                                                <line x1="1" y1="1" x2="23"
+                                                                    y2="23" />
+                                                            </svg>
                                                             Ẩn đánh giá
                                                         </button>
                                                     </form>
-
                                                 @elseif ($review->status === 'hidden')
-
                                                     {{-- Hiển thị lại --}}
-                                                    <form
-                                                        method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}"
-                                                    >
+                                                    <form method="POST"
+                                                        action="{{ route('admin.reviews.update-status', $review) }}">
                                                         @csrf
                                                         @method('PATCH')
 
-                                                        <input
-                                                            type="hidden"
-                                                            name="status"
-                                                            value="approved"
-                                                        >
+                                                        <input type="hidden" name="status" value="approved">
 
-                                                        <button
-                                                            type="submit"
+                                                        <button type="submit"
                                                             onclick="return confirm('Bạn có chắc muốn hiển thị lại đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
-                                                        >
-                                                            <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
+                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50">
+                                                            <span
+                                                                class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
                                                                 ✓
                                                             </span>
 
                                                             Hiển thị lại
                                                         </button>
                                                     </form>
-
                                                 @endif
 
                                             </div>
@@ -706,7 +545,6 @@
                                     </td>
 
                                 </tr>
-
                             @endforeach
 
                         </tbody>
@@ -719,13 +557,12 @@
                 <div class="border-t border-slate-200 px-6 py-4">
                     {{ $reviews->links() }}
                 </div>
-
             @else
-
                 {{-- Empty --}}
                 <div class="px-6 py-20 text-center">
 
-                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-3xl text-slate-400">
+                    <div
+                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-3xl text-slate-400">
                         ☆
                     </div>
 
@@ -738,10 +575,8 @@
                     </p>
 
                     @if (request()->hasAny(['search', 'status', 'rating']))
-                        <a
-                            href="{{ route('admin.reviews.index') }}"
-                            class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                        >
+                        <a href="{{ route('admin.reviews.index') }}"
+                            class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
                             Xóa bộ lọc
                         </a>
                     @endif
@@ -752,34 +587,5 @@
 
         </section>
 
-    </main>
-
-    <script>
-        const reviewMenus = document.querySelectorAll('.review-action-menu');
-
-        reviewMenus.forEach((menu) => {
-            menu.addEventListener('toggle', () => {
-                if (!menu.open) {
-                    return;
-                }
-
-                reviewMenus.forEach((otherMenu) => {
-                    if (otherMenu !== menu) {
-                        otherMenu.removeAttribute('open');
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('click', (event) => {
-            reviewMenus.forEach((menu) => {
-                if (menu.open && !menu.contains(event.target)) {
-                    menu.removeAttribute('open');
-                }
-            });
-        });
-    </script>
-
-</body>
-
-</html>
+    </div>
+@endsection

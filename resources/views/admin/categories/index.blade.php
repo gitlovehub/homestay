@@ -37,7 +37,7 @@
 
             <div class="overflow-x-auto">
 
-                <table class="min-w-full divide-y divide-slate-200">
+                <table class="w-full min-h-120 divide-y divide-slate-200">
 
                     <thead class="bg-slate-50">
                         <tr>
@@ -87,14 +87,14 @@
                                 <td class="whitespace-nowrap px-6 py-4">
                                     @if ($category->status)
                                         <span
-                                            class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-700">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-600"></span>
                                             Hoạt động
                                         </span>
                                     @else
                                         <span
-                                            class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
-                                            <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                            class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-xs font-semibold text-red-700">
+                                            <span class="h-1.5 w-1.5 rounded-full bg-red-600"></span>
                                             Tạm khóa
                                         </span>
                                     @endif
@@ -102,7 +102,7 @@
 
                                 <td class="whitespace-nowrap px-6 py-4 text-center">
 
-                                    <details class="group relative inline-block text-left">
+                                    <details data-action-menu class="group relative inline-block text-left">
 
                                         {{-- Nút ba chấm --}}
                                         <summary
@@ -117,7 +117,7 @@
 
                                             {{-- Xem chi tiết --}}
                                             <a href="{{ route('admin.categories.show', $category) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-700 transition hover:bg-blue-50">
                                                 <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                                   <circle cx="12" cy="12" r="3"/>
@@ -144,7 +144,7 @@
                                                 @method('DELETE')
 
                                                 <button type="submit"
-                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50">
+                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
                                                     <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                       <polyline points="3 6 5 6 21 6"/>
                                                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>

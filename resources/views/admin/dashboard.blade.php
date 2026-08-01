@@ -234,7 +234,7 @@
                             $statusItems = [
                                 ['key' => 'pending', 'label' => 'Chờ xác nhận', 'color' => 'bg-amber-400'],
                                 ['key' => 'confirmed', 'label' => 'Đã xác nhận', 'color' => 'bg-blue-500'],
-                                ['key' => 'checked_in', 'label' => 'Đang nhận phòng', 'color' => 'bg-violet-500'],
+                                ['key' => 'checked_in', 'label' => 'Đã nhận phòng', 'color' => 'bg-violet-500'],
                                 ['key' => 'completed', 'label' => 'Hoàn thành', 'color' => 'bg-emerald-500'],
                                 ['key' => 'cancelled', 'label' => 'Đã hủy', 'color' => 'bg-red-500'],
                             ];
@@ -278,19 +278,29 @@
                             <tr class="border-b border-slate-100 bg-slate-50/70">
                                 <th
                                     class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Khách hàng</th>
+                                    Khách hàng
+                                </th>
+
                                 <th
                                     class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Homestay</th>
+                                    Homestay
+                                </th>
+
                                 <th
                                     class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Nhận phòng</th>
+                                    Nhận phòng
+                                </th>
+
                                 <th
                                     class="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Tổng tiền</th>
+                                    Tổng tiền
+                                </th>
+
                                 <th
                                     class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Trạng thái</th>
+                                    Trạng thái
+                                </th>
+
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -299,7 +309,7 @@
                                     $bookingStatusLabels = [
                                         'pending' => 'Chờ xác nhận',
                                         'confirmed' => 'Đã xác nhận',
-                                        'checked_in' => 'Đang nhận phòng',
+                                        'checked_in' => 'Đã nhận phòng',
                                         'completed' => 'Hoàn thành',
                                         'cancelled' => 'Đã hủy',
                                     ];
@@ -323,9 +333,9 @@
                                                 {{ $avatarText }}
                                             </div>
                                             <div class="min-w-0">
-                                                <p class="max-w-30 truncate font-semibold text-slate-900">
+                                                <p class="max-w-28 truncate font-semibold text-slate-900">
                                                     {{ $customerName }}</p>
-                                                <p class="max-w-30 truncate text-xs text-slate-400">
+                                                <p class="max-w-28 truncate text-xs text-slate-400">
                                                     {{ $booking->booking_code }}</p>
                                             </div>
                                         </div>

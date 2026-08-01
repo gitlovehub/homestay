@@ -95,18 +95,14 @@
 
                             @if ($amenity->status)
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
-
+                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
                                     <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-
                                     Hoạt động
                                 </span>
                             @else
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
-
+                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-700">
                                     <span class="h-2 w-2 rounded-full bg-red-500"></span>
-
                                     Tạm khóa
                                 </span>
                             @endif
@@ -264,7 +260,7 @@
                     @if (!empty($amenity->description))
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
 
-                            <p class="whitespace-pre-line break-words text-sm leading-7 text-slate-700">
+                            <p class="break-words text-sm leading-7 text-slate-700">
                                 {{ $amenity->description }}</p>
 
                         </div>

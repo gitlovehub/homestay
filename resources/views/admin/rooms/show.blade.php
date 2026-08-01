@@ -1,49 +1,26 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('title', 'Chi tiết phòng | HomeStayGo')
 
-    <title>Chi tiết phòng | HomeStay</title>
+@section('page-title', 'Chi tiết phòng')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
-<body class="min-h-screen bg-slate-100">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-    @include('partials.navbar')
+            <p class="text-sm font-semibold md:text-lg text-slate-500">
+                Xem toàn bộ thông tin của phòng trong hệ thống.
+            </p>
 
-    <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-
-        {{-- Header --}}
-        <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-
-            <div>
-                <a
-                    href="{{ route('admin.rooms.index') }}"
-                    class="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-                >
-                    ← Quay lại danh sách phòng
-                </a>
-
-                <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                    Chi tiết phòng
-                </h1>
-
-                <p class="mt-2 text-slate-500">
-                    Xem toàn bộ thông tin của phòng trong hệ thống.
-                </p>
-            </div>
-
-            <a
-                href="{{ route('admin.rooms.edit', $room) }}"
-                class="inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600"
-            >
-                Sửa phòng
+            <a href="{{ route('admin.rooms.edit', $room) }}"
+                class="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Chỉnh sửa
             </a>
 
         </div>
@@ -58,17 +35,14 @@
                     <div class="min-h-80 bg-slate-100">
 
                         @if ($room->image)
-                            <img
-                                src="{{ asset('storage/' . $room->image) }}"
-                                alt="{{ $room->name }}"
-                                class="h-full min-h-80 w-full object-cover"
-                            >
+                            <img src="{{ asset('storage/' . $room->image) }}" alt="{{ $room->name }}"
+                                class="h-full min-h-80 w-full object-cover">
                         @else
                             <div class="flex h-full min-h-80 items-center justify-center">
 
                                 <div class="text-center">
                                     <div class="text-6xl">
-                                        🛏️
+                                        🚪
                                     </div>
 
                                     <p class="mt-4 font-semibold text-slate-600">
@@ -87,29 +61,27 @@
 
                             <div class="flex flex-wrap items-center gap-3">
 
-                                <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                                <span class="rounded-full bg-blue-50 border border-blue-200 px-4 py-1.5 text-sm font-semibold text-blue-700">
                                     {{ $room->room_type }}
                                 </span>
 
                                 @switch($room->status)
-
                                     @case('available')
-                                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                            Còn trống
+                                        <span class="rounded-full bg-emerald-50 border border-emerald-200 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                                            Còn phòng
                                         </span>
-                                        @break
+                                    @break
 
                                     @case('maintenance')
-                                        <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                                        <span class="rounded-full bg-amber-50 border border-amber-200 px-4 py-1.5 text-sm font-semibold text-amber-700">
                                             Bảo trì
                                         </span>
-                                        @break
+                                    @break
 
                                     @default
-                                        <span class="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                                        <span class="rounded-full bg-red-50 border border-red-200 px-4 py-1.5 text-sm font-semibold text-red-700">
                                             Ngừng hoạt động
                                         </span>
-
                                 @endswitch
 
                             </div>
@@ -140,12 +112,18 @@
                                 Thuộc Homestay
                             </p>
 
-                            <p class="mt-2 font-bold text-slate-900">
+                            <p class="mt-2 text-lg font-bold text-slate-900">
                                 {{ $room->homestay?->name ?? 'Không xác định' }}
                             </p>
 
-                            <p class="mt-1 text-sm text-slate-500">
+                            <p class="mt-1 flex items-center gap-1 text-sm text-slate-500">
+                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                  <circle cx="12" cy="10" r="3"/>
+                                </svg>
                                 {{ $room->homestay?->address }}
+                                <span>-</span>
+                                {{ $room->homestay?->city }}
                             </p>
 
                         </div>
@@ -213,7 +191,7 @@
                 </h2>
 
                 @if ($room->description)
-                    <div class="mt-5 whitespace-pre-line leading-7 text-slate-600">
+                    <div class="mt-5 leading-7 text-slate-600">
                         {{ $room->description }}
                     </div>
                 @else
@@ -260,26 +238,19 @@
             {{-- Footer --}}
             <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
 
-                <a
-                    href="{{ route('admin.rooms.index') }}"
-                    class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-                >
+                <a href="{{ route('admin.rooms.index') }}"
+                    class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
                     Quay lại danh sách
                 </a>
 
-                <a
-                    href="{{ route('admin.rooms.edit', $room) }}"
-                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                    Chỉnh sửa phòng
+                <a href="{{ route('admin.rooms.edit', $room) }}"
+                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                    Lưu thay đổi
                 </a>
 
             </div>
 
         </div>
 
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection

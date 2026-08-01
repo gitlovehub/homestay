@@ -1,343 +1,617 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết tài khoản | HomeStay</title>
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-    @include('partials.navbar')
+@extends('layouts.admin')
 
+@section('title', 'Chi tiết tài khoản | HomeStayGo')
+
+@section('page-title', 'Chi tiết tài khoản')
+
+@section('content')
     @php
+        /*
+        |--------------------------------------------------------------------------
+        | Ảnh đại diện
+        |--------------------------------------------------------------------------
+        */
         $avatarUrl = null;
+
         if (!empty($user->avatar)) {
             $avatarUrl = \Illuminate\Support\Str::startsWith($user->avatar, ['http://', 'https://'])
                 ? $user->avatar
                 : asset('storage/' . ltrim($user->avatar, '/'));
         }
 
-        $nameParts = preg_split('/\s+/u', trim($user->name));
+        $nameParts = preg_split('/\s+/u', trim($user->name ?? ''));
+
         $firstNamePart = $nameParts[0] ?? '';
         $lastNamePart = $nameParts[count($nameParts) - 1] ?? '';
+
         $avatarText = mb_strtoupper(mb_substr($firstNamePart, 0, 1) . mb_substr($lastNamePart, 0, 1));
+
         $isCurrentUser = (int) auth()->id() === (int) $user->id;
 
-        $bookingStatusLabels = [
-            'pending'    => 'Chờ xác nhận',
-            'confirmed'  => 'Đã xác nhận',
-            'checked_in' => 'Đã nhận phòng',
-            'completed'  => 'Hoàn thành',
-            'cancelled'  => 'Đã hủy',
-        ];
-        $bookingStatusClasses = [
-            'pending'    => 'border-amber-200 bg-amber-50 text-amber-700',
-            'confirmed'  => 'border-blue-200 bg-blue-50 text-blue-700',
-            'checked_in' => 'border-violet-200 bg-violet-50 text-violet-700',
-            'completed'  => 'border-emerald-200 bg-emerald-50 text-emerald-700',
-            'cancelled'  => 'border-red-200 bg-red-50 text-red-700',
+        /*
+        |--------------------------------------------------------------------------
+        | Vai trò tài khoản
+        |--------------------------------------------------------------------------
+        */
+        $roleConfig = [
+            'admin' => [
+                'label' => 'Quản trị viên',
+                'class' => 'border-violet-200 bg-violet-50 text-violet-700',
+            ],
+
+            'user' => [
+                'label' => 'Khách hàng',
+                'class' => 'border-blue-200 bg-blue-50 text-blue-700',
+            ],
         ];
 
-        $paymentStatusLabels = [
-            'unpaid'   => 'Chưa thanh toán',
-            'pending'  => 'Đang xử lý',
-            'paid'     => 'Đã thanh toán',
-            'refunded' => 'Đã hoàn tiền',
-            'failed'   => 'Thất bại',
-        ];
-        $paymentStatusClasses = [
-            'unpaid'   => 'border-slate-200 bg-slate-100 text-slate-600',
-            'pending'  => 'border-amber-200 bg-amber-50 text-amber-700',
-            'paid'     => 'border-emerald-200 bg-emerald-50 text-emerald-700',
-            'refunded' => 'border-violet-200 bg-violet-50 text-violet-700',
-            'failed'   => 'border-red-200 bg-red-50 text-red-700',
+        $currentRole = $roleConfig[$user->role] ?? [
+            'label' => 'Không xác định',
+            'class' => 'border-slate-200 bg-slate-50 text-slate-600',
         ];
 
+        /*
+        |--------------------------------------------------------------------------
+        | Trạng thái tài khoản
+        |--------------------------------------------------------------------------
+        */
+        $accountStatusConfig = [
+            'active' => [
+                'label' => 'Đang hoạt động',
+                'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                'dot' => 'bg-emerald-500',
+            ],
+
+            'inactive' => [
+                'label' => 'Tạm khóa',
+                'badge' => 'border-red-200 bg-red-50 text-red-700',
+                'dot' => 'bg-red-500',
+            ],
+        ];
+
+        $currentAccountStatus = $accountStatusConfig[$user->status] ?? [
+            'label' => 'Không xác định',
+            'badge' => 'border-slate-200 bg-slate-50 text-slate-600',
+            'dot' => 'bg-slate-400',
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trạng thái Booking
+        |--------------------------------------------------------------------------
+        */
+        $bookingStatusConfig = [
+            'pending' => [
+                'label' => 'Chờ xác nhận',
+                'class' => 'border-amber-200 bg-amber-50 text-amber-700',
+                'dot' => 'bg-amber-500',
+            ],
+
+            'confirmed' => [
+                'label' => 'Đã xác nhận',
+                'class' => 'border-blue-200 bg-blue-50 text-blue-700',
+                'dot' => 'bg-blue-500',
+            ],
+
+            'checked_in' => [
+                'label' => 'Đã nhận phòng',
+                'class' => 'border-violet-200 bg-violet-50 text-violet-700',
+                'dot' => 'bg-violet-500',
+            ],
+
+            'completed' => [
+                'label' => 'Đã hoàn thành',
+                'class' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                'dot' => 'bg-emerald-500',
+            ],
+
+            'cancelled' => [
+                'label' => 'Đã hủy',
+                'class' => 'border-red-200 bg-red-50 text-red-700',
+                'dot' => 'bg-red-500',
+            ],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Trạng thái thanh toán
+        |--------------------------------------------------------------------------
+        */
+        $paymentStatusConfig = [
+            'unpaid' => [
+                'label' => 'Chưa thanh toán',
+                'class' => 'border-slate-200 bg-slate-100 text-slate-600',
+            ],
+
+            'pending' => [
+                'label' => 'Đang xử lý',
+                'class' => 'border-amber-200 bg-amber-50 text-amber-700',
+            ],
+
+            'paid' => [
+                'label' => 'Đã thanh toán',
+                'class' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            ],
+
+            'refunded' => [
+                'label' => 'Đã hoàn tiền',
+                'class' => 'border-blue-200 bg-blue-50 text-blue-700',
+            ],
+
+            'failed' => [
+                'label' => 'Thanh toán thất bại',
+                'class' => 'border-red-200 bg-red-50 text-red-700',
+            ],
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Phương thức thanh toán
+        |--------------------------------------------------------------------------
+        */
         $paymentMethodLabels = [
-            'cash'          => 'Tiền mặt',
+            'cash' => 'Tiền mặt',
             'bank_transfer' => 'Chuyển khoản ngân hàng',
-            'vnpay'         => 'VNPay',
-            'momo'          => 'MoMo',
+            'vnpay' => 'VNPay',
+            'momo' => 'MoMo',
         ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Thống kê
+        |--------------------------------------------------------------------------
+        */
+        $bookingsCount = (int) ($user->bookings_count ?? 0);
+        $reviewsCount = (int) ($user->reviews_count ?? 0);
+
+        $successfulTransactions = (int) ($paymentStatistics['successful_transactions'] ?? 0);
+
+        $pendingTransactions = (int) ($paymentStatistics['pending_transactions'] ?? 0);
+
+        $totalPaid = (int) ($paymentStatistics['total_paid'] ?? 0);
+
+        $totalRefunded = (int) ($paymentStatistics['total_refunded'] ?? 0);
     @endphp
 
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-screen-2xl">
+
         <x-alert />
 
-        {{-- Header --}}
-        <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <a
-                    href="{{ route('admin.users.index') }}"
-                    class="mb-4 block text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-                >
-                    ← Quay lại danh sách tài khoản
-                </a>
-                <h1 class="text-3xl font-bold tracking-tight text-slate-900">Hồ sơ khách hàng</h1>
-                <p class="mt-2 text-sm text-slate-500">Quản lý thông tin, booking và thanh toán của tài khoản.</p>
+        {{-- Hồ sơ tổng quan --}}
+        <section class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            {{-- Phần đầu --}}
+            <div
+                class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-slate-50 via-blue-50/70 to-indigo-50 px-5 py-6 sm:px-6 lg:px-8">
+                <div class="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-blue-200/40 blur-3xl">
+                </div>
+
+                <div class="relative flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between">
+                    {{-- Avatar và thông tin --}}
+                    <div class="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="Ảnh đại diện của {{ $user->name }}"
+                                class="h-24 w-24 shrink-0 rounded-2xl border-4 border-white object-cover shadow-md">
+                        @else
+                            <div
+                                class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-blue-600 text-3xl font-bold text-white shadow-md">
+                                {{ $avatarText ?: '?' }}
+                            </div>
+                        @endif
+
+                        <div class="min-w-0">
+                            {{-- Nhãn --}}
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ $currentRole['class'] }}">
+                                    {{ $currentRole['label'] }}
+                                </span>
+
+                                <span
+                                    class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold {{ $currentAccountStatus['badge'] }}">
+                                    <span class="h-2 w-2 rounded-full {{ $currentAccountStatus['dot'] }}"></span>
+
+                                    {{ $currentAccountStatus['label'] }}
+                                </span>
+
+                                @if ($isCurrentUser)
+                                    <span
+                                        class="inline-flex items-center rounded-full border border-blue-200 bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                                        Tài khoản của bạn
+                                    </span>
+                                @endif
+                            </div>
+
+                            <h2 class="mt-3 break-words text-2xl font-bold text-slate-900 sm:text-3xl">
+                                {{ $user->name }}
+                            </h2>
+
+                            <p class="mt-1 break-all flex items-center gap-1 text-sm text-slate-500">
+                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                </svg>
+                                {{ $user->email }}
+                            </p>
+
+                            <div
+                                class="mt-4 flex flex-col gap-2 text-sm text-slate-600 sm:flex-row sm:flex-wrap sm:gap-x-6">
+                                {{-- Số điện thoại --}}
+                                <span class="inline-flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.8" class="h-4 w-4 shrink-0 text-blue-500">
+                                        <path
+                                            d="M4 4h4l2 5-2.5 1.5a16 16 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2C9.2 22 2 14.8 2 6a2 2 0 0 1 2-2Z">
+                                        </path>
+                                    </svg>
+
+                                    @if ($user->phone)
+                                        <a href="tel:{{ $user->phone }}"
+                                            class="font-medium transition hover:text-blue-600">
+                                            {{ $user->phone }}
+                                        </a>
+                                    @else
+                                        <span>Chưa cập nhật số điện thoại</span>
+                                    @endif
+                                </span>
+
+                                {{-- Địa chỉ --}}
+                                <span class="inline-flex min-w-0 items-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.8"
+                                        class="mt-0.5 h-4 w-4 shrink-0 text-amber-500">
+                                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                        <circle cx="12" cy="10" r="2.5"></circle>
+                                    </svg>
+
+                                    <span class="break-words">
+                                        {{ $user->address ?: 'Chưa cập nhật địa chỉ' }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Ngày tham gia --}}
+                    <div class="grid shrink-0 gap-3 sm:grid-cols-2 xl:w-auto xl:grid-cols-1">
+                        <div class="rounded-xl border border-white/80 bg-white/80 px-5 py-4 shadow-sm backdrop-blur">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                Thành viên từ
+                            </p>
+
+                            <p class="mt-1.5 text-lg font-bold text-slate-900">
+                                {{ $user->created_at->format('d/m/Y') }}
+                            </p>
+                        </div>
+
+                        <a href="#booking-history"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" class="h-5 w-5">
+                                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                <path d="M8 3v4"></path>
+                                <path d="M16 3v4"></path>
+                                <path d="M3 10h18"></path>
+                            </svg>
+
+                            Xem lịch sử đặt phòng
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <a href="#booking-history"
-               class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M8 7V3m8 4V3M5 11h14M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                Lịch sử đặt phòng
-            </a>
-        </div>
+            {{-- Thông tin nhanh --}}
+            <div class="grid sm:grid-cols-2 xl:grid-cols-4">
+                <div class="border-b border-slate-200 px-5 py-4 sm:border-r sm:px-6 xl:border-b-0">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Mã tài khoản
+                    </p>
 
-        {{-- Profile Overview --}}
-        <section class="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 shadow-xl">
-            <div class="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-blue-500/25 blur-3xl"></div>
-            <div class="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-violet-500/20 blur-3xl"></div>
+                    <p class="mt-2 font-bold text-slate-900">
+                        #{{ $user->id }}
+                    </p>
+                </div>
 
-            <div class="relative flex flex-col gap-8 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
-                {{-- Left: Avatar + Info --}}
-                <div class="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
-                    @if ($avatarUrl)
-                        <img src="{{ $avatarUrl }}" alt="{{ $user->name }}"
-                             class="h-24 w-24 shrink-0 rounded-2xl border-4 border-white/20 object-cover shadow-lg">
-                    @else
-                        <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-3xl font-bold text-white shadow-lg backdrop-blur">
-                            {{ $avatarText ?: '?' }}
-                        </div>
-                    @endif
+                <div class="border-b border-slate-200 px-5 py-4 sm:px-6 xl:border-r xl:border-b-0">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Xác minh email
+                    </p>
 
-                    <div class="min-w-0">
-                        <div class="flex flex-wrap items-center gap-2">
-                            @if ($user->role === 'admin')
-                                <span class="inline-flex items-center rounded-full border border-violet-300/40 bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-violet-100">
-                                    Quản trị viên
-                                </span>
-                            @else
-                                <span class="inline-flex items-center rounded-full border border-blue-300/40 bg-blue-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-100">
-                                    Khách hàng
-                                </span>
-                            @endif
-
-                            @if ($user->status === 'active')
-                                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/40 bg-emerald-400/20 px-3 py-1 text-xs font-semibold text-emerald-100">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-                                    Đang hoạt động
-                                </span>
-                            @else
-                                <span class="inline-flex items-center gap-1.5 rounded-full border border-red-300/40 bg-red-400/20 px-3 py-1 text-xs font-semibold text-red-100">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-red-400"></span>
-                                    Tạm khóa
-                                </span>
-                            @endif
-
-                            @if ($isCurrentUser)
-                                <span class="rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs font-semibold text-white">
-                                    Tài khoản của bạn
-                                </span>
-                            @endif
-                        </div>
-
-                        <h2 class="mt-3 break-words text-2xl font-bold text-white sm:text-3xl">{{ $user->name }}</h2>
-                        <p class="mt-1 break-all text-sm text-slate-300">{{ $user->email }}</p>
-
-                        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-300">
-                            <span class="inline-flex items-center gap-2">
-                                <svg class="h-4 w-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M3 5a2 2 0 012-2h3l2 5-2 1a16 16 0 007 7l1-2 5 2v3a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                                {{ $user->phone ?: 'Chưa cập nhật SĐT' }}
+                    <div class="mt-2">
+                        @if ($user->email_verified_at)
+                            <span class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                Đã xác minh
                             </span>
-                            <span class="inline-flex items-center gap-2">
-                                <svg class="h-4 w-4 text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M12 21s7-4.35 7-11a7 7 0 10-14 0c0 6.65 7 11 7 11z"/>
-                                    <circle cx="12" cy="10" r="2" stroke-width="2"/>
-                                </svg>
-                                {{ $user->address ?: 'Chưa cập nhật địa chỉ' }}
+                        @else
+                            <span class="inline-flex items-center gap-2 text-sm font-semibold text-amber-700">
+                                <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                                Chưa xác minh
                             </span>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
-                {{-- Right: Member since + Action --}}
-                <div class="w-full shrink-0 lg:w-72">
-                    <div class="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Thành viên từ</p>
-                        <p class="mt-1.5 text-xl font-bold text-white">{{ $user->created_at->format('d/m/Y') }}</p>
-                        <p class="mt-1 text-xs text-slate-400">
-                            Cập nhật: {{ $user->updated_at->format('d/m/Y H:i') }}
+                <div class="border-b border-slate-200 px-5 py-4 sm:border-r sm:border-b-0 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Vai trò
+                    </p>
+
+                    <p class="mt-2 font-semibold text-slate-900">
+                        {{ $currentRole['label'] }}
+                    </p>
+                </div>
+
+                <div class="px-5 py-4 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Cập nhật lần cuối
+                    </p>
+
+                    <p class="mt-2 font-semibold text-slate-900">
+                        {{ $user->updated_at->format('H:i d/m/Y') }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        {{-- Thống kê --}}
+        <section class="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {{-- Tổng Booking --}}
+            <article
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">
+                            Tổng Booking
                         </p>
 
-                        <div class="mt-5">
-                            @if ($isCurrentUser)
-                                <div class="rounded-xl border border-blue-300/25 bg-blue-400/15 px-4 py-3 text-center text-sm font-medium text-blue-100">
-                                    Không thể tự khóa tài khoản hiện tại
-                                </div>
-                            @else
-                                <form action="{{ route('admin.users.update-status', $user) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="hidden" name="status"
-                                           value="{{ $user->status === 'active' ? 'inactive' : 'active' }}">
-                                    <button type="submit"
-                                            onclick="return confirm('{{ $user->status === 'active' ? 'Bạn có chắc muốn khóa tài khoản này không?' : 'Bạn có chắc muốn mở khóa tài khoản này không?' }}')"
-                                            class="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-lg transition
-                                                {{ $user->status === 'active' ? 'bg-red-500 hover:bg-red-600' : 'bg-emerald-500 hover:bg-emerald-600' }}">
-                                        @if ($user->status === 'active')
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M5 11V8a7 7 0 0114 0v3m-1 0H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z"/>
-                                            </svg>
-                                            Khóa tài khoản
-                                        @else
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8 11V8a4 4 0 018 0m2 3H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z"/>
-                                            </svg>
-                                            Mở khóa tài khoản
-                                        @endif
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
+                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                            {{ number_format($bookingsCount, 0, ',', '.') }}
+                        </p>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        {{-- Stats --}}
-        <section class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {{-- Booking --}}
-            <div class="rounded-2xl border border-blue-100 bg-gradient-to-br from-white to-blue-50/70 p-5 shadow-sm transition hover:shadow-md">
-                <div class="flex items-center justify-between">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M8 7V3m8 4V3M5 11h14M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    <span
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" class="h-6 w-6">
+                            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                            <path d="M8 3v4"></path>
+                            <path d="M16 3v4"></path>
+                            <path d="M3 10h18"></path>
                         </svg>
-                    </div>
-                    <span class="rounded-full bg-blue-100/80 px-2.5 py-1 text-xs font-semibold text-blue-700">Booking</span>
+                    </span>
                 </div>
-                <p class="mt-4 text-3xl font-bold text-slate-900">{{ number_format($user->bookings_count, 0, ',', '.') }}</p>
-                <p class="mt-0.5 text-sm text-slate-500">Tổng đơn đặt phòng</p>
-            </div>
 
-            {{-- Reviews --}}
-            <div class="rounded-2xl border border-amber-100 bg-gradient-to-br from-white to-amber-50/70 p-5 shadow-sm transition hover:shadow-md">
-                <div class="flex items-center justify-between">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3z"/>
-                        </svg>
-                    </div>
-                    <span class="rounded-full bg-amber-100/80 px-2.5 py-1 text-xs font-semibold text-amber-700">Đánh giá</span>
-                </div>
-                <p class="mt-4 text-3xl font-bold text-slate-900">{{ number_format($user->reviews_count, 0, ',', '.') }}</p>
-                <p class="mt-0.5 text-sm text-slate-500">Tổng đánh giá đã gửi</p>
-            </div>
-
-            {{-- Successful payments --}}
-            <div class="rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/70 p-5 shadow-sm transition hover:shadow-md">
-                <div class="flex items-center justify-between">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <span class="rounded-full bg-emerald-100/80 px-2.5 py-1 text-xs font-semibold text-emerald-700">Thành công</span>
-                </div>
-                <p class="mt-4 text-3xl font-bold text-slate-900">
-                    {{ number_format($paymentStatistics['successful_transactions'] ?? 0, 0, ',', '.') }}
+                <p class="mt-4 text-xs leading-5 text-slate-400">
+                    Tổng số đơn đặt phòng của tài khoản.
                 </p>
-                <p class="mt-0.5 text-sm text-slate-500">Giao dịch thành công</p>
-            </div>
+            </article>
 
-            {{-- Total paid --}}
-            <div class="rounded-2xl border border-violet-100 bg-gradient-to-br from-white to-violet-50/70 p-5 shadow-sm transition hover:shadow-md">
-                <div class="flex items-center justify-between">
-                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M3 7h18M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
-                        </svg>
-                    </div>
-                    <span class="rounded-full bg-violet-100/80 px-2.5 py-1 text-xs font-semibold text-violet-700">Tổng chi</span>
-                </div>
-                <p class="mt-4 text-2xl font-bold text-slate-900">
-                    {{ number_format($paymentStatistics['total_paid'] ?? 0, 0, ',', '.') }} ₫
-                </p>
-                <p class="mt-0.5 text-sm text-slate-500">Tổng tiền đã thanh toán</p>
-            </div>
-        </section>
-
-        {{-- Main Content --}}
-        <div class="grid items-start gap-6 lg:grid-cols-12">
-            {{-- Booking History --}}
-            <section id="booking-history"
-                     class="min-w-0 scroll-mt-28 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-8">
-                <div class="flex flex-col gap-3 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            {{-- Đánh giá --}}
+            <article
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Lịch sử đặt phòng</h2>
-                        <p class="mt-0.5 text-sm text-slate-500">Sắp xếp từ mới nhất đến cũ nhất</p>
+                        <p class="text-sm font-medium text-slate-500">
+                            Đánh giá đã gửi
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                            {{ number_format($reviewsCount, 0, ',', '.') }}
+                        </p>
                     </div>
-                    <span class="inline-flex w-fit items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-                        {{ number_format($user->bookings_count, 0, ',', '.') }} đơn
+
+                    <span
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:bg-amber-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" class="h-6 w-6">
+                            <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z">
+                            </path>
+                        </svg>
+                    </span>
+                </div>
+
+                <p class="mt-4 text-xs leading-5 text-slate-400">
+                    Tổng số đánh giá đã gửi trên hệ thống.
+                </p>
+            </article>
+
+            {{-- Giao dịch thành công --}}
+            <article
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">
+                            Giao dịch thành công
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                            {{ number_format($successfulTransactions, 0, ',', '.') }}
+                        </p>
+                    </div>
+
+                    <span
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:bg-emerald-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" class="h-6 w-6">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="m8 12 2.5 2.5L16 9"></path>
+                        </svg>
+                    </span>
+                </div>
+
+                <p class="mt-4 text-xs leading-5 text-slate-400">
+                    Số giao dịch được thanh toán thành công.
+                </p>
+            </article>
+
+            {{-- Tổng tiền đã thanh toán --}}
+            <article
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                        <p class="text-sm font-medium text-slate-500">
+                            Tổng đã thanh toán
+                        </p>
+
+                        <p class="mt-2 break-words text-xl font-bold text-blue-600 sm:text-2xl">
+                            {{ number_format($totalPaid, 0, ',', '.') }}đ
+                        </p>
+                    </div>
+
+                    <span
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 transition group-hover:bg-violet-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" class="h-6 w-6">
+                            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                            <path d="M3 9h18"></path>
+                            <path d="M7 15h2"></path>
+                        </svg>
+                    </span>
+                </div>
+
+                <p class="mt-4 text-xs leading-5 text-slate-400">
+                    Tổng số tiền tài khoản đã thanh toán.
+                </p>
+            </article>
+        </section>
+
+        {{-- Nội dung chính --}}
+        <div class="grid items-start gap-6 xl:grid-cols-12">
+            {{-- Lịch sử đặt phòng --}}
+            <section id="booking-history"
+                class="min-w-0 scroll-mt-28 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm xl:col-span-8">
+                <div
+                    class="flex flex-col gap-3 border-b border-slate-200 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                    <div>
+                        <h3 class="font-bold text-slate-900">
+                            Lịch sử đặt phòng
+                        </h3>
+
+                        <p class="mt-1 text-sm text-slate-500">
+                            Các đơn đặt phòng mới nhất của khách hàng.
+                        </p>
+                    </div>
+
+                    <span
+                        class="inline-flex w-fit items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
+                        {{ number_format($bookingsCount, 0, ',', '.') }}
+                        đơn
                     </span>
                 </div>
 
                 @if ($bookings->count())
                     <div class="overflow-x-auto">
-                        <table class="w-full border-collapse text-left">
+                        <table class="w-full min-w-[850px] border-collapse text-left">
                             <thead>
-                                <tr class="border-b border-slate-100 bg-slate-50/80 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    <th class="px-5 py-3.5">Mã đơn</th>
-                                    <th class="px-5 py-3.5">Homestay</th>
-                                    <th class="px-5 py-3.5">Tổng tiền</th>
-                                    <th class="px-5 py-3.5">Trạng thái</th>
-                                    <th class="px-5 py-3.5 text-right">Chi tiết</th>
+                                <tr
+                                    class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                    <th scope="col" class="px-5 py-4">
+                                        Mã Booking
+                                    </th>
+
+                                    <th scope="col" class="px-5 py-4">
+                                        Phòng
+                                    </th>
+
+                                    <th scope="col" class="px-5 py-4">
+                                        Thời gian
+                                    </th>
+
+                                    <th scope="col" class="px-5 py-4">
+                                        Tổng tiền
+                                    </th>
+
+                                    <th scope="col" class="px-5 py-4">
+                                        Trạng thái
+                                    </th>
+
+                                    <th scope="col" class="px-5 py-4 text-center">
+                                        Chi tiết
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 text-sm">
+
+                            <tbody class="divide-y divide-slate-100 bg-white text-sm">
                                 @foreach ($bookings as $booking)
                                     @php
-                                        $bookingClass = $bookingStatusClasses[$booking->status] ?? 'border-slate-200 bg-slate-100 text-slate-600';
-                                        $paymentClass = $paymentStatusClasses[$booking->payment_status] ?? 'border-slate-200 bg-slate-100 text-slate-600';
+                                        $currentBookingStatus = $bookingStatusConfig[$booking->status] ?? [
+                                            'label' => 'Không xác định',
+                                            'class' => 'border-slate-200 bg-slate-100 text-slate-600',
+                                            'dot' => 'bg-slate-400',
+                                        ];
                                     @endphp
+
                                     <tr class="transition hover:bg-slate-50/80">
-                                        <td class="whitespace-nowrap px-5 py-4">
-                                            <p class="font-semibold text-blue-600">{{ $booking->booking_code }}</p>
-                                            <p class="mt-0.5 text-xs text-slate-400">{{ $booking->created_at->format('d/m/Y H:i') }}</p>
-                                        </td>
-                                        <td class="px-5 py-4">
-                                            <p class="max-w-[180px] truncate font-medium text-slate-900"
-                                               title="{{ $booking->room?->homestay?->name }}">
-                                                {{ $booking->room?->homestay?->name ?? 'Không xác định' }}
-                                            </p>
-                                            <p class="mt-0.5 max-w-[180px] truncate text-xs text-slate-500"
-                                               title="{{ $booking->room?->name }}">
-                                                {{ $booking->room?->name ?? 'Không xác định' }}
+                                        {{-- Mã Booking --}}
+                                        <td class="whitespace-nowrap px-5 py-4 align-middle">
+                                            <a href="{{ route('admin.bookings.show', $booking) }}"
+                                                class="font-bold text-blue-600 transition hover:text-blue-700 hover:underline">
+                                                {{ $booking->booking_code }}
+                                            </a>
+
+                                            <p class="mt-1 text-xs text-slate-400">
+                                                {{ $booking->created_at->format('H:i d/m/Y') }}
                                             </p>
                                         </td>
-                                        <td class="whitespace-nowrap px-5 py-4">
-                                            <p class="font-semibold text-slate-900">
-                                                {{ number_format($booking->total_price, 0, ',', '.') }} ₫
+
+                                        {{-- Phòng --}}
+                                        <td class="px-5 py-4 align-middle">
+                                            <div class="max-w-52">
+                                                <p class="truncate font-semibold text-slate-900"
+                                                    title="{{ $booking->room?->name }}">
+                                                    {{ $booking->room?->name ?? 'Phòng không tồn tại' }}
+                                                </p>
+
+                                                <p class="mt-1 truncate text-xs text-slate-500"
+                                                    title="{{ $booking->room?->homestay?->name }}">
+                                                    {{ $booking->room?->homestay?->name ?? 'Homestay không xác định' }}
+                                                </p>
+                                            </div>
+                                        </td>
+
+                                        {{-- Thời gian --}}
+                                        <td class="whitespace-nowrap px-5 py-4 align-middle">
+                                            <p class="font-semibold text-slate-700">
+                                                {{ $booking->check_in->format('d/m/Y') }}
+                                            </p>
+
+                                            <p class="mt-1 text-xs text-slate-400">
+                                                đến {{ $booking->check_out->format('d/m/Y') }}
                                             </p>
                                         </td>
-                                        <td class="whitespace-nowrap px-5 py-4">
-                                            <span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-medium {{ $bookingClass }}">
-                                                {{ $bookingStatusLabels[$booking->status] ?? $booking->status }}
+
+                                        {{-- Tổng tiền --}}
+                                        <td class="whitespace-nowrap px-5 py-4 align-middle">
+                                            <p class="font-bold text-slate-900">
+                                                {{ number_format((float) ($booking->total_price ?? 0), 0, ',', '.') }}đ
+                                            </p>
+
+                                            <p class="mt-1 text-xs text-slate-400">
+                                                {{ $booking->number_of_nights }} đêm
+                                            </p>
+                                        </td>
+
+                                        {{-- Trạng thái --}}
+                                        <td class="whitespace-nowrap px-5 py-4 align-middle">
+                                            <span
+                                                class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold {{ $currentBookingStatus['class'] }}">
+                                                <span
+                                                    class="h-2 w-2 rounded-full {{ $currentBookingStatus['dot'] }}"></span>
+
+                                                {{ $currentBookingStatus['label'] }}
                                             </span>
                                         </td>
-                                        <td class="whitespace-nowrap px-5 py-4 text-right">
+
+                                        {{-- Chi tiết --}}
+                                        <td class="whitespace-nowrap px-5 py-4 text-center align-middle">
                                             <a href="{{ route('admin.bookings.show', $booking) }}"
-                                               class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
-                                               title="Xem chi tiết đơn">
-                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+                                                title="Xem chi tiết Booking">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="1.8"
+                                                    class="h-4 w-4">
+                                                    <path d="M9 5l7 7-7 7"></path>
                                                 </svg>
                                             </a>
                                         </td>
@@ -346,127 +620,316 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="border-t border-slate-100 px-6 py-4">
-                        {{ $bookings->links() }}
-                    </div>
+
+                    @if ($bookings->hasPages())
+                        <div class="border-t border-slate-200 px-5 py-5 sm:px-6">
+                            {{ $bookings->links() }}
+                        </div>
+                    @endif
                 @else
                     <div class="px-6 py-16 text-center">
-                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-400">
-                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                      d="M8 7V3m8 4V3M5 11h14M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <div
+                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.6" class="h-8 w-8">
+                                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                <path d="M8 3v4"></path>
+                                <path d="M16 3v4"></path>
+                                <path d="M3 10h18"></path>
                             </svg>
                         </div>
-                        <h3 class="mt-4 text-base font-semibold text-slate-900">Chưa có đơn đặt phòng</h3>
-                        <p class="mt-1 text-sm text-slate-500">Tài khoản này chưa từng đặt phòng trên hệ thống.</p>
+
+                        <h3 class="mt-4 font-bold text-slate-900">
+                            Chưa có đơn đặt phòng
+                        </h3>
+
+                        <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                            Tài khoản này chưa từng đặt phòng trên hệ thống HomeStayGo.
+                        </p>
                     </div>
                 @endif
             </section>
 
-            {{-- Sidebar --}}
-            <aside class="min-w-0 space-y-6 lg:col-span-4">
-                {{-- Account Info --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div class="border-b border-slate-100 px-5 py-4">
-                        <h2 class="text-base font-bold text-slate-900">Thông tin tài khoản</h2>
-                        <p class="mt-0.5 text-sm text-slate-500">Quản trị & xác minh</p>
-                    </div>
-                    <div class="divide-y divide-slate-100 px-5">
-                        <div class="flex items-center justify-between gap-4 py-3.5">
-                            <p class="text-sm text-slate-500">Mã tài khoản</p>
-                            <p class="font-semibold text-slate-900">#{{ $user->id }}</p>
-                        </div>
-                        <div class="flex items-center justify-between gap-4 py-3.5">
-                            <p class="text-sm text-slate-500">Xác minh email</p>
-                            @if ($user->email_verified_at)
-                                <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">Đã xác minh</span>
-                            @else
-                                <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">Chưa xác minh</span>
-                            @endif
-                        </div>
-                        <div class="flex items-center justify-between gap-4 py-3.5">
-                            <p class="text-sm text-slate-500">Booking đang xử lý</p>
-                            <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
-                                {{ number_format($paymentStatistics['pending_transactions'] ?? 0, 0, ',', '.') }}
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between gap-4 py-3.5">
-                            <p class="text-sm text-slate-500">Tổng đã hoàn tiền</p>
-                            <p class="font-semibold text-violet-600">
-                                {{ number_format($paymentStatistics['total_refunded'] ?? 0, 0, ',', '.') }} ₫
+            {{-- Cột bên phải --}}
+            <aside class="min-w-0 space-y-6 xl:col-span-4">
+                <div class="space-y-6 xl:sticky xl:top-24">
+                    {{-- Quản lý tài khoản --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Quản lý tài khoản
+                            </h3>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                Cập nhật trạng thái sử dụng của tài khoản.
                             </p>
                         </div>
-                    </div>
-                </section>
 
-                {{-- Latest Payment --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-                        <div>
-                            <h2 class="text-base font-bold text-slate-900">Giao dịch gần nhất</h2>
-                            <p class="mt-0.5 text-sm text-slate-500">Thanh toán mới nhất</p>
-                        </div>
-                        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M3 7h18M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    @if ($latestPayment)
-                        @php
-                            $latestPaymentClass = $paymentStatusClasses[$latestPayment->status] ?? 'border-slate-200 bg-slate-100 text-slate-600';
-                        @endphp
                         <div class="p-5">
-                            <div class="rounded-xl bg-gradient-to-br from-emerald-50 to-blue-50 p-4">
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Số tiền</p>
-                                <p class="mt-1 text-2xl font-bold text-emerald-600">
-                                    {{ number_format($latestPayment->amount, 0, ',', '.') }} ₫
+                            @if ($isCurrentUser)
+                                <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                                <path d="m5 12 4 4L19 6"></path>
+                                            </svg>
+                                        </span>
+
+                                        <div>
+                                            <p class="font-semibold text-blue-700">
+                                                Tài khoản hiện tại
+                                            </p>
+
+                                            <p class="mt-1 text-sm leading-6 text-blue-600">
+                                                Bạn không thể tự khóa tài khoản đang đăng nhập.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="mb-4 rounded-xl border p-4 {{ $currentAccountStatus['badge'] }}">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full {{ $currentAccountStatus['dot'] }}"></span>
+
+                                        <div>
+                                            <p class="font-semibold">
+                                                {{ $currentAccountStatus['label'] }}
+                                            </p>
+
+                                            <p class="mt-1 text-sm leading-6 opacity-80">
+                                                @if ($user->status === 'active')
+                                                    Tài khoản đang được phép sử dụng các chức năng theo quyền hạn.
+                                                @else
+                                                    Tài khoản đang bị giới hạn các thao tác trong hệ thống.
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form method="POST" action="{{ route('admin.users.update-status', $user) }}"
+                                    onsubmit="return confirm(
+                                        '{{ $user->status === 'active'
+                                            ? 'Bạn có chắc muốn khóa tài khoản này không?'
+                                            : 'Bạn có chắc muốn mở khóa tài khoản này không?' }}'
+                                    )">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <input type="hidden" name="status"
+                                        value="{{ $user->status === 'active' ? 'inactive' : 'active' }}">
+
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition focus:outline-none focus:ring-4
+                                            {{ $user->status === 'active'
+                                                ? 'bg-red-600 hover:bg-red-700 focus:ring-red-200'
+                                                : 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-200' }}">
+                                        @if ($user->status === 'active')
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                                <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+                                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                            </svg>
+
+                                            Khóa tài khoản
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                                <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+                                                <path d="M8 10V7a4 4 0 0 1 7.5-2"></path>
+                                            </svg>
+
+                                            Mở khóa tài khoản
+                                        @endif
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </section>
+
+                    {{-- Thông tin tài khoản --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Thông tin tài khoản
+                            </h3>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                Thông tin quản trị và xác minh.
+                            </p>
+                        </div>
+
+                        <div class="divide-y divide-slate-100 px-5">
+                            <div class="flex items-center justify-between gap-4 py-4">
+                                <p class="text-sm text-slate-500">
+                                    Mã tài khoản
                                 </p>
-                                <span class="mt-3 inline-flex rounded-full border px-2.5 py-1 text-xs font-medium {{ $latestPaymentClass }}">
-                                    {{ $paymentStatusLabels[$latestPayment->status] ?? $latestPayment->status }}
+
+                                <p class="font-semibold text-slate-900">
+                                    #{{ $user->id }}
+                                </p>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-4 py-4">
+                                <p class="text-sm text-slate-500">
+                                    Vai trò
+                                </p>
+
+                                <span
+                                    class="rounded-full border px-2.5 py-1 text-xs font-semibold {{ $currentRole['class'] }}">
+                                    {{ $currentRole['label'] }}
                                 </span>
                             </div>
 
-                            <dl class="mt-4 space-y-3">
-                                <div class="flex justify-between gap-3">
-                                    <dt class="text-sm text-slate-500">Phương thức</dt>
-                                    <dd class="text-right text-sm font-medium text-slate-800">
-                                        {{ $paymentMethodLabels[$latestPayment->payment_method] ?? $latestPayment->payment_method }}
-                                    </dd>
-                                </div>
-                                <div class="flex justify-between gap-3">
-                                    <dt class="text-sm text-slate-500">Mã giao dịch</dt>
-                                    <dd class="max-w-[160px] break-all text-right text-sm font-medium text-slate-800">
-                                        {{ $latestPayment->transaction_code ?: 'Chưa có mã' }}
-                                    </dd>
-                                </div>
-                                <div class="flex justify-between gap-3">
-                                    <dt class="text-sm text-slate-500">Thời gian</dt>
-                                    <dd class="text-right text-sm font-medium text-slate-800">
-                                        {{ $latestPayment->paid_at
-                                            ? $latestPayment->paid_at->format('d/m/Y H:i')
-                                            : $latestPayment->created_at->format('d/m/Y H:i') }}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    @else
-                        <div class="px-5 py-12 text-center">
-                            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                          d="M3 7h18M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
-                                </svg>
+                            <div class="flex items-center justify-between gap-4 py-4">
+                                <p class="text-sm text-slate-500">
+                                    Xác minh email
+                                </p>
+
+                                @if ($user->email_verified_at)
+                                    <span
+                                        class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                                        Đã xác minh
+                                    </span>
+                                @else
+                                    <span
+                                        class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+                                        Chưa xác minh
+                                    </span>
+                                @endif
                             </div>
-                            <h3 class="mt-3 text-sm font-semibold text-slate-800">Chưa có giao dịch</h3>
-                            <p class="mt-1 text-sm text-slate-500">Tài khoản chưa phát sinh thanh toán.</p>
+
+                            <div class="flex items-center justify-between gap-4 py-4">
+                                <p class="text-sm text-slate-500">
+                                    Giao dịch đang xử lý
+                                </p>
+
+                                <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+                                    {{ number_format($pendingTransactions, 0, ',', '.') }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-start justify-between gap-4 py-4">
+                                <p class="text-sm text-slate-500">
+                                    Tổng đã hoàn tiền
+                                </p>
+
+                                <p class="text-right font-semibold text-blue-600">
+                                    {{ number_format($totalRefunded, 0, ',', '.') }}đ
+                                </p>
+                            </div>
                         </div>
-                    @endif
-                </section>
+                    </section>
+
+                    {{-- Giao dịch gần nhất --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div
+                            class="flex items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900">
+                                    Giao dịch gần nhất
+                                </h3>
+
+                                <p class="mt-1 text-sm text-slate-500">
+                                    Thanh toán mới nhất của tài khoản.
+                                </p>
+                            </div>
+
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                    <path d="M3 9h18"></path>
+                                </svg>
+                            </span>
+                        </div>
+
+                        @if ($latestPayment)
+                            @php
+                                $latestPaymentStatus = $paymentStatusConfig[$latestPayment->status] ?? [
+                                    'label' => 'Không xác định',
+                                    'class' => 'border-slate-200 bg-slate-100 text-slate-600',
+                                ];
+                            @endphp
+
+                            <div class="p-5">
+                                <div
+                                    class="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-blue-50 p-4">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                        Số tiền
+                                    </p>
+
+                                    <p class="mt-1 break-words text-2xl font-bold text-emerald-600">
+                                        {{ number_format((float) ($latestPayment->amount ?? 0), 0, ',', '.') }}đ
+                                    </p>
+
+                                    <span
+                                        class="mt-3 inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold {{ $latestPaymentStatus['class'] }}">
+                                        {{ $latestPaymentStatus['label'] }}
+                                    </span>
+                                </div>
+
+                                <dl class="mt-5 divide-y divide-slate-100">
+                                    <div class="flex items-start justify-between gap-4 py-3">
+                                        <dt class="text-sm text-slate-500">
+                                            Phương thức
+                                        </dt>
+
+                                        <dd class="text-right text-sm font-semibold text-slate-800">
+                                            {{ $paymentMethodLabels[$latestPayment->payment_method] ?? ($latestPayment->payment_method ?? 'Không xác định') }}
+                                        </dd>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 py-3">
+                                        <dt class="text-sm text-slate-500">
+                                            Mã giao dịch
+                                        </dt>
+
+                                        <dd class="max-w-44 break-all text-right text-sm font-semibold text-slate-800">
+                                            {{ $latestPayment->transaction_code ?: 'Chưa có mã' }}
+                                        </dd>
+                                    </div>
+
+                                    <div class="flex items-start justify-between gap-4 py-3">
+                                        <dt class="text-sm text-slate-500">
+                                            Thời gian
+                                        </dt>
+
+                                        <dd class="text-right text-sm font-semibold text-slate-800">
+                                            {{ $latestPayment->paid_at
+                                                ? $latestPayment->paid_at->format('H:i d/m/Y')
+                                                : $latestPayment->created_at->format('H:i d/m/Y') }}
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        @else
+                            <div class="px-5 py-12 text-center">
+                                <div
+                                    class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.6" class="h-7 w-7">
+                                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                        <path d="M3 9h18"></path>
+                                    </svg>
+                                </div>
+
+                                <h3 class="mt-4 font-semibold text-slate-800">
+                                    Chưa có giao dịch
+                                </h3>
+
+                                <p class="mt-1 text-sm leading-6 text-slate-500">
+                                    Tài khoản này chưa phát sinh thanh toán.
+                                </p>
+                            </div>
+                        @endif
+                    </section>
+                </div>
             </aside>
         </div>
-    </main>
-</body>
-</html>
+    </div>
+@endsection

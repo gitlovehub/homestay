@@ -1,72 +1,41 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Quản lý đặt phòng | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('page-title', 'Quản lý đặt phòng')
 
-    <title>Quản lý Booking | HomeStay</title>
+@section('content')
+    <div class="mx-auto max-w-screen-2xl">
 
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
+        @php
+            $currentYear = now()->year;
+        @endphp
 
-<body class="min-h-screen bg-slate-100">
+        @php
+            $statusLabels = [
+                'pending' => 'Chờ xác nhận',
+                'confirmed' => 'Đã xác nhận',
+                'checked_in' => 'Đã nhận phòng',
+                'completed' => 'Đã hoàn thành',
+                'cancelled' => 'Đã hủy',
+            ];
 
-    @include('partials.navbar')
-
-    @php
-        $currentYear = now()->year;
-    @endphp
-
-    @php
-        $statusLabels = [
-            'pending' => 'Chờ xác nhận',
-            'confirmed' => 'Đã xác nhận',
-            'checked_in' => 'Đã nhận phòng',
-            'completed' => 'Đã hoàn thành',
-            'cancelled' => 'Đã hủy',
-        ];
-
-        $paymentLabels = [
-            'unpaid' => 'Chưa thanh toán',
-            'pending' => 'Đang xử lý',
-            'paid' => 'Đã thanh toán',
-            'refunded' => 'Đã hoàn tiền',
-            'failed' => 'Thanh toán thất bại',
-        ];
-    @endphp
-
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            $paymentLabels = [
+                'unpaid' => 'Chưa thanh toán',
+                'pending' => 'Đang xử lý',
+                'paid' => 'Đã thanh toán',
+                'refunded' => 'Đã hoàn tiền',
+                'failed' => 'Thanh toán thất bại',
+            ];
+        @endphp
 
         <x-alert />
 
-        {{-- Quay lại --}}
-        <a
-            href="{{ route('admin.dashboard') }}"
-            class="mb-4 block text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-        >
-            ← Quay lại bảng điều khiển
-        </a>
-
-        {{-- Tiêu đề và bộ lọc --}}
         <div class="mb-8 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
 
-            <div>
-                <h1 class="text-3xl font-bold text-slate-900">
-                    Quản lý Booking
-                </h1>
-
-                <p class="mt-2 text-slate-500">
-                    Danh sách các đơn đặt phòng trong hệ thống.
-                </p>
-            </div>
+            <p class="text-sm font-semibold md:text-lg text-slate-500">
+                Danh sách các đơn đặt phòng trong hệ thống.
+            </p>
 
             <form
                 method="GET"
@@ -148,7 +117,7 @@
 
             <div class="overflow-x-auto rounded-2xl">
 
-                <table class="min-w-full min-h-120 divide-y divide-slate-200">
+                <table class="w-full min-h-120 divide-y divide-slate-200">
 
                     <thead class="bg-slate-50">
 
@@ -283,43 +252,43 @@
                                     @switch($booking->status)
 
                                         @case('pending')
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-700">
                                                 <span class="h-2 w-2 rounded-full bg-amber-500"></span>
                                                 Chờ xác nhận
                                             </span>
                                             @break
 
                                         @case('confirmed')
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-700">
                                                 <span class="h-2 w-2 rounded-full bg-blue-500"></span>
                                                 Đã xác nhận
                                             </span>
                                             @break
 
                                         @case('checked_in')
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-violet-50 border border-violet-200 px-3 py-1 text-xs font-semibold text-violet-700">
                                                 <span class="h-2 w-2 rounded-full bg-violet-500"></span>
                                                 Đã nhận phòng
                                             </span>
                                             @break
 
                                         @case('completed')
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700">
                                                 <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                                                 Đã hoàn thành
                                             </span>
                                             @break
 
                                         @case('cancelled')
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-red-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-red-700">
                                                 <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                                 Đã hủy
                                             </span>
                                             @break
 
                                         @default
-                                            <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                                                <span class="h-2 w-2 rounded-full bg-slate-400"></span>
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-slate-50 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
+                                                <span class="h-2 w-2 rounded-full bg-slate-500"></span>
                                                 Không xác định
                                             </span>
 
@@ -330,7 +299,7 @@
                                 {{-- Menu thao tác --}}
                                 <td class="whitespace-nowrap px-5 py-5 text-center">
 
-                                    <details class="group relative inline-block text-left">
+                                    <details data-action-menu class="group relative inline-block text-left">
 
                                         {{-- Nút ba chấm --}}
                                         <summary
@@ -346,13 +315,15 @@
                                             {{-- Xem chi tiết --}}
                                             <a
                                                 href="{{ route('admin.bookings.show', $booking) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                                             >
-                                                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
-                                                    👁
-                                                </span>
-
-                                                Xem chi tiết
+                                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                </svg>
+                                                Xem
                                             </a>
 
                                             {{-- Trạng thái Pending --}}
@@ -378,10 +349,9 @@
                                                         type="submit"
                                                         class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-blue-700 transition hover:bg-blue-50"
                                                     >
-                                                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
-                                                            ✓
-                                                        </span>
-
+                                                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                          <path d="M20 6L9 17l-5-5"/>
+                                                        </svg>
                                                         Xác nhận đơn
                                                     </button>
 
@@ -405,10 +375,9 @@
                                                         type="submit"
                                                         class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
                                                     >
-                                                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                                                            ✕
-                                                        </span>
-
+                                                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                          <path d="M18 6L6 18M6 6l12 12"/>
+                                                        </svg>
                                                         Hủy Booking
                                                     </button>
 
@@ -439,10 +408,10 @@
                                                         type="submit"
                                                         class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-violet-700 transition hover:bg-violet-50"
                                                     >
-                                                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
-                                                            🏨
-                                                        </span>
-
+                                                        <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                                          <circle cx="12" cy="10" r="3"/>
+                                                        </svg>
                                                         Đã nhận phòng
                                                     </button>
 
@@ -466,10 +435,9 @@
                                                         type="submit"
                                                         class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-700 transition hover:bg-red-50"
                                                     >
-                                                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50">
-                                                            ✕
-                                                        </span>
-
+                                                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                          <path d="M18 6L6 18M6 6l12 12"/>
+                                                        </svg>
                                                         Hủy Booking
                                                     </button>
 
@@ -500,10 +468,9 @@
                                                         type="submit"
                                                         class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
                                                     >
-                                                        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
-                                                            ✓
-                                                        </span>
-
+                                                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                          <path d="M20 6L9 17l-5-5"/>
+                                                        </svg>
                                                         Hoàn thành
                                                     </button>
 
@@ -572,33 +539,6 @@
 
         </div>
 
-    </main>
+    </div>
 
-    {{-- Đóng menu khác khi mở một menu --}}
-    <script>
-        document.querySelectorAll('details').forEach((details) => {
-            details.addEventListener('toggle', () => {
-                if (!details.open) {
-                    return;
-                }
-
-                document.querySelectorAll('details[open]').forEach((item) => {
-                    if (item !== details) {
-                        item.removeAttribute('open');
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('click', (event) => {
-            document.querySelectorAll('details[open]').forEach((details) => {
-                if (!details.contains(event.target)) {
-                    details.removeAttribute('open');
-                }
-            });
-        });
-    </script>
-
-</body>
-
-</html>
+@endsection

@@ -1,203 +1,302 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Chi tiết đặt phòng | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('page-title', 'Chi tiết đặt phòng')
 
-    <title>Chi tiết Booking | HomeStay</title>
-
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-
-<body class="min-h-screen bg-slate-100">
-
-    @include('partials.navbar')
-
+@section('content')
     @php
-        $statusLabels = [
-            'pending' => 'Chờ xác nhận',
-            'confirmed' => 'Đã xác nhận',
-            'checked_in' => 'Đã nhận phòng',
-            'completed' => 'Đã hoàn thành',
-            'cancelled' => 'Đã hủy',
+        $statusConfig = [
+            'pending' => [
+                'label' => 'Chờ xác nhận',
+                'badge' => 'bg-amber-50 border border-amber-200 text-amber-700',
+                'dot' => 'bg-amber-500',
+            ],
+            'confirmed' => [
+                'label' => 'Đã xác nhận',
+                'badge' => 'bg-blue-50 border border-blue-200 text-blue-700',
+                'dot' => 'bg-blue-500',
+            ],
+            'checked_in' => [
+                'label' => 'Đã nhận phòng',
+                'badge' => 'bg-violet-50 border border-violet-200 text-violet-700',
+                'dot' => 'bg-violet-500',
+            ],
+            'completed' => [
+                'label' => 'Đã hoàn thành',
+                'badge' => 'bg-emerald-50 border border-emerald-200 text-emerald-700',
+                'dot' => 'bg-emerald-500',
+            ],
+            'cancelled' => [
+                'label' => 'Đã hủy',
+                'badge' => 'bg-red-50 border border-red-200 text-red-700',
+                'dot' => 'bg-red-500',
+            ],
         ];
 
-        $paymentLabels = [
-            'unpaid' => 'Chưa thanh toán',
-            'pending' => 'Đang xử lý',
-            'paid' => 'Đã thanh toán',
-            'refunded' => 'Đã hoàn tiền',
-            'failed' => 'Thanh toán thất bại',
+        $paymentConfig = [
+            'unpaid' => [
+                'label' => 'Chưa thanh toán',
+                'box' => 'border-slate-200 bg-slate-50',
+                'title' => 'text-slate-700',
+                'description' => 'text-slate-500',
+                'message' => 'Booking chưa ghi nhận thanh toán.',
+            ],
+            'pending' => [
+                'label' => 'Đang xử lý',
+                'box' => 'border-amber-200 bg-amber-50',
+                'title' => 'text-amber-700',
+                'description' => 'text-amber-600',
+                'message' => 'Giao dịch đang được hệ thống xử lý.',
+            ],
+            'paid' => [
+                'label' => 'Đã thanh toán',
+                'box' => 'border-emerald-200 bg-emerald-50',
+                'title' => 'text-emerald-700',
+                'description' => 'text-emerald-600',
+                'message' => 'Booking đã được thanh toán thành công.',
+            ],
+            'refunded' => [
+                'label' => 'Đã hoàn tiền',
+                'box' => 'border-violet-200 bg-violet-50',
+                'title' => 'text-violet-700',
+                'description' => 'text-violet-600',
+                'message' => 'Khoản thanh toán đã được hoàn lại.',
+            ],
+            'failed' => [
+                'label' => 'Thanh toán thất bại',
+                'box' => 'border-red-200 bg-red-50',
+                'title' => 'text-red-700',
+                'description' => 'text-red-600',
+                'message' => 'Giao dịch chưa được thực hiện thành công.',
+            ],
         ];
+
+        $currentStatus = $statusConfig[$booking->status] ?? [
+            'label' => 'Không xác định',
+            'badge' => 'bg-slate-100 text-slate-600',
+            'dot' => 'bg-slate-400',
+        ];
+
+        $currentPayment = $paymentConfig[$booking->payment_status] ?? [
+            'label' => 'Không xác định',
+            'box' => 'border-slate-200 bg-slate-50',
+            'title' => 'text-slate-700',
+            'description' => 'text-slate-500',
+            'message' => 'Không xác định được trạng thái thanh toán.',
+        ];
+
+        $room = $booking->room;
+        $homestay = $room?->homestay;
     @endphp
 
-    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-
+    <div class="mx-auto max-w-screen-2xl">
         <x-alert />
 
-        {{-- Quay lại --}}
-        <a
-            href="{{ route('admin.bookings.index') }}"
-            class="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-        >
-            <span>←</span>
-            Quay lại danh sách Booking
-        </a>
-
         {{-- Tiêu đề --}}
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-5 sm:px-6">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h2 class="break-all text-2xl font-bold text-slate-900 sm:text-3xl">
+                                {{ $booking->booking_code }}
+                            </h2>
 
-            <div>
-                <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">
-                    Chi tiết đơn đặt phòng
-                </p>
+                            <span
+                                class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold {{ $currentStatus['badge'] }}">
+                                <span class="h-2 w-2 rounded-full {{ $currentStatus['dot'] }}"></span>
 
-                <h1 class="mt-2 text-3xl font-bold text-slate-900">
-                    {{ $booking->booking_code }}
-                </h1>
+                                {{ $currentStatus['label'] }}
+                            </span>
+                        </div>
 
-                <p class="mt-2 text-sm text-slate-500">
-                    Được tạo lúc
-                    {{ $booking->created_at->format('H:i, d/m/Y') }}
-                </p>
-            </div>
-
-            <div>
-                @switch($booking->status)
-
-                    @case('pending')
-                        <span class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-700">
-                            <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                            Chờ xác nhận
-                        </span>
-                        @break
-
-                    @case('confirmed')
-                        <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
-                            <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-                            Đã xác nhận
-                        </span>
-                        @break
-
-                    @case('checked_in')
-                        <span class="inline-flex items-center gap-2 rounded-full bg-violet-100 px-4 py-2 text-sm font-semibold text-violet-700">
-                            <span class="h-2.5 w-2.5 rounded-full bg-violet-500"></span>
-                            Đã nhận phòng
-                        </span>
-                        @break
-
-                    @case('completed')
-                        <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
-                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                            Đã hoàn thành
-                        </span>
-                        @break
-
-                    @case('cancelled')
-                        <span class="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
-                            <span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>
-                            Đã hủy
-                        </span>
-                        @break
-
-                    @default
-                        <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600">
-                            <span class="h-2.5 w-2.5 rounded-full bg-slate-400"></span>
-                            Không xác định
-                        </span>
-
-                @endswitch
-            </div>
-
-        </div>
-
-        <div class="grid gap-6 lg:grid-cols-3">
-
-            {{-- Nội dung chính --}}
-            <div class="space-y-6 lg:col-span-2">
-
-                {{-- Thông tin khách hàng --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Thông tin khách hàng
-                        </h2>
-
-                        <p class="mt-1 text-sm text-slate-500">
-                            Thông tin người thực hiện đặt phòng.
+                        <p class="mt-2 text-sm text-slate-500">
+                            Được tạo lúc {{ $booking->created_at->format('H:i, d/m/Y') }}
                         </p>
                     </div>
 
-                    <div class="grid gap-6 p-6 sm:grid-cols-2">
+                    <div class="flex shrink-0 items-center gap-2">
+                        <a href="{{ route('admin.bookings.index') }}"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600">
+                            <span>Danh sách</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Thông tin tổng quan --}}
+            <div class="grid divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
+                <div class="px-5 py-4 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Khách hàng
+                    </p>
+
+                    <p class="mt-2 truncate font-bold text-slate-900">
+                        {{ $booking->customer_name ?: 'Chưa cập nhật' }}
+                    </p>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ $booking->customer_phone ?: 'Chưa có số điện thoại' }}
+                    </p>
+                </div>
+
+                <div class="px-5 py-4 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Thời gian lưu trú
+                    </p>
+
+                    <p class="mt-2 font-bold text-slate-900">
+                        {{ $booking->check_in->format('d/m/Y') }}
+                        <span class="mx-1 text-slate-400">→</span>
+                        {{ $booking->check_out->format('d/m/Y') }}
+                    </p>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ $booking->number_of_nights }} đêm ·
+                        {{ $booking->number_of_guests }} khách
+                    </p>
+                </div>
+
+                <div class="px-5 py-4 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Phòng
+                    </p>
+
+                    <p class="mt-2 truncate font-bold text-slate-900">
+                        {{ $room?->name ?? 'Phòng không tồn tại' }}
+                    </p>
+
+                    <p class="mt-1 truncate text-sm text-slate-500">
+                        {{ $homestay?->name ?? 'Homestay không xác định' }}
+                    </p>
+                </div>
+
+                <div class="px-5 py-4 sm:px-6">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Tổng thanh toán
+                    </p>
+
+                    <p class="mt-2 text-xl font-bold text-blue-600">
+                        {{ number_format((float) ($booking->total_price ?? 0), 0, ',', '.') }}đ
+                    </p>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ $currentPayment['label'] }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid gap-6 xl:grid-cols-12">
+            {{-- Nội dung chính --}}
+            <div class="space-y-6 xl:col-span-8">
+                {{-- Thông tin khách hàng --}}
+                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" class="h-5 w-5">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 21a8 8 0 0 1 16 0"></path>
+                            </svg>
+                        </span>
 
                         <div>
+                            <h3 class="font-bold text-slate-900">
+                                Thông tin khách hàng
+                            </h3>
+
+                            <p class="mt-0.5 text-sm text-slate-500">
+                                Thông tin người thực hiện đặt phòng.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 Họ và tên
                             </p>
 
                             <p class="mt-2 font-semibold text-slate-900">
-                                {{ $booking->customer_name }}
+                                {{ $booking->customer_name ?: 'Chưa cập nhật' }}
                             </p>
                         </div>
 
-                        <div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 Số điện thoại
                             </p>
 
-                            <p class="mt-2 font-semibold text-slate-900">
-                                {{ $booking->customer_phone }}
-                            </p>
+                            @if ($booking->customer_phone)
+                                <a href="tel:{{ $booking->customer_phone }}"
+                                    class="mt-2 inline-block font-semibold text-blue-600 transition hover:text-blue-700 hover:underline">
+                                    {{ $booking->customer_phone }}
+                                </a>
+                            @else
+                                <p class="mt-2 font-semibold text-slate-500">
+                                    Chưa cập nhật
+                                </p>
+                            @endif
                         </div>
 
-                        <div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 Email
                             </p>
 
-                            <p class="mt-2 break-all font-semibold text-slate-900">
-                                {{ $booking->customer_email }}
-                            </p>
+                            @if ($booking->customer_email)
+                                <a href="mailto:{{ $booking->customer_email }}"
+                                    class="mt-2 inline-block break-all font-semibold text-blue-600 transition hover:text-blue-700 hover:underline">
+                                    {{ $booking->customer_email }}
+                                </a>
+                            @else
+                                <p class="mt-2 font-semibold text-slate-500">
+                                    Chưa cập nhật
+                                </p>
+                            @endif
                         </div>
 
-                        <div>
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Mã tài khoản
+                                Tài khoản đặt phòng
                             </p>
 
                             <p class="mt-2 font-semibold text-slate-900">
                                 {{ $booking->user ? '#' . $booking->user->id : 'Không tồn tại' }}
                             </p>
                         </div>
-
                     </div>
-
                 </section>
 
                 {{-- Thông tin lưu trú --}}
                 <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" class="h-5 w-5">
+                                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                <path d="M16 3v4"></path>
+                                <path d="M8 3v4"></path>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                        </span>
 
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Thông tin lưu trú
-                        </h2>
+                        <div>
+                            <h3 class="font-bold text-slate-900">
+                                Thông tin lưu trú
+                            </h3>
 
-                        <p class="mt-1 text-sm text-slate-500">
-                            Thời gian và số lượng khách trong Booking.
-                        </p>
+                            <p class="mt-0.5 text-sm text-slate-500">
+                                Thời gian lưu trú và số lượng khách.
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
-
+                    <div class="grid gap-5 p-5 sm:grid-cols-2 lg:grid-cols-3 sm:p-6">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 Ngày nhận phòng
@@ -220,7 +319,7 @@
 
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Số đêm
+                                Tổng số đêm
                             </p>
 
                             <p class="mt-2 text-lg font-bold text-slate-900">
@@ -230,7 +329,7 @@
 
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Số khách
+                                Số lượng khách
                             </p>
 
                             <p class="mt-2 text-lg font-bold text-slate-900">
@@ -257,37 +356,42 @@
                                 {{ $booking->updated_at->format('H:i d/m/Y') }}
                             </p>
                         </div>
-
                     </div>
-
                 </section>
 
                 {{-- Thông tin phòng --}}
                 <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                        </span>
 
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Thông tin phòng
-                        </h2>
+                        <div>
+                            <h3 class="font-bold text-slate-900">
+                                Thông tin phòng
+                            </h3>
 
-                        <p class="mt-1 text-sm text-slate-500">
-                            Phòng và Homestay được khách lựa chọn.
-                        </p>
+                            <p class="mt-0.5 text-sm text-slate-500">
+                                Phòng và Homestay được khách lựa chọn.
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="p-6">
-
-                        @if ($booking->room)
-
-                            <div class="grid gap-6 sm:grid-cols-2">
-
+                    <div class="p-5 sm:p-6">
+                        @if ($room)
+                            <div class="grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                         Tên phòng
                                     </p>
 
                                     <p class="mt-2 text-lg font-bold text-slate-900">
-                                        {{ $booking->room->name }}
+                                        {{ $room->name }}
                                     </p>
                                 </div>
 
@@ -297,7 +401,7 @@
                                     </p>
 
                                     <p class="mt-2 font-semibold text-slate-900">
-                                        {{ $booking->room->room_type ?? 'Chưa cập nhật' }}
+                                        {{ $room->room_type ?: 'Chưa cập nhật' }}
                                     </p>
                                 </div>
 
@@ -307,7 +411,7 @@
                                     </p>
 
                                     <p class="mt-2 font-semibold text-slate-900">
-                                        {{ $booking->room->homestay?->name ?? 'Không xác định' }}
+                                        {{ $homestay?->name ?? 'Không xác định' }}
                                     </p>
                                 </div>
 
@@ -317,7 +421,7 @@
                                     </p>
 
                                     <p class="mt-2 font-semibold text-slate-900">
-                                        {{ $booking->room->capacity ?? 'Chưa cập nhật' }} khách
+                                        {{ $room->capacity ? $room->capacity . ' khách' : 'Chưa cập nhật' }}
                                     </p>
                                 </div>
 
@@ -326,77 +430,121 @@
                                         Địa chỉ Homestay
                                     </p>
 
-                                    <p class="mt-2 font-semibold leading-7 text-slate-900">
-                                        {{ $booking->room->homestay?->address ?? 'Chưa cập nhật địa chỉ' }}
-                                    </p>
+                                    <div class="mt-2 flex items-start gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.8"
+                                            class="mt-0.5 h-5 w-5 shrink-0 text-slate-400">
+                                            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                            <circle cx="12" cy="10" r="2.5"></circle>
+                                        </svg>
+
+                                        <p class="font-semibold leading-7 text-slate-900">
+                                            {{ $homestay?->address ?? 'Chưa cập nhật địa chỉ' }},
+
+                                            @if ($homestay?->city)
+                                                {{ $homestay->city }}
+                                            @endif
+                                        </p>
+                                    </div>
                                 </div>
-
                             </div>
-
                         @else
+                            <div class="rounded-xl border border-dashed border-red-200 bg-red-50 px-6 py-10 text-center">
+                                <span
+                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.8" class="h-6 w-6">
+                                        <circle cx="12" cy="12" r="9"></circle>
+                                        <path d="M12 8v5"></path>
+                                        <path d="M12 16h.01"></path>
+                                    </svg>
+                                </span>
 
-                            <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
-                                <p class="font-semibold text-slate-700">
+                                <p class="mt-4 font-semibold text-red-700">
                                     Phòng không còn tồn tại
                                 </p>
 
-                                <p class="mt-1 text-sm text-slate-500">
+                                <p class="mt-1 text-sm text-red-600">
                                     Dữ liệu phòng của Booking này đã bị xóa hoặc không tìm thấy.
                                 </p>
                             </div>
-
                         @endif
-
                     </div>
-
                 </section>
 
                 {{-- Ghi chú --}}
                 <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                        <span
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                <path d="M4 4h16v13H8l-4 4V4Z"></path>
+                            </svg>
+                        </span>
 
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Ghi chú của khách hàng
-                        </h2>
+                        <div>
+                            <h3 class="font-bold text-slate-900">
+                                Ghi chú của khách hàng
+                            </h3>
+
+                            <p class="mt-0.5 text-sm text-slate-500">
+                                Yêu cầu hoặc thông tin khách hàng gửi kèm.
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="p-6">
-
+                    <div class="p-5 sm:p-6">
                         @if ($booking->note)
-                            <p class="whitespace-pre-line leading-7 text-slate-700">
-                                {{ $booking->note }}
-                            </p>
+                            <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                                <p class="leading-7 text-slate-700">
+                                    {{ $booking->note }}
+                                </p>
+                            </div>
                         @else
-                            <p class="text-sm text-slate-500">
-                                Khách hàng không để lại ghi chú.
-                            </p>
+                            <div
+                                class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-7 text-center">
+                                <p class="text-sm text-slate-500">
+                                    Khách hàng không để lại ghi chú.
+                                </p>
+                            </div>
                         @endif
-
                     </div>
-
                 </section>
 
                 {{-- Thông tin hủy --}}
                 @if ($booking->status === 'cancelled')
-                    <section class="overflow-hidden rounded-2xl border border-red-200 bg-white shadow-sm">
+                    <section class="hidden overflow-hidden rounded-2xl border border-red-200 bg-white shadow-sm xl:block">
+                        <div class="flex items-center gap-3 border-b border-red-100 bg-red-50 px-5 py-4 sm:px-6">
+                            <span
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="m9 9 6 6"></path>
+                                    <path d="m15 9-6 6"></path>
+                                </svg>
+                            </span>
 
-                        <div class="border-b border-red-100 bg-red-50 px-6 py-4">
-                            <h2 class="text-lg font-bold text-red-700">
-                                Thông tin hủy Booking
-                            </h2>
+                            <div>
+                                <h3 class="font-bold text-red-700">
+                                    Thông tin hủy Booking
+                                </h3>
+
+                                <p class="mt-0.5 text-sm text-red-600">
+                                    Chi tiết liên quan đến việc hủy đơn.
+                                </p>
+                            </div>
                         </div>
 
-                        <div class="grid gap-6 p-6 sm:grid-cols-2">
-
+                        <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                     Thời gian hủy
                                 </p>
 
                                 <p class="mt-2 font-semibold text-slate-900">
-                                    {{ $booking->cancelled_at
-                                        ? $booking->cancelled_at->format('H:i d/m/Y')
-                                        : 'Chưa cập nhật' }}
+                                    {{ $booking->cancelled_at ? $booking->cancelled_at->format('H:i d/m/Y') : 'Chưa cập nhật' }}
                                 </p>
                             </div>
 
@@ -409,386 +557,379 @@
                                     {{ $booking->cancellation_reason ?: 'Không có lý do hủy.' }}
                                 </p>
                             </div>
-
                         </div>
-
                     </section>
                 @endif
-
             </div>
 
             {{-- Cột bên phải --}}
-            <aside class="space-y-6">
+            <aside class="space-y-6 xl:col-span-4">
+                <div class="space-y-6 xl:sticky xl:top-6">
+                    {{-- Quản lý Booking --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Quản lý Booking
+                            </h3>
 
-                {{-- Quản lý Booking --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Quản lý Booking
-                        </h2>
-
-                        <p class="mt-1 text-sm text-slate-500">
-                            Cập nhật trạng thái xử lý của đơn đặt phòng.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3 p-6">
-
-                        @if ($booking->status === 'pending')
-
-                            <form
-                                method="POST"
-                                action="{{ route('admin.bookings.update-status', $booking) }}"
-                            >
-                                @csrf
-                                @method('PATCH')
-
-                                <input
-                                    type="hidden"
-                                    name="status"
-                                    value="confirmed"
-                                >
-
-                                <button
-                                    type="submit"
-                                    onclick="return confirm('Xác nhận Booking này?')"
-                                    class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-                                >
-                                    Xác nhận Booking
-                                </button>
-                            </form>
-
-                            <form
-                                method="POST"
-                                action="{{ route('admin.bookings.update-status', $booking) }}"
-                            >
-                                @csrf
-                                @method('PATCH')
-
-                                <input
-                                    type="hidden"
-                                    name="status"
-                                    value="cancelled"
-                                >
-
-                                <button
-                                    type="submit"
-                                    onclick="return confirm('Bạn có chắc muốn hủy Booking này?')"
-                                    class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100"
-                                >
-                                    Hủy Booking
-                                </button>
-                            </form>
-
-                        @elseif ($booking->status === 'confirmed')
-
-                            <form
-                                method="POST"
-                                action="{{ route('admin.bookings.update-status', $booking) }}"
-                            >
-                                @csrf
-                                @method('PATCH')
-
-                                <input
-                                    type="hidden"
-                                    name="status"
-                                    value="checked_in"
-                                >
-
-                                <button
-                                    type="submit"
-                                    onclick="return confirm('Xác nhận khách đã nhận phòng?')"
-                                    class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-700"
-                                >
-                                    Khách đã nhận phòng
-                                </button>
-                            </form>
-
-                            <form
-                                method="POST"
-                                action="{{ route('admin.bookings.update-status', $booking) }}"
-                            >
-                                @csrf
-                                @method('PATCH')
-
-                                <input
-                                    type="hidden"
-                                    name="status"
-                                    value="cancelled"
-                                >
-
-                                <button
-                                    type="submit"
-                                    onclick="return confirm('Bạn có chắc muốn hủy Booking này?')"
-                                    class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100"
-                                >
-                                    Hủy Booking
-                                </button>
-                            </form>
-
-                        @elseif ($booking->status === 'checked_in')
-
-                            <form
-                                method="POST"
-                                action="{{ route('admin.bookings.update-status', $booking) }}"
-                            >
-                                @csrf
-                                @method('PATCH')
-
-                                <input
-                                    type="hidden"
-                                    name="status"
-                                    value="completed"
-                                >
-
-                                <button
-                                    type="submit"
-                                    onclick="return confirm('Xác nhận Booking đã hoàn thành?')"
-                                    class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-                                >
-                                    Hoàn thành Booking
-                                </button>
-                            </form>
-
-                        @elseif ($booking->status === 'completed')
-
-                            <div class="rounded-xl bg-emerald-50 p-4">
-                                <p class="font-semibold text-emerald-700">
-                                    Booking đã hoàn thành
-                                </p>
-
-                                <p class="mt-1 text-sm text-emerald-600">
-                                    Booking này không còn thao tác cập nhật.
-                                </p>
-                            </div>
-
-                        @elseif ($booking->status === 'cancelled')
-
-                            <div class="rounded-xl bg-red-50 p-4">
-                                <p class="font-semibold text-red-700">
-                                    Booking đã bị hủy
-                                </p>
-
-                                <p class="mt-1 text-sm text-red-600">
-                                    Booking này không còn thao tác cập nhật.
-                                </p>
-                            </div>
-
-                        @endif
-
-                    </div>
-
-                </section>
-
-                {{-- Chi tiết thanh toán --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Chi tiết thanh toán
-                        </h2>
-                    </div>
-
-                    <div class="space-y-4 p-6">
-
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-sm text-slate-500">
-                                Giá phòng mỗi đêm
-                            </span>
-
-                            <span class="text-sm font-semibold text-slate-900">
-                                {{ number_format($booking->room_price, 0, ',', '.') }}đ
-                            </span>
+                            <p class="mt-1 text-sm text-slate-500">
+                                Cập nhật trạng thái xử lý của đơn.
+                            </p>
                         </div>
 
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-sm text-slate-500">
-                                Số đêm
-                            </span>
+                        <div class="space-y-3 p-5">
+                            @if ($booking->status === 'pending')
+                                <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
+                                    onsubmit="return confirm('Bạn có chắc muốn xác nhận Booking {{ $booking->booking_code }} không?')">
+                                    @csrf
+                                    @method('PATCH')
 
-                            <span class="text-sm font-semibold text-slate-900">
-                                {{ $booking->number_of_nights }}
-                            </span>
-                        </div>
+                                    <input type="hidden" name="status" value="confirmed">
 
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-sm text-slate-500">
-                                Tạm tính
-                            </span>
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                            <path d="m5 12 4 4L19 6"></path>
+                                        </svg>
+                                        <span>Xác nhận Booking</span>
+                                    </button>
+                                </form>
 
-                            <span class="text-sm font-semibold text-slate-900">
-                                {{ number_format($booking->subtotal, 0, ',', '.') }}đ
-                            </span>
-                        </div>
+                                <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
+                                    onsubmit="return confirm('Bạn có chắc muốn hủy Booking {{ $booking->booking_code }} không?')">
+                                    @csrf
+                                    @method('PATCH')
 
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-sm text-slate-500">
-                                Phí dịch vụ
-                            </span>
+                                    <input type="hidden" name="status" value="cancelled">
 
-                            <span class="text-sm font-semibold text-slate-900">
-                                {{ number_format($booking->service_fee, 0, ',', '.') }}đ
-                            </span>
-                        </div>
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                            <path d="M6 6l12 12"></path>
+                                            <path d="M18 6 6 18"></path>
+                                        </svg>
+                                        <span>Hủy Booking</span>
+                                    </button>
+                                </form>
+                            @elseif ($booking->status === 'confirmed')
+                                <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
+                                    onsubmit="return confirm('Xác nhận khách đã nhận phòng?')">
+                                    @csrf
+                                    @method('PATCH')
 
-                        <div class="flex items-center justify-between gap-4">
-                            <span class="text-sm text-slate-500">
-                                Giảm giá
-                            </span>
+                                    <input type="hidden" name="status" value="checked_in">
 
-                            <span class="text-sm font-semibold text-emerald-600">
-                                -{{ number_format($booking->discount_amount, 0, ',', '.') }}đ
-                            </span>
-                        </div>
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200">
+                                        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        <span>Khách đã nhận phòng</span>
+                                    </button>
+                                </form>
 
-                        <div class="border-t border-slate-200 pt-4">
+                                <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
+                                    onsubmit="return confirm('Bạn có chắc muốn hủy Booking {{ $booking->booking_code }} không?')">
+                                    @csrf
+                                    @method('PATCH')
 
-                            <div class="flex items-end justify-between gap-4">
-                                <span class="font-bold text-slate-900">
-                                    Tổng thanh toán
-                                </span>
+                                    <input type="hidden" name="status" value="cancelled">
 
-                                <span class="text-2xl font-bold text-blue-600">
-                                    {{ number_format($booking->total_price, 0, ',', '.') }}đ
-                                </span>
-                            </div>
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 focus:outline-none focus:ring-4 focus:ring-red-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                            <path d="M6 6l12 12"></path>
+                                            <path d="M18 6 6 18"></path>
+                                        </svg>
+                                        <span>Hủy Booking</span>
+                                    </button>
+                                </form>
+                            @elseif ($booking->status === 'checked_in')
+                                <form method="POST" action="{{ route('admin.bookings.update-status', $booking) }}"
+                                    onsubmit="return confirm('Xác nhận Booking {{ $booking->booking_code }} đã hoàn thành?')">
+                                    @csrf
+                                    @method('PATCH')
 
-                        </div>
+                                    <input type="hidden" name="status" value="completed">
 
-                    </div>
+                                    <button type="submit"
+                                        class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                            <path d="m5 12 4 4L19 6"></path>
+                                        </svg>
 
-                </section>
+                                        <span>Hoàn thành</span>
+                                    </button>
+                                </form>
+                            @elseif ($booking->status === 'completed')
+                                <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                                <path d="m5 12 4 4L19 6"></path>
+                                            </svg>
+                                        </span>
 
-                {{-- Trạng thái thanh toán --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                                        <div>
+                                            <p class="font-semibold text-emerald-700">
+                                                Booking đã hoàn thành
+                                            </p>
 
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Trạng thái thanh toán
-                        </h2>
-                    </div>
-
-                    <div class="p-6">
-
-                        @switch($booking->payment_status)
-
-                            @case('paid')
-                                <div class="rounded-xl bg-emerald-50 p-4">
-                                    <p class="font-semibold text-emerald-700">
-                                        Đã thanh toán
-                                    </p>
-
-                                    <p class="mt-1 text-sm text-emerald-600">
-                                        Booking đã được thanh toán thành công.
-                                    </p>
+                                            <p class="mt-1 text-sm leading-6 text-emerald-600">
+                                                Booking này không còn thao tác cập nhật.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                @break
+                            @elseif ($booking->status === 'cancelled')
+                                <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+                                    <div class="flex items-start gap-3">
+                                        <span
+                                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                                                <path d="M6 6l12 12"></path>
+                                                <path d="M18 6 6 18"></path>
+                                            </svg>
+                                        </span>
 
-                            @case('pending')
-                                <div class="rounded-xl bg-amber-50 p-4">
-                                    <p class="font-semibold text-amber-700">
-                                        Đang xử lý
-                                    </p>
+                                        <div>
+                                            <p class="font-semibold text-red-700">
+                                                Booking đã bị hủy
+                                            </p>
 
-                                    <p class="mt-1 text-sm text-amber-600">
-                                        Giao dịch đang được hệ thống xử lý.
-                                    </p>
+                                            <p class="mt-1 text-sm leading-6 text-red-600">
+                                                Booking này không còn thao tác cập nhật.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                @break
-
-                            @case('refunded')
-                                <div class="rounded-xl bg-blue-50 p-4">
-                                    <p class="font-semibold text-blue-700">
-                                        Đã hoàn tiền
-                                    </p>
-
-                                    <p class="mt-1 text-sm text-blue-600">
-                                        Khoản thanh toán đã được hoàn lại.
-                                    </p>
-                                </div>
-                                @break
-
-                            @case('failed')
-                                <div class="rounded-xl bg-red-50 p-4">
-                                    <p class="font-semibold text-red-700">
-                                        Thanh toán thất bại
-                                    </p>
-
-                                    <p class="mt-1 text-sm text-red-600">
-                                        Giao dịch chưa được thực hiện thành công.
-                                    </p>
-                                </div>
-                                @break
-
-                            @default
-                                <div class="rounded-xl bg-slate-100 p-4">
+                            @else
+                                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
                                     <p class="font-semibold text-slate-700">
-                                        Chưa thanh toán
+                                        Không có thao tác
                                     </p>
 
                                     <p class="mt-1 text-sm text-slate-500">
-                                        Booking chưa ghi nhận thanh toán.
+                                        Trạng thái Booking hiện tại không hợp lệ.
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </section>
+
+                    {{-- Chi tiết thanh toán --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Chi tiết thanh toán
+                            </h3>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                Các khoản phí của đơn đặt phòng.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4 p-5">
+                            <div class="flex items-start justify-between gap-4">
+                                <span class="text-sm text-slate-500">
+                                    Giá phòng mỗi đêm
+                                </span>
+
+                                <span class="whitespace-nowrap text-sm font-semibold text-slate-900">
+                                    {{ number_format((float) ($booking->room_price ?? 0), 0, ',', '.') }}đ
+                                </span>
+                            </div>
+
+                            <div class="flex items-start justify-between gap-4">
+                                <span class="text-sm text-slate-500">
+                                    Số đêm
+                                </span>
+
+                                <span class="text-sm font-semibold text-slate-900">
+                                    {{ $booking->number_of_nights }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-start justify-between gap-4">
+                                <span class="text-sm text-slate-500">
+                                    Tạm tính
+                                </span>
+
+                                <span class="whitespace-nowrap text-sm font-semibold text-slate-900">
+                                    {{ number_format((float) ($booking->subtotal ?? 0), 0, ',', '.') }}đ
+                                </span>
+                            </div>
+
+                            <div class="flex items-start justify-between gap-4">
+                                <span class="text-sm text-slate-500">
+                                    Phí dịch vụ
+                                </span>
+
+                                <span class="whitespace-nowrap text-sm font-semibold text-slate-900">
+                                    {{ number_format((float) ($booking->service_fee ?? 0), 0, ',', '.') }}đ
+                                </span>
+                            </div>
+
+                            <div class="flex items-start justify-between gap-4">
+                                <span class="text-sm text-slate-500">
+                                    Giảm giá
+                                </span>
+
+                                <span class="whitespace-nowrap text-sm font-semibold text-emerald-600">
+                                    -{{ number_format((float) ($booking->discount_amount ?? 0), 0, ',', '.') }}đ
+                                </span>
+                            </div>
+
+                            <div class="border-t border-dashed border-slate-300 pt-4">
+                                <div class="flex items-end justify-between gap-4">
+                                    <span class="font-bold text-slate-900">
+                                        Tổng thanh toán
+                                    </span>
+
+                                    <span class="whitespace-nowrap text-xl font-bold text-blue-600">
+                                        {{ number_format((float) ($booking->total_price ?? 0), 0, ',', '.') }}đ
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {{-- Trạng thái thanh toán --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Trạng thái thanh toán
+                            </h3>
+                        </div>
+
+                        <div class="p-5">
+                            <div class="rounded-xl border p-4 {{ $currentPayment['box'] }}">
+                                <p class="font-semibold {{ $currentPayment['title'] }}">
+                                    {{ $currentPayment['label'] }}
+                                </p>
+
+                                <p class="mt-1 text-sm leading-6 {{ $currentPayment['description'] }}">
+                                    {{ $currentPayment['message'] }}
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {{-- Thông tin nhanh --}}
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                            <h3 class="font-bold text-slate-900">
+                                Thông tin nhanh
+                            </h3>
+                        </div>
+
+                        <div class="divide-y divide-slate-100 px-5">
+                            <div class="py-4">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Mã Booking
+                                </p>
+
+                                <p class="mt-2 break-all font-bold text-blue-600">
+                                    {{ $booking->booking_code }}
+                                </p>
+                            </div>
+
+                            <div class="py-4">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Trạng thái Booking
+                                </p>
+
+                                <div class="mt-2">
+                                    <span
+                                        class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold {{ $currentStatus['badge'] }}">
+                                        <span class="h-2 w-2 rounded-full {{ $currentStatus['dot'] }}"></span>
+
+                                        {{ $currentStatus['label'] }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="py-4">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Thanh toán
+                                </p>
+
+                                <p class="mt-2 font-semibold text-slate-900">
+                                    {{ $currentPayment['label'] }}
+                                </p>
+                            </div>
+
+                            <div class="py-4">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Cập nhật lần cuối
+                                </p>
+
+                                <p class="mt-2 font-semibold text-slate-900">
+                                    {{ $booking->updated_at->format('H:i d/m/Y') }}
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {{-- Thông tin hủy --}}
+                    @if ($booking->status === 'cancelled')
+                        <section class="block overflow-hidden rounded-2xl border border-red-200 bg-white shadow-sm xl:hidden">
+                            <div class="flex items-center gap-3 border-b border-red-100 bg-red-50 px-5 py-4 sm:px-6">
+                                <span
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-100 text-red-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+                                        <circle cx="12" cy="12" r="9"></circle>
+                                        <path d="m9 9 6 6"></path>
+                                        <path d="m15 9-6 6"></path>
+                                    </svg>
+                                </span>
+
+                                <div>
+                                    <h3 class="font-bold text-red-700">
+                                        Thông tin hủy Booking
+                                    </h3>
+
+                                    <p class="mt-0.5 text-sm text-red-600">
+                                        Chi tiết liên quan đến việc hủy đơn.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
+                                <div>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                        Thời gian hủy
+                                    </p>
+
+                                    <p class="mt-2 font-semibold text-slate-900">
+                                        {{ $booking->cancelled_at ? $booking->cancelled_at->format('H:i d/m/Y') : 'Chưa cập nhật' }}
                                     </p>
                                 </div>
 
-                        @endswitch
+                                <div>
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                        Lý do hủy
+                                    </p>
 
-                    </div>
-
-                </section>
-
-                {{-- Thông tin nhanh --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-
-                    <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
-                        <h2 class="text-lg font-bold text-slate-900">
-                            Thông tin nhanh
-                        </h2>
-                    </div>
-
-                    <div class="space-y-4 p-6">
-
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Mã Booking
-                            </p>
-
-                            <p class="mt-2 font-bold text-blue-600">
-                                {{ $booking->booking_code }}
-                            </p>
-                        </div>
-
-                        <div class="border-t border-slate-100 pt-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Trạng thái Booking
-                            </p>
-
-                            <p class="mt-2 font-semibold text-slate-900">
-                                {{ $statusLabels[$booking->status] ?? 'Không xác định' }}
-                            </p>
-                        </div>
-
-                        <div class="border-t border-slate-100 pt-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Trạng thái thanh toán
-                            </p>
-
-                            <p class="mt-2 font-semibold text-slate-900">
-                                {{ $paymentLabels[$booking->payment_status] ?? 'Không xác định' }}
-                            </p>
-                        </div>
-
-                    </div>
-
-                </section>
-
+                                    <p class="mt-2 leading-7 text-slate-700">
+                                        {{ $booking->cancellation_reason ?: 'Không có lý do hủy.' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    @endif
+                </div>
             </aside>
-
         </div>
-
-    </main>
-
-</body>
-
-</html>
+    </div>
+@endsection

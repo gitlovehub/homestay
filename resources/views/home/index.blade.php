@@ -231,10 +231,6 @@
                                 </div>
                             @else
                                 <div class="px-4 py-8 text-center">
-                                    <div class="text-3xl">
-                                        📍
-                                    </div>
-
                                     <p class="mt-2 text-sm font-semibold text-slate-600">
                                         Chưa có thành phố
                                     </p>
@@ -244,153 +240,59 @@
                     </div>
                 </div>
 
-                <div class="contents" x-data="{
-                    checkIn: @js(old('check_in', request('check_in', ''))),
-                    checkOut: @js(old('check_out', request('check_out', ''))),
-                
-                    openDatePicker(input) {
-                        if (!input || input.disabled) {
-                            return;
-                        }
-                
-                        if (typeof input.showPicker === 'function') {
-                            input.showPicker();
-                            return;
-                        }
-                
-                        input.focus();
-                        input.click();
-                    },
-                
-                    formatDate(value) {
-                        if (!value) {
-                            return '';
-                        }
-                
-                        const [year, month, day] = value.split('-');
-                
-                        return `${day}/${month}/${year}`;
-                    },
-                
-                    nextDay(value) {
-                        if (!value) {
-                            return @js(now()->toDateString());
-                        }
-                
-                        const [year, month, day] = value
-                            .split('-')
-                            .map(Number);
-                
-                        const date = new Date(
-                            year,
-                            month - 1,
-                            day
-                        );
-                
-                        date.setDate(date.getDate() + 1);
-                
-                        const nextYear = date.getFullYear();
-                
-                        const nextMonth = String(
-                            date.getMonth() + 1
-                        ).padStart(2, '0');
-                
-                        const nextDate = String(
-                            date.getDate()
-                        ).padStart(2, '0');
-                
-                        return `${nextYear}-${nextMonth}-${nextDate}`;
-                    },
-                
-                    handleCheckInChange() {
-                        if (
-                            this.checkOut &&
-                            this.checkOut < this.nextDay(this.checkIn)
-                        ) {
-                            this.checkOut = '';
-                        }
-                    }
-                }">
-                    {{-- Ngày nhận phòng --}}
-                    <div>
-                        <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Ngày nhận phòng
-                        </label>
+                {{-- Ngày nhận phòng --}}
+                <div>
+                    <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Ngày nhận phòng
+                    </label>
 
-                        <div class="relative">
-                            {{-- Input thật dùng để gửi dữ liệu và mở lịch --}}
-                            <input x-ref="checkInInput" id="check_in" type="date" name="check_in" x-model="checkIn"
-                                min="{{ now()->toDateString() }}" @change="handleCheckInChange()" required
-                                class="absolute bottom-0 left-0 h-px w-px opacity-0">
+                    <input id="check_in" type="date" name="check_in"
+                        value="{{ old('check_in', request('check_in')) }}" min="{{ now()->toDateString() }}" required
+                        onclick="
+            if (typeof this.showPicker === 'function') {
+                this.showPicker();
+            }
+        "
+                        class="block min-h-12 w-full cursor-pointer rounded-xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none transition
+            @error('check_in')
+                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
+            @else
+                border-slate-300 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+            @enderror">
 
-                            {{-- Nút hiển thị --}}
-                            <button type="button" @click="openDatePicker($refs.checkInInput)"
-                                class="group flex min-h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                                <span class="text-sm font-medium"
-                                    :class="checkIn
-                                        ?
-                                        'text-slate-700' :
-                                        'text-slate-400'"
-                                    x-text="checkIn
-                                        ? formatDate(checkIn)
-                                        : 'dd/mm/yyyy'"></span>
+                    @error('check_in')
+                        <p class="mt-2 text-sm font-medium text-red-600">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
 
-                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition group-hover:text-blue-600"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                                </svg>
-                            </button>
-                        </div>
+                {{-- Ngày trả phòng --}}
+                <div>
+                    <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
+                        Ngày trả phòng
+                    </label>
 
-                        @error('check_in')
-                            <p class="mt-2 text-sm font-medium text-red-600">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                    <input id="check_out" type="date" name="check_out"
+                        value="{{ old('check_out', request('check_out')) }}" min="{{ now()->addDay()->toDateString() }}"
+                        required
+                        onclick="
+            if (typeof this.showPicker === 'function') {
+                this.showPicker();
+            }
+        "
+                        class="block min-h-12 w-full cursor-pointer rounded-xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none transition
+            @error('check_out')
+                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
+            @else
+                border-slate-300 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+            @enderror">
 
-                    {{-- Ngày trả phòng --}}
-                    <div>
-                        <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Ngày trả phòng
-                        </label>
-
-                        <div class="relative" :class="!checkIn ? 'opacity-60' : ''">
-                            {{-- Input thật --}}
-                            <input x-ref="checkOutInput" id="check_out" type="date" name="check_out"
-                                x-model="checkOut" :min="nextDay(checkIn)" :disabled="!checkIn" required
-                                class="absolute bottom-0 left-0 h-px w-px opacity-0">
-
-                            {{-- Nút hiển thị --}}
-                            <button type="button" :disabled="!checkIn" @click="openDatePicker($refs.checkOutInput)"
-                                class="group flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition enabled:cursor-pointer enabled:hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed">
-                                <span class="text-sm font-medium"
-                                    :class="checkOut
-                                        ?
-                                        'text-slate-700' :
-                                        'text-slate-400'"
-                                    x-text="checkOut
-                                        ? formatDate(checkOut)
-                                        : checkIn
-                                            ? 'dd/mm/yyyy'
-                                            : 'dd/mm/yyyy'">
-                                </span>
-
-                                <svg class="h-5 w-5 shrink-0 text-slate-500 transition group-enabled:hover:text-blue-600"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        @error('check_out')
-                            <p class="mt-2 text-sm font-medium text-red-600">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                    @error('check_out')
+                        <p class="mt-2 text-sm font-medium text-red-600">
+                            {{ $message }}
+                        </p>
+                    @enderror
                 </div>
 
                 <div class="flex items-end">

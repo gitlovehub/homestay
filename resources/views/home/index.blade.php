@@ -31,7 +31,7 @@
                         Khám phá ngay
                     </a>
 
-                    <a href="#about"
+                    <a href="{{ route('about') }}"
                         class="rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600">
                         Tìm hiểu thêm
                     </a>

@@ -141,7 +141,11 @@
                 </div>
             </div>
 
-            <a href="#about" class="font-medium text-slate-600 transition hover:text-blue-600">
+            <a href="{{ route('about') }}"
+                class="font-semibold transition
+                    {{ request()->routeIs('about')
+                        ? 'text-blue-600'
+                        : 'text-slate-600 hover:text-blue-600' }}">
                 Giới thiệu
             </a>
             <a href="#contact" class="font-medium text-slate-600 transition hover:text-blue-600">

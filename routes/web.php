@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 // --- Trang chủ ---
 Route::get('/', [HomeController::class, 'index'])->name('home');
+// Trang giới thiệu
+Route::view('/about', 'about')->name('about');
 
 // --- Tìm Homestay còn phòng ---
 Route::get(

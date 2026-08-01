@@ -78,7 +78,6 @@ class StoreHomestayRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                Rule::in(config('homestay_locations', [])),
             ],
 
             'phone' => [
@@ -177,7 +176,6 @@ class StoreHomestayRequest extends FormRequest
             'city.required' => 'Vui lòng chọn tỉnh/thành phố.',
             'city.string' => 'Tỉnh/thành phố không hợp lệ.',
             'city.max' => 'Tên tỉnh/thành phố không được quá 100 ký tự.',
-            'city.in' => 'Tỉnh/thành phố được chọn không nằm trong danh sách.',
 
             'phone.regex' => 'Số điện thoại phải gồm 10 đến 11 chữ số.',
 

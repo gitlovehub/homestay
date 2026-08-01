@@ -1,28 +1,14 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Chỉnh sửa tiện ích | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('page-title', 'Chỉnh sửa tiện ích')
 
-    <title>Chỉnh sửa tiện ích | HomeStay</title>
+@section('content')
+    <div class="mx-auto max-w-4xl">
 
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-
-    @include('partials.navbar')
-
-    @php
-        $defaultAmenityIcon = '
+        @php
+            $defaultAmenityIcon = '
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -39,47 +25,20 @@
             </svg>
         ';
 
-        $currentIcon = old('icon', $amenity->icon);
+            $currentIcon = old('icon', $amenity->icon);
 
-        $currentStatus = (string) old(
-            'status',
-            $amenity->status ? '1' : '0'
-        );
-    @endphp
+            $currentStatus = (string) old('status', $amenity->status ? '1' : '0');
+        @endphp
 
-    <main class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-
-        {{-- Tiêu đề --}}
-        <div class="mb-8">
-
-            <a
-                href="{{ route('admin.amenities.index') }}"
-                class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-            >
-                <span aria-hidden="true">←</span>
-
-                Quay lại danh sách tiện ích
-            </a>
-
-            <h1 class="mt-4 text-3xl font-bold text-slate-900">
-                Chỉnh sửa tiện ích
-            </h1>
-
-            <p class="mt-2 text-slate-500">
-                Cập nhật thông tin tiện ích
-                <span class="font-semibold text-slate-700">
-                    {{ $amenity->name }}
-                </span>.
-            </p>
-
-        </div>
+        <p class="mb-4 text-sm font-semibold md:text-lg text-slate-500">
+            Cập nhật thông tin tiện ích
+            <span class="font-semibold text-slate-700">
+                {{ $amenity->name }}
+            </span>.
+        </p>
 
         {{-- Form chỉnh sửa tiện ích --}}
-        <form
-            action="{{ route('admin.amenities.update', $amenity) }}"
-            method="POST"
-            class="space-y-6"
-        >
+        <form action="{{ route('admin.amenities.update', $amenity) }}" method="POST" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -92,10 +51,7 @@
                     {{-- Tên tiện ích --}}
                     <div>
 
-                        <label
-                            for="name"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
                             Tên tiện ích
 
                             <span class="text-red-500">
@@ -103,21 +59,12 @@
                             </span>
                         </label>
 
-                        <input
-                            id="name"
-                            type="text"
-                            name="name"
-                            value="{{ old('name', $amenity->name) }}"
-                            maxlength="255"
-                            placeholder="Ví dụ: Ghế tình yêu"
-                            autocomplete="off"
-                            autofocus
+                        <input id="name" type="text" name="name" value="{{ old('name', $amenity->name) }}"
+                            maxlength="255" placeholder="Ví dụ: Ghế tình yêu" autocomplete="off" autofocus
                             class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
-                                {{ $errors->has('name')
-                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                }}"
-                        >
+                            {{ $errors->has('name')
+                                ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                         @error('name')
                             <p class="mt-2 text-sm font-medium text-red-500">
@@ -130,36 +77,23 @@
                     {{-- Icon --}}
                     <div>
 
-                        <label
-                            for="icon"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
-                        >
+                        <label for="icon" class="mb-2 block text-sm font-semibold text-slate-700">
                             Icon
                         </label>
 
                         <div class="grid gap-4 sm:grid-cols-[1fr_auto]">
 
-                            <input
-                                id="icon"
-                                type="text"
-                                name="icon"
-                                value="{{ old('icon', $amenity->icon) }}"
-                                maxlength="255"
-                                placeholder="Ví dụ: 🪑"
-                                autocomplete="off"
+                            <input id="icon" type="text" name="icon" value="{{ old('icon', $amenity->icon) }}"
+                                maxlength="255" placeholder="Ví dụ: 🪑" autocomplete="off"
                                 class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
-                                    {{ $errors->has('icon')
-                                        ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                        : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                    }}"
-                            >
+                                {{ $errors->has('icon')
+                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
 
                             {{-- Xem trước icon --}}
-                            <div
-                                id="icon-preview"
+                            <div id="icon-preview"
                                 class="flex min-h-12 min-w-20 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 text-2xl text-blue-600"
-                                aria-label="Xem trước icon"
-                            >
+                                aria-label="Xem trước icon">
                                 @if (!empty($currentIcon))
                                     <span>{{ $currentIcon }}</span>
                                 @else
@@ -187,34 +121,22 @@
 
                         <div class="mb-2 flex items-center justify-between gap-4">
 
-                            <label
-                                for="description"
-                                class="block text-sm font-semibold text-slate-700"
-                            >
+                            <label for="description" class="block text-sm font-semibold text-slate-700">
                                 Mô tả
                             </label>
 
-                            <span
-                                id="description-counter"
-                                class="text-xs font-medium text-slate-400"
-                            >
+                            <span id="description-counter" class="text-xs font-medium text-slate-400">
                                 0 / 1000 ký tự
                             </span>
 
                         </div>
 
-                        <textarea
-                            id="description"
-                            name="description"
-                            rows="5"
-                            maxlength="1000"
+                        <textarea id="description" name="description" rows="5" maxlength="1000"
                             placeholder="Nhập mô tả ngắn về tiện ích..."
                             class="w-full resize-y rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
-                                {{ $errors->has('description')
-                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                                }}"
-                        >{{ old('description', $amenity->description) }}</textarea>
+                            {{ $errors->has('description')
+                                ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description', $amenity->description) }}</textarea>
 
                         @error('description')
                             <p class="mt-2 text-sm font-medium text-red-500">
@@ -235,65 +157,45 @@
                         <div class="grid gap-4 sm:grid-cols-2">
 
                             {{-- Hoạt động --}}
-                            <label
-                                for="status-active"
-                                class="relative block cursor-pointer"
-                            >
-                                <input
-                                    id="status-active"
-                                    type="radio"
-                                    name="status"
-                                    value="1"
-                                    class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-blue-600 focus:ring-blue-500"
-                                    {{ $currentStatus === '1' ? 'checked' : '' }}
-                                >
+                            <label for="status-active" class="relative block cursor-pointer">
+                                <input id="status-active" type="radio" name="status" value="1"
+                                    class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                    {{ $currentStatus === '1' ? 'checked' : '' }}>
 
                                 <div
                                     class="min-h-[92px] rounded-2xl border border-slate-300 bg-white py-5 pl-14 pr-5 transition
-                                        hover:border-emerald-400
-                                        peer-checked:border-emerald-500
-                                        peer-checked:bg-emerald-50"
-                                >
+                    hover:border-emerald-400 hover:bg-emerald-50/50
+                    peer-checked:border-emerald-500
+                    peer-checked:bg-emerald-50
+                    peer-checked:ring-2 peer-checked:ring-emerald-200">
                                     <p class="font-semibold text-slate-900">
                                         Hoạt động
                                     </p>
-
                                     <p class="mt-1 text-sm leading-6 text-slate-500">
                                         Tiện ích được phép hiển thị và sử dụng.
                                     </p>
                                 </div>
-
                             </label>
 
                             {{-- Tạm khóa --}}
-                            <label
-                                for="status-inactive"
-                                class="relative block cursor-pointer"
-                            >
-                                <input
-                                    id="status-inactive"
-                                    type="radio"
-                                    name="status"
-                                    value="0"
-                                    class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-blue-600 focus:ring-blue-500"
-                                    {{ $currentStatus === '0' ? 'checked' : '' }}
-                                >
+                            <label for="status-inactive" class="relative block cursor-pointer">
+                                <input id="status-inactive" type="radio" name="status" value="0"
+                                    class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-red-600 focus:ring-red-500"
+                                    {{ $currentStatus === '0' ? 'checked' : '' }}>
 
                                 <div
                                     class="min-h-[92px] rounded-2xl border border-slate-300 bg-white py-5 pl-14 pr-5 transition
-                                        hover:border-red-400
-                                        peer-checked:border-red-400
-                                        peer-checked:bg-red-50"
-                                >
+                    hover:border-red-400 hover:bg-red-50/50
+                    peer-checked:border-red-500
+                    peer-checked:bg-red-50
+                    peer-checked:ring-2 peer-checked:ring-red-200">
                                     <p class="font-semibold text-slate-900">
                                         Tạm khóa
                                     </p>
-
                                     <p class="mt-1 text-sm leading-6 text-slate-500">
                                         Tiện ích chưa được phép hiển thị hoặc sử dụng.
                                     </p>
                                 </div>
-
                             </label>
 
                         </div>
@@ -311,33 +213,16 @@
             </section>
 
             {{-- Nút hành động --}}
-            <div class="flex flex-col-reverse gap-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-end">
+            <div
+                class="flex flex-col-reverse gap-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-end">
 
-                <a
-                    href="{{ route('admin.amenities.index') }}"
-                    class="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200"
-                >
+                <a href="{{ route('admin.amenities.index') }}"
+                    class="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200">
                     Hủy
                 </a>
 
-                <button
-                    type="submit"
-                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 active:scale-[0.99]"
-                >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M5 13l4 4L19 7"
-                        />
-                    </svg>
-
+                <button type="submit"
+                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 active:scale-[0.99]">
                     Lưu thay đổi
                 </button>
 
@@ -345,10 +230,10 @@
 
         </form>
 
-    </main>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const iconInput = document.getElementById('icon');
             const iconPreview = document.getElementById('icon-preview');
 
@@ -414,7 +299,4 @@
             updateDescriptionCounter();
         });
     </script>
-
-</body>
-
-</html>
+@endsection

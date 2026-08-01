@@ -47,9 +47,8 @@
                         <div>
                             @if ($category->status)
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
                                     <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-
                                     Hoạt động
                                 </span>
                             @else
@@ -90,7 +89,7 @@
 
                         <div class="mt-2">
                             <span
-                                class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+                                class="inline-flex rounded-full text-lg font-semibold text-blue-700">
                                 {{ $category->slug }}
                             </span>
                         </div>

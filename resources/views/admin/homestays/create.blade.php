@@ -335,8 +335,8 @@
 
                             <div class="relative">
 
-                                <input id="base_price" name="base_price" type="number" min="0" step="1000"
-                                    value="{{ old('base_price') }}" placeholder="Ví dụ: 1500000"
+                                <input id="base_price" name="base_price" type="number" min="0" step="100000"
+                                    value="{{ old('base_price') }}" placeholder="Ví dụ: 2000000"
                                     class="w-full rounded-xl border px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                     {{ $errors->has('base_price')
                                         ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'

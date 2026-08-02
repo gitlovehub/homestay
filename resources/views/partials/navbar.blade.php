@@ -493,7 +493,11 @@
 
                 @if (auth()->user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}"
-                        class="mb-2 block rounded-lg px-3 py-2.5 text-base font-medium text-blue-600 hover:bg-blue-50">
+                        class="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+                        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/>
+                          <path d="M3 20h18"/>
+                        </svg>
                         Quản trị
                     </a>
                 @endif

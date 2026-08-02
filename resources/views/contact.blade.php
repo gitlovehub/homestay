@@ -32,7 +32,7 @@
 {{-- Thông tin liên hệ --}}
 <div class="lg:col-span-2">
 
-{{-- Bản đồ vị trí HomeStayGo tại Hà Nội --}}
+{{-- Bản đồ vị trí HomeStayGo tại FPT Polytechnic Hà Nội --}}
 <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg">
     <div class="p-5">
         <p class="text-sm font-semibold text-blue-600">
@@ -40,35 +40,58 @@
         </p>
 
         <h3 class="mt-1 text-xl font-bold text-slate-900">
-            HomeStayGo Hà Nội
+            Tòa nhà FPT Polytechnic Hà Nội
         </h3>
 
-        <p class="mt-2 text-sm text-slate-500">
-            Trung tâm Hà Nội, Việt Nam
+        <p class="mt-2 text-sm leading-6 text-slate-500">
+            Phố Trịnh Văn Bô, phường Xuân Phương,
+            quận Nam Từ Liêm, TP. Hà Nội
         </p>
     </div>
 
     <div class="h-[350px] w-full">
         <iframe
-            src="https://www.google.com/maps?q=21.028511,105.804817&z=16&output=embed"
+            src="https://www.google.com/maps?q=T%C3%B2a%20nh%C3%A0%20FPT%20Polytechnic%2C%20ph%E1%BB%91%20Tr%E1%BB%8Bnh%20V%C4%83n%20B%C3%B4%2C%20Xu%C3%A2n%20Ph%C6%B0%C6%A1ng%2C%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i&z=17&output=embed"
             class="h-full w-full"
             style="border: 0;"
             loading="lazy"
             allowfullscreen
             referrerpolicy="no-referrer-when-downgrade"
-            title="Vị trí HomeStayGo tại Hà Nội">
+            title="Vị trí Tòa nhà FPT Polytechnic Hà Nội"
+        >
         </iframe>
     </div>
 
     <div class="p-5">
         <a
-            href="https://www.google.com/maps/search/?api=1&query=21.028511,105.804817"
+            href="https://www.google.com/maps/search/?api=1&query=T%C3%B2a%20nh%C3%A0%20FPT%20Polytechnic%2C%20ph%E1%BB%91%20Tr%E1%BB%8Bnh%20V%C4%83n%20B%C3%B4%2C%20Xu%C3%A2n%20Ph%C6%B0%C6%A1ng%2C%20Nam%20T%E1%BB%AB%20Li%C3%AAm%2C%20H%C3%A0%20N%E1%BB%99i"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex w-full items-center justify-center gap-2 rounded-2xl
                    bg-blue-600 px-5 py-3.5 text-sm font-bold text-white
                    transition hover:bg-blue-700"
         >
+            <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    d="M12 21s7-5.686 7-12a7 7 0 1 0-14 0c0 6.314 7 12 7 12Z"
+                />
+
+                <circle
+                    cx="12"
+                    cy="9"
+                    r="2.5"
+                    stroke-width="1.8"
+                />
+            </svg>
+
             Mở vị trí trên Google Maps
         </a>
     </div>

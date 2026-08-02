@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Frontend\HomestaySearchController;
@@ -161,7 +162,33 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/reviews/{review}', [ReviewController::class, 'show']
     )->name('reviews.show');
+                Route::get(
+                '/contacts',
+                [ContactMessageController::class, 'index']
+            )->name('contacts.index');
 
+    // Xem chi tiết thư liên hệ
+    Route::get(
+        '/contacts/{contact}',
+        [ContactMessageController::class, 'show']
+        )->name('contacts.show');
+
+ // Admin gửi phản hồi ngay trên website
+    Route::post(
+        '/contacts/{contact}/reply',
+        [ContactMessageController::class, 'reply']
+        )->name('contacts.reply');
+
+// Đổi trạng thái đã đọc hoặc chưa đọc
+    Route::patch(
+        '/contacts/{contact}/status',
+        [ContactMessageController::class, 'updateStatus']
+        )->name('contacts.update-status');
+// Xóa thư liên hệ
+    Route::delete(
+         '/contacts/{contact}',
+            [ContactMessageController::class, 'destroy']
+            )->name('contacts.destroy');
 });
 
 require __DIR__ . '/auth.php';

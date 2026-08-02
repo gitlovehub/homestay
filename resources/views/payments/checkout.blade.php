@@ -4,11 +4,9 @@
 
 @section('content')
     @php
-        /*
-        |--------------------------------------------------------------------------
-        | Chuẩn hóa dữ liệu booking
-        |--------------------------------------------------------------------------
-        */
+        $bookingDetailUrl = auth()->user()?->isAdmin()
+        ? route('admin.bookings.show', $booking)
+        : route('bookings.show', $booking);
 
         $checkInValue = $booking->getAttribute('check_in_date')
             ?? $booking->getAttribute('check_in');
@@ -110,7 +108,7 @@
 
             {{-- Nút quay lại --}}
             <a
-                href="{{ route('bookings.show', $booking) }}"
+               href="{{ $bookingDetailUrl }}"
                 class="group inline-flex items-center gap-2 rounded-xl px-1 py-2 text-sm font-semibold text-slate-500 transition hover:text-blue-600"
             >
                 <span
@@ -677,6 +675,8 @@
                             </svg>
                         </span>
 
+                    <div class="space-y-4">
+
                         <div>
                             <h3 class="font-black text-blue-950">
                                 Thanh toán an toàn
@@ -688,6 +688,20 @@
                                 thanh toán bằng dữ liệu trên trình duyệt.
                             </p>
                         </div>
+
+                        <div>
+                            <h3 class="font-black text-blue-950">
+                                Xác minh giao dịch
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-blue-700">
+                                Trạng thái đơn đặt phòng chỉ được cập nhật sau khi
+                                kết quả thanh toán được hệ thống xác minh.
+                            </p>
+                        </div>
+
+                    </div>
+
                     </div>
                 </div>
 
@@ -787,7 +801,7 @@
                                 </div>
 
                                 <a
-                                    href="{{ route('bookings.show', $booking) }}"
+                                    href="{{ $bookingDetailUrl }}"
                                     class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800"
                                 >
                                     <svg
@@ -903,18 +917,39 @@
                                 </form>
                             @endif
 
-                            {{-- Phương thức hỗ trợ --}}
-                            <div class="mt-6">
-                                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
-                                    Phương thức hỗ trợ
-                                </p>
+                                                    {{-- Phương thức hỗ trợ --}}
+                        {{-- Phương thức thanh toán hỗ trợ --}}
+                        <div class="mt-6 border-t border-slate-100 pt-6">
+                            <div class="flex items-center justify-between gap-4">
+                                <div>
+                                    <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
+                                        Phương thức thanh toán
+                                    </p>
 
-                                <div class="mt-3 grid grid-cols-3 gap-2">
-                                    <div
-                                        class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center"
+                                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                                        Chọn phương thức tại cổng thanh toán VNPAY.
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700"
+                                >
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    Đang hoạt động
+                                </span>
+                            </div>
+
+                            <div class="mt-4 grid grid-cols-3 gap-3">
+
+                                {{-- QR Code --}}
+                                <div
+                                    class="group rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-sm transition hover:border-blue-300 hover:bg-blue-50/50"
+                                >
+                                    <span
+                                        class="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100"
                                     >
                                         <svg
-                                            class="mx-auto h-5 w-5 text-blue-600"
+                                            class="h-5 w-5"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -923,42 +958,69 @@
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 stroke-width="2"
-                                                d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h2v2h-2v-2Zm4 0h2v6h-6v-2"
+                                                d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h2v2h-2v-2Zm4 0h2v6h-6v-2h4v-4Z"
                                             />
                                         </svg>
+                                    </span>
 
-                                        <p class="mt-2 text-[11px] font-bold text-slate-600">
-                                            QR Code
-                                        </p>
-                                    </div>
+                                    <p class="mt-2 text-xs font-bold text-slate-700">
+                                        VNPAY QR
+                                    </p>
 
-                                    <div
-                                        class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center"
+                                    <p class="mt-1 text-[10px] leading-4 text-slate-400">
+                                        Quét bằng ứng dụng ngân hàng
+                                    </p>
+                                </div>
+
+                                {{-- Thẻ ATM --}}
+                                <div
+                                    class="group rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-sm transition hover:border-blue-300 hover:bg-blue-50/50"
+                                >
+                                    <span
+                                        class="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100"
                                     >
                                         <svg
-                                            class="mx-auto h-5 w-5 text-blue-600"
+                                            class="h-5 w-5"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
                                         >
+                                            <rect
+                                                x="3"
+                                                y="5"
+                                                width="18"
+                                                height="14"
+                                                rx="2"
+                                                stroke-width="2"
+                                            />
+
                                             <path
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 stroke-width="2"
-                                                d="M3 7h18v11H3V7Zm0 4h18M7 15h3"
+                                                d="M3 10h18M7 15h4"
                                             />
                                         </svg>
+                                    </span>
 
-                                        <p class="mt-2 text-[11px] font-bold text-slate-600">
-                                            Thẻ ATM
-                                        </p>
-                                    </div>
+                                    <p class="mt-2 text-xs font-bold text-slate-700">
+                                        Thẻ nội địa
+                                    </p>
 
-                                    <div
-                                        class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center"
+                                    <p class="mt-1 text-[10px] leading-4 text-slate-400">
+                                        Thẻ ATM có Internet Banking
+                                    </p>
+                                </div>
+
+                                {{-- Ngân hàng --}}
+                                <div
+                                    class="group rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-sm transition hover:border-blue-300 hover:bg-blue-50/50"
+                                >
+                                    <span
+                                        class="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100"
                                     >
                                         <svg
-                                            class="mx-auto h-5 w-5 text-blue-600"
+                                            class="h-5 w-5"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -970,12 +1032,156 @@
                                                 d="M3 10h18M5 10V7l7-4 7 4v3M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18"
                                             />
                                         </svg>
+                                    </span>
 
-                                        <p class="mt-2 text-[11px] font-bold text-slate-600">
-                                            Ngân hàng
-                                        </p>
-                                    </div>
+                                    <p class="mt-2 text-xs font-bold text-slate-700">
+                                        Tài khoản
+                                    </p>
+
+                                    <p class="mt-1 text-[10px] leading-4 text-slate-400">
+                                        Thanh toán qua ngân hàng
+                                    </p>
                                 </div>
+                            </div>
+                        </div>
+
+                        {{-- Thông tin giao dịch --}}
+                        <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                            <div class="flex items-center justify-between gap-4 text-xs">
+                                <span class="text-slate-500">
+                                    Mã đơn hàng
+                                </span>
+
+                                <span class="font-bold text-slate-700">
+                                    {{ $bookingCode }}
+                                </span>
+                            </div>
+
+                            <div class="mt-3 flex items-center justify-between gap-4 text-xs">
+                                <span class="text-slate-500">
+                                    Thời hạn giao dịch
+                                </span>
+
+                                <span class="font-bold text-amber-600">
+                                    {{ config('services.vnpay.expire_minutes', 15) }} phút
+                                </span>
+                            </div>
+
+                            <div class="mt-3 flex items-center justify-between gap-4 text-xs">
+                                <span class="text-slate-500">
+                                    Đơn vị tiền tệ
+                                </span>
+
+                                <span class="font-bold text-slate-700">
+                                    VND
+                                </span>
+                            </div>
+                        </div>
+
+                    {{-- Cam kết bảo mật --}}
+                    <div class="mt-5 space-y-3 border-t border-slate-100 pt-5">
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+                            >
+                                <svg
+                                    class="h-3.5 w-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="3"
+                                        d="m5 13 4 4L19 7"
+                                    />
+                                </svg>
+                            </span>
+
+                            <p class="text-xs leading-5 text-slate-500">
+                                Số tiền được xác định từ đơn đặt phòng và không thể chỉnh sửa trên trình duyệt.
+                            </p>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+                            >
+                                <svg
+                                    class="h-3.5 w-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="3"
+                                        d="m5 13 4 4L19 7"
+                                    />
+                                </svg>
+                            </span>
+
+                            <p class="text-xs leading-5 text-slate-500">
+                                Không đóng hoặc tải lại trình duyệt trong quá trình thanh toán.
+                            </p>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600"
+                            >
+                                <svg
+                                    class="h-3.5 w-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="3"
+                                        d="m5 13 4 4L19 7"
+                                    />
+                                </svg>
+                            </span>
+
+                            <p class="text-xs leading-5 text-slate-500">
+                                Trạng thái đơn chỉ được cập nhật sau khi kết quả giao dịch được xác minh.
+                            </p>
+                        </div>
+                    </div>
+
+                            {{-- Dòng bảo mật cuối --}}
+                            <div
+                                class="mt-5 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-3 py-3 text-xs font-semibold text-slate-500"
+                            >
+                                <svg
+                                    class="h-4 w-4 text-blue-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="11"
+                                        rx="2"
+                                        stroke-width="2"
+                                    />
+
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 10V7a4 4 0 0 1 8 0v3"
+                                    />
+                                </svg>
+
+                                Thanh toán được xử lý trên cổng VNPAY
                             </div>
 
                             {{-- Các lưu ý --}}

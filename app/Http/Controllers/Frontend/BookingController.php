@@ -138,22 +138,31 @@ class BookingController extends Controller
         return view('bookings.history', compact('bookings'));
     }
 
-    public function show(Booking $booking)
-    {
-        abort_unless(
-            $booking->user_id === auth()->id(),
-            403
-        );
+public function show(Booking $booking)
+{
+    $user = auth()->user();
 
-        $booking->load([
-            'room.homestay',
-            'promotion',
-            'latestPayment',
-        ]);
+    abort_unless(
+        $user
+        && (
+            (int) $booking->user_id === (int) $user->id
+            || $user->isAdmin()
+        ),
+        403,
+        'Bạn không có quyền xem đơn đặt phòng này.'
+    );
 
-        return view('bookings.show', compact('booking'));
-    }
+    $booking->load([
+        'user',
+        'room.homestay',
+        'promotion',
+        'latestPayment',
+        'paidPayment',
+        'reviews',
+    ]);
 
+    return view('bookings.show', compact('booking'));
+}
     private function generateBookingCode(): string
     {
         do {

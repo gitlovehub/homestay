@@ -1,4 +1,4 @@
-<footer id="contact" class="relative overflow-hidden bg-slate-950 text-slate-300">
+<footer class="relative overflow-hidden bg-slate-950 text-slate-300">
     {{-- Decorative background --}}
     <div class="pointer-events-none absolute inset-0">
         <div class="absolute -left-32 -top-32 h-72 w-72 rounded-full bg-blue-600/10 blur-3xl"></div>
@@ -116,46 +116,70 @@
                     </li>
                 </ul>
             </div>
-
             {{-- Liên hệ --}}
             <div>
-                <h3 class="text-sm font-semibold uppercase tracking-wider text-white">
+                <a href="{{ route('contact') }}"
+                    class="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-white transition hover:text-blue-400">
                     Liên hệ
-                </h3>
+
+                <svg class="h-4 w-4 transition group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                </svg>
+                </a>
+
                 <ul class="mt-5 space-y-4">
                     <li class="flex items-start gap-3">
                         <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-blue-400">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                             </svg>
                         </span>
+
                         <div>
                             <p class="text-xs text-slate-500">Email</p>
-                            <a href="mailto:support@homestaygo.vn" class="text-sm text-slate-300 transition hover:text-white">
+                            <a href="mailto:support@homestaygo.vn"
+                                class="text-sm text-slate-300 transition hover:text-white">
                                 support@homestaygo.vn
                             </a>
                         </div>
                     </li>
+
                     <li class="flex items-start gap-3">
                         <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-blue-400">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                             </svg>
                         </span>
+
                         <div>
                             <p class="text-xs text-slate-500">Hotline</p>
-                            <a href="tel:0123456789" class="text-sm text-slate-300 transition hover:text-white">
+                            <a href="tel:0123456789"
+                                class="text-sm text-slate-300 transition hover:text-white">
                                 0123 456 789
                             </a>
                         </div>
                     </li>
+
                     <li class="flex items-start gap-3">
                         <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-blue-400">
                             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                             </svg>
                         </span>
+
                         <div>
                             <p class="text-xs text-slate-500">Địa chỉ</p>
                             <p class="text-sm text-slate-300">Việt Nam</p>

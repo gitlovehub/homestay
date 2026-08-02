@@ -148,9 +148,15 @@
                         : 'text-slate-600 hover:text-blue-600' }}">
                 Giới thiệu
             </a>
-            <a href="#contact" class="font-medium text-slate-600 transition hover:text-blue-600">
-                Liên hệ
-            </a>
+        <a
+            href="{{ route('contact') }}"
+            class="inline-block text-base font-medium transition
+                {{ request()->routeIs('contact.*')
+                    ? 'text-blue-600'
+                    : 'text-slate-600 hover:text-blue-600' }}"
+        >
+            Liên hệ
+        </a>
         </div>
 
         {{-- Right side (Desktop) --}}
@@ -440,8 +446,11 @@
                 class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
                 Giới thiệu
             </a>
-            <a href="#contact"
-                class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+
+            <a href="{{ route('contact') }}"
+                class="{{ request()->routeIs('contact')
+                    ? 'font-semibold text-blue-600'
+                    : 'font-medium text-slate-600 transition hover:text-blue-600' }}">
                 Liên hệ
             </a>
         </div>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ContactReplyMail;
 use App\Models\ContactMessage;
+use App\Mail\ContactReplyMail;
+use App\Http\Requests\ReplyContactMessageRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -122,40 +123,17 @@ class ContactMessageController extends Controller
      * Gửi phản hồi đến email người dùng.
      */
     public function reply(
-        Request $request,
+        ReplyContactMessageRequest $request,
         ContactMessage $contactMessage
     ): RedirectResponse {
-        $validated = $request->validate(
-            [
-                'reply_subject' => [
-                    'required',
-                    'string',
-                    'max:255',
-                ],
-
-                'reply_message' => [
-                    'required',
-                    'string',
-                    'min:10',
-                    'max:5000',
-                ],
-            ],
-            [
-                'reply_subject.required' => 'Vui lòng nhập tiêu đề phản hồi.',
-                'reply_subject.max' => 'Tiêu đề phản hồi không được vượt quá 255 ký tự.',
-
-                'reply_message.required' => 'Vui lòng nhập nội dung phản hồi.',
-                'reply_message.min' => 'Nội dung phản hồi phải có ít nhất 10 ký tự.',
-                'reply_message.max' => 'Nội dung phản hồi không được vượt quá 5000 ký tự.',
-            ]
-        );
+        $validated = $request->validated();
 
         $admin = $request->user();
         $sentAt = now();
 
         try {
             /*
-             * Chỉ lưu phản hồi sau khi Laravel gửi email thành công.
+             * Chỉ lưu phản hồi sau khi gửi email thành công.
              */
             Mail::to($contactMessage->email)->send(
                 new ContactReplyMail(
@@ -181,20 +159,11 @@ class ContactMessageController extends Controller
                  */
                 $contactMessage->update([
                     'status' => 'replied',
-
-                    /*
-                     * Trường hợp admin phản hồi trực tiếp mà thư chưa có read_at.
-                     */
                     'read_at' => $contactMessage->read_at ?? $sentAt,
-
                     'replied_at' => $sentAt,
                 ]);
             });
         } catch (Throwable $exception) {
-            /*
-             * Ghi lỗi vào log để kiểm tra nhưng không hiển thị
-             * thông tin kỹ thuật cho người dùng.
-             */
             report($exception);
 
             return back()
@@ -212,7 +181,10 @@ class ContactMessageController extends Controller
             )
             ->with(
                 'success',
-                'Đã gửi phản hồi đến ' . $contactMessage->email . ' thành công.'
+                'Đã gửi phản hồi đến ' .
+                $contactMessage->email .
+                ' thành công.'
             );
     }
+
 }

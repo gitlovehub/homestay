@@ -418,7 +418,7 @@
             <aside class="space-y-6 xl:col-span-4">
                 <div class="space-y-6 xl:sticky xl:top-24">
 
-                    {{-- Form phản hồi chuẩn bị cho bước 5 --}}
+                    {{-- Form phản hồi --}}
                     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                         <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
                             <h3 class="font-bold text-slate-900">
@@ -431,9 +431,14 @@
                         </div>
 
                         <form
-                            onsubmit="return false;"
+                            id="contact-reply-form"
+                            method="POST"
+                            action="{{ route('admin.contact-messages.reply', $contactMessage) }}"
                             class="space-y-4 p-5"
                         >
+                            @csrf
+
+                            {{-- Người nhận --}}
                             <div>
                                 <label
                                     for="reply_email"
@@ -446,49 +451,111 @@
                                     id="reply_email"
                                     type="email"
                                     value="{{ $contactMessage->email }}"
-                                    disabled
+                                    readonly
                                     class="w-full cursor-not-allowed rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600"
                                 >
                             </div>
 
+                            {{-- Tiêu đề --}}
                             <div>
                                 <label
                                     for="reply_subject"
                                     class="mb-2 block text-sm font-semibold text-slate-700"
                                 >
                                     Tiêu đề phản hồi
+                                    <span class="text-red-500">*</span>
                                 </label>
 
                                 <input
                                     id="reply_subject"
                                     type="text"
-                                    value="Phản hồi: {{ $contactMessage->subject }}"
-                                    disabled
-                                    class="w-full cursor-not-allowed rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600"
+                                    name="reply_subject"
+                                    maxlength="255"
+                                    value="{{ old(
+                                        'reply_subject',
+                                        'Phản hồi: ' . $contactMessage->subject
+                                    ) }}"
+                                    placeholder="Nhập tiêu đề phản hồi"
+                                    class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                        {{ $errors->has('reply_subject')
+                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                 >
+
+                                @error('reply_subject')
+                                    <p class="mt-1.5 text-sm font-medium text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
 
+                            {{-- Nội dung --}}
                             <div>
-                                <label
-                                    for="reply_message"
-                                    class="mb-2 block text-sm font-semibold text-slate-700"
-                                >
-                                    Nội dung phản hồi
-                                </label>
+                                <div class="mb-2 flex items-center justify-between gap-3">
+                                    <label
+                                        for="reply_message"
+                                        class="block text-sm font-semibold text-slate-700"
+                                    >
+                                        Nội dung phản hồi
+                                        <span class="text-red-500">*</span>
+                                    </label>
+
+                                    <span
+                                        id="reply-message-count"
+                                        class="text-xs font-medium text-slate-400"
+                                    >
+                                        {{ mb_strlen(old('reply_message', '')) }}/5000
+                                    </span>
+                                </div>
 
                                 <textarea
                                     id="reply_message"
-                                    rows="7"
-                                    disabled
-                                    placeholder="Nhập nội dung phản hồi..."
-                                    class="w-full cursor-not-allowed resize-none rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600 placeholder:text-slate-400"
-                                ></textarea>
+                                    name="reply_message"
+                                    rows="8"
+                                    maxlength="5000"
+                                    placeholder="Nhập nội dung phản hồi cho người dùng..."
+                                    class="w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400
+                                        {{ $errors->has('reply_message')
+                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
+                                >{{ old('reply_message') }}</textarea>
+
+                                @error('reply_message')
+                                    <p class="mt-1.5 text-sm font-medium text-red-600">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
                             </div>
 
+                            {{-- Cảnh báo --}}
+                            <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+                                <div class="flex items-start gap-3">
+                                    <svg
+                                        class="mt-0.5 h-5 w-5 shrink-0 text-blue-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="1.8"
+                                            d="M11.25 11.25 11.291 11.229a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.022M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                                        />
+                                    </svg>
+
+                                    <p class="text-sm leading-6 text-blue-700">
+                                        Sau khi gửi thành công, phản hồi sẽ được lưu vào lịch sử
+                                        và trạng thái yêu cầu chuyển sang “Đã phản hồi”.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- Nút gửi --}}
                             <button
-                                type="button"
-                                disabled
-                                class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-300 px-5 py-3 text-sm font-semibold text-white"
+                                id="contact-reply-button"
+                                type="submit"
+                                class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70"
                             >
                                 <svg
                                     class="h-5 w-5"
@@ -504,14 +571,10 @@
                                     />
                                 </svg>
 
-                                Gửi phản hồi
+                                <span id="contact-reply-button-text">
+                                    Gửi phản hồi
+                                </span>
                             </button>
-
-                            <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
-                                <p class="text-sm leading-6 text-blue-700">
-                                    Form gửi email sẽ được kích hoạt ở bước 5 sau khi tạo Mailable và chức năng gửi phản hồi.
-                                </p>
-                            </div>
                         </form>
                     </section>
 
@@ -580,3 +643,54 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const replyForm = document.getElementById(
+                'contact-reply-form'
+            );
+
+            const replyMessage = document.getElementById(
+                'reply_message'
+            );
+
+            const replyMessageCount = document.getElementById(
+                'reply-message-count'
+            );
+
+            const replyButton = document.getElementById(
+                'contact-reply-button'
+            );
+
+            const replyButtonText = document.getElementById(
+                'contact-reply-button-text'
+            );
+
+            function updateReplyMessageCount() {
+                if (!replyMessage || !replyMessageCount) {
+                    return;
+                }
+
+                replyMessageCount.textContent =
+                    replyMessage.value.length + '/5000';
+            }
+
+            updateReplyMessageCount();
+
+            if (replyMessage) {
+                replyMessage.addEventListener(
+                    'input',
+                    updateReplyMessageCount
+                );
+            }
+
+            if (replyForm && replyButton && replyButtonText) {
+                replyForm.addEventListener('submit', function () {
+                    replyButton.disabled = true;
+                    replyButtonText.textContent = 'Đang gửi...';
+                });
+            }
+        });
+    </script>
+@endpush

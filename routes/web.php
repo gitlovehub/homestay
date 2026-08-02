@@ -172,6 +172,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         [ContactMessageController::class, 'show']
     )->name('contact-messages.show');
 
+    Route::post(
+        '/contact-messages/{contactMessage}/reply',
+        [ContactMessageController::class, 'reply']
+    )->name('contact-messages.reply');
+
 });
 
 require __DIR__ . '/auth.php';

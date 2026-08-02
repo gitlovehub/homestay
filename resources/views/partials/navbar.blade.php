@@ -327,6 +327,7 @@
     {{-- Nội dung menu --}}
     <div class="flex h-[calc(100%-65px)] flex-col overflow-y-auto">
         <div class="space-y-1 px-3 py-4">
+        
             <a href="{{ route('home') }}"
                 class="block rounded-lg px-3 py-2.5 text-base font-medium text-blue-600 hover:bg-blue-50">
                 Trang chủ
@@ -442,17 +443,16 @@
                 </div>
             </div>
 
-            <a href="#about"
+            <a href="{{ route('about') }}"
                 class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
                 Giới thiệu
             </a>
 
             <a href="{{ route('contact') }}"
-                class="{{ request()->routeIs('contact')
-                    ? 'font-semibold text-blue-600'
-                    : 'font-medium text-slate-600 transition hover:text-blue-600' }}">
+                class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
                 Liên hệ
             </a>
+
         </div>
 
         <div class="mt-auto border-t border-slate-100 px-3 py-4">

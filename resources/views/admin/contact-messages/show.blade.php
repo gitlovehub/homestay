@@ -293,25 +293,34 @@
 
                         <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
                             <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                Tài khoản
+                                Trạng thái
                             </p>
 
                             @if ($contactMessage->user)
-                                <p class="mt-2 font-semibold text-slate-900">
-                                    #{{ $contactMessage->user->id }}
-                                    · {{ $contactMessage->user->name }}
-                                </p>
-
-                                <p class="mt-1 text-xs text-slate-500">
-                                    Trạng thái:
-                                    {{ $contactMessage->user->status === 'active'
-                                        ? 'Đang hoạt động'
-                                        : 'Không hoạt động' }}
-                                </p>
+                                <div class="mt-2">
+                                    @if ($contactMessage->user->status === 'active')
+                                        <span
+                                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"
+                                        >
+                                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                            Đang hoạt động
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700"
+                                        >
+                                            <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                            Không hoạt động
+                                        </span>
+                                    @endif
+                                </div>
                             @else
-                                <p class="mt-2 font-semibold text-slate-500">
+                                <span
+                                    class="mt-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600"
+                                >
+                                    <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
                                     Tài khoản không còn tồn tại
-                                </p>
+                                </span>
                             @endif
                         </div>
 

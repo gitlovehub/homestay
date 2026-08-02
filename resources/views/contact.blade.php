@@ -28,7 +28,7 @@
             <div class="grid gap-8 lg:grid-cols-5 lg:gap-10">
 
                 {{-- Cột trái: Thông tin + Bản đồ --}}
-                <div class="flex flex-col gap-6 lg:col-span-2">
+                <div class="order-2 lg:order-1 flex flex-col gap-6 lg:col-span-2">
 
                     {{-- Bản đồ --}}
                     <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg">
@@ -171,7 +171,7 @@
                 </div>
 
                 {{-- Cột phải: Form liên hệ --}}
-                <div class="lg:col-span-3">
+                <div class="order-1 lg:order-2 lg:col-span-3">
                     <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/5 sm:p-6 lg:p-8">
                         <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">
                             Yêu cầu hỗ trợ

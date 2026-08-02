@@ -686,7 +686,7 @@
                                     </div>
 
                                     {{-- Nút --}}
-                                    <div class="mt-7 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
+                                    <div class="mt-7 flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
 
                                         <button
                                             type="reset"

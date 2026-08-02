@@ -100,32 +100,44 @@ class Booking extends Model
 /**
  * Các lần thanh toán VNPAY của booking.
  */
+/**
+ * Tất cả các lần thử thanh toán VNPAY.
+ */
+/*
+|--------------------------------------------------------------------------
+| Payments
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Tất cả các lần thử thanh toán của booking.
+ */
 public function payments(): HasMany
 {
-    return $this->hasMany(Payment::class);
+    return $this->hasMany(Payment::class, 'booking_id');
 }
 
 /**
- * Lần thanh toán mới nhất.
+ * Lần thanh toán mới nhất của booking.
  */
 public function latestPayment(): HasOne
 {
-    return $this->hasOne(Payment::class)
+    return $this->hasOne(Payment::class, 'booking_id')
         ->latestOfMany();
 }
 
 /**
- * Giao dịch thanh toán thành công của booking.
+ * Giao dịch thanh toán thành công mới nhất.
  */
 public function paidPayment(): HasOne
 {
-    return $this->hasOne(Payment::class)
+    return $this->hasOne(Payment::class, 'booking_id')
         ->where('status', Payment::STATUS_PAID)
         ->latestOfMany();
 }
 
 /**
- * Kiểm tra booking đã được thanh toán hay chưa.
+ * Kiểm tra booking đã thanh toán thành công hay chưa.
  */
 public function isPaid(): bool
 {
@@ -133,7 +145,6 @@ public function isPaid(): bool
         ->where('status', Payment::STATUS_PAID)
         ->exists();
 }
-
     /*
     |--------------------------------------------------------------------------
     | Review

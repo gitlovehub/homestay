@@ -37,35 +37,26 @@ class VnpayService
                 '2.1.0'
             ),
 
-            'vnp_Command' => config(
-                'services.vnpay.command',
-                'pay'
-            ),
+            'vnp_Command' => 'pay',
 
             'vnp_TmnCode' => config(
                 'services.vnpay.tmn_code'
             ),
 
             /*
-             * VNPAY yêu cầu số tiền phải nhân 100.
+             * VNPAY yêu cầu số tiền nhân 100.
              */
-            'vnp_Amount' => $payment->amount * 100,
+            'vnp_Amount' =>
+                (int) $payment->amount * 100,
 
-            'vnp_CurrCode' => config(
-                'services.vnpay.currency',
-                'VND'
-            ),
+            'vnp_CurrCode' => 'VND',
 
-            'vnp_TxnRef' => $payment->transaction_ref,
+            'vnp_TxnRef' =>
+                $payment->transaction_ref,
 
-            /*
-             * Nội dung gửi sang VNPAY nên viết không dấu
-             * và không có ký tự đặc biệt.
-             */
-            'vnp_OrderInfo' => sprintf(
-                'Thanh toan booking %d',
-                $payment->booking_id
-            ),
+            'vnp_OrderInfo' =>
+                'Thanh toan booking '
+                . $payment->booking_id,
 
             'vnp_OrderType' => config(
                 'services.vnpay.order_type',
@@ -81,36 +72,28 @@ class VnpayService
                 'services.vnpay.return_url'
             ),
 
-            'vnp_IpAddr' => $request->ip()
+            'vnp_IpAddr' =>
+                $request->ip()
                 ?: '127.0.0.1',
 
-            'vnp_CreateDate' => $now->format(
-                'YmdHis'
-            ),
+            'vnp_CreateDate' =>
+                $now->format('YmdHis'),
 
-            'vnp_ExpireDate' => $expireAt->format(
-                'YmdHis'
-            ),
+            'vnp_ExpireDate' =>
+                $expireAt->format('YmdHis'),
         ];
 
-        /*
-         * Loại bỏ dữ liệu null hoặc chuỗi rỗng.
-         */
         $params = array_filter(
             $params,
             static fn (mixed $value): bool =>
-                $value !== null && $value !== ''
+                $value !== null
+                && $value !== ''
         );
 
-        /*
-         * VNPAY yêu cầu sắp xếp tăng dần
-         * theo tên tham số.
-         */
         ksort($params);
 
-        $hashData = $this->buildQueryString(
-            $params
-        );
+        $hashData =
+            $this->buildQueryString($params);
 
         $secureHash = hash_hmac(
             'sha512',
@@ -133,26 +116,17 @@ class VnpayService
     }
 
     /**
-     * Kiểm tra chữ ký dữ liệu VNPAY trả về.
+     * Kiểm tra chữ ký Return URL hoặc IPN.
      */
     public function verifySignature(
         array $responseData
     ): bool {
         $this->ensureConfigured();
 
-        /*
-         * Chỉ lấy các tham số bắt đầu bằng vnp_.
-         */
-        $responseData = array_filter(
-            $responseData,
-            static fn (
-                string $key
-            ): bool => str_starts_with(
-                $key,
-                'vnp_'
-            ),
-            ARRAY_FILTER_USE_KEY
-        );
+        $responseData =
+            $this->onlyVnpayData(
+                $responseData
+            );
 
         $receivedHash = (string) (
             $responseData['vnp_SecureHash']
@@ -165,20 +139,24 @@ class VnpayService
 
         unset(
             $responseData['vnp_SecureHash'],
-            $responseData['vnp_SecureHashType']
+            $responseData[
+                'vnp_SecureHashType'
+            ]
         );
 
         $responseData = array_filter(
             $responseData,
             static fn (mixed $value): bool =>
-                $value !== null && $value !== ''
+                $value !== null
+                && $value !== ''
         );
 
         ksort($responseData);
 
-        $hashData = $this->buildQueryString(
-            $responseData
-        );
+        $hashData =
+            $this->buildQueryString(
+                $responseData
+            );
 
         $calculatedHash = hash_hmac(
             'sha512',
@@ -195,7 +173,7 @@ class VnpayService
     }
 
     /**
-     * Lấy riêng dữ liệu bắt đầu bằng vnp_.
+     * Chỉ lấy tham số có tiền tố vnp_.
      */
     public function onlyVnpayData(
         array $data
@@ -213,7 +191,7 @@ class VnpayService
     }
 
     /**
-     * Chuyển danh sách tham số thành chuỗi ký.
+     * Tạo chuỗi tham số dùng để ký.
      */
     private function buildQueryString(
         array $params
@@ -221,20 +199,17 @@ class VnpayService
         $parts = [];
 
         foreach ($params as $key => $value) {
-            $parts[] = urlencode(
-                (string) $key
-            )
+            $parts[] =
+                urlencode((string) $key)
                 . '='
-                . urlencode(
-                    (string) $value
-                );
+                . urlencode((string) $value);
         }
 
         return implode('&', $parts);
     }
 
     /**
-     * Kiểm tra thông tin VNPAY đã được cấu hình.
+     * Kiểm tra cấu hình bắt buộc.
      */
     private function ensureConfigured(): void
     {
@@ -245,18 +220,16 @@ class VnpayService
             'services.vnpay.return_url',
         ];
 
-        foreach ($requiredConfigs as $configKey) {
-            $value = config($configKey);
+        foreach ($requiredConfigs as $key) {
+            $value = config($key);
 
             if (
                 ! is_string($value)
                 || trim($value) === ''
             ) {
                 throw new RuntimeException(
-                    sprintf(
-                        'Thiếu cấu hình VNPAY: %s',
-                        $configKey
-                    )
+                    'Thiếu cấu hình VNPAY: '
+                    . $key
                 );
             }
         }

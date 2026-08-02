@@ -148,7 +148,7 @@ class BookingController extends Controller
         $booking->load([
             'room.homestay',
             'promotion',
-            'payment',
+            'latestPayment',
         ]);
 
         return view('bookings.show', compact('booking'));

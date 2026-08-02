@@ -35,13 +35,11 @@ return [
         ],
     ],
     
-    'vnpay' => [
+'vnpay' => [
     'version' => env(
         'VNPAY_VERSION',
         '2.1.0'
     ),
-
-    'command' => 'pay',
 
     'tmn_code' => env(
         'VNPAY_TMN_CODE'
@@ -64,15 +62,22 @@ return [
                 'http://127.0.0.1:8000'
             ),
             '/'
-        ) . '/payments/vnpay/return'
+        )
+            . '/payments/vnpay/return'
+    ),
+
+    /*
+     * IPN URL không đưa vào URL thanh toán.
+     * Dùng giá trị này để cấu hình với VNPAY.
+     */
+    'ipn_url' => env(
+        'VNPAY_IPN_URL'
     ),
 
     'locale' => env(
         'VNPAY_LOCALE',
         'vn'
     ),
-
-    'currency' => 'VND',
 
     'order_type' => 'other',
 

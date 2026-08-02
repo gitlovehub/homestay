@@ -291,35 +291,326 @@
                         </div>
 
                         {{-- Tỉnh/Thành phố --}}
-                        <div>
+                        <div
+                            x-data="{
+                                open: false,
+                                loading: false,
+                                loadError: '',
+                                locations: [],
 
-                            <label for="city" class="mb-2 block text-sm font-semibold text-slate-700">
+                                selected: @js((string) old('city', $homestay->city)),
+
+                                async loadLocations(forceReload = false) {
+                                    this.loading = true;
+                                    this.loadError = '';
+
+                                    const cacheKey = 'homestay_vietnam_provinces_v2';
+                                    const cacheTimeKey = 'homestay_vietnam_provinces_v2_time';
+                                    const cacheDuration = 24 * 60 * 60 * 1000;
+
+                                    try {
+                                        const cachedData = localStorage.getItem(cacheKey);
+
+                                        const cachedTime = Number(
+                                            localStorage.getItem(cacheTimeKey) || 0
+                                        );
+
+                                        const cacheIsValid =
+                                            cachedData &&
+                                            cachedTime &&
+                                            Date.now() - cachedTime < cacheDuration;
+
+                                        if (!forceReload && cacheIsValid) {
+                                            this.locations = JSON.parse(cachedData);
+                                            return;
+                                        }
+
+                                        const response = await fetch(
+                                            'https://provinces.open-api.vn/api/v2/p/',
+                                            {
+                                                method: 'GET',
+                                                headers: {
+                                                    Accept: 'application/json'
+                                                }
+                                            }
+                                        );
+
+                                        if (!response.ok) {
+                                            throw new Error(
+                                                `Không thể tải dữ liệu. Mã lỗi: ${response.status}`
+                                            );
+                                        }
+
+                                        const data = await response.json();
+
+                                        this.locations = data
+                                            .map(location => ({
+                                                code: String(location.code),
+                                                name: location.name
+                                            }))
+                                            .sort((firstLocation, secondLocation) =>
+                                                firstLocation.name.localeCompare(
+                                                    secondLocation.name,
+                                                    'vi'
+                                                )
+                                            );
+
+                                        localStorage.setItem(
+                                            cacheKey,
+                                            JSON.stringify(this.locations)
+                                        );
+
+                                        localStorage.setItem(
+                                            cacheTimeKey,
+                                            String(Date.now())
+                                        );
+                                    } catch (error) {
+                                        console.error(
+                                            'Lỗi tải tỉnh/thành phố:',
+                                            error
+                                        );
+
+                                        this.loadError =
+                                            'Không thể tải danh sách tỉnh/thành phố. Vui lòng thử lại.';
+                                    } finally {
+                                        this.loading = false;
+                                    }
+                                },
+
+                                selectLocation(location) {
+                                    this.selected = location.name;
+                                    this.open = false;
+                                },
+
+                                clearLocation() {
+                                    this.selected = '';
+                                    this.open = false;
+                                }
+                            }"
+                            x-init="loadLocations()"
+                            @click.outside="open = false"
+                            @keydown.escape.window="open = false"
+                            :class="open ? 'z-50' : 'z-20'"
+                            class="relative overflow-visible"
+                        >
+                            <label
+                                for="city_selector"
+                                class="mb-2 block text-sm font-semibold text-slate-700"
+                            >
                                 Tỉnh/Thành phố
                                 <span class="text-red-500">*</span>
                             </label>
 
-                            <select id="city" name="city"
-                                class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
-                                {{ $errors->has('city')
-                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
-                                <option value="">
-                                    -- Chọn tỉnh/thành phố --
-                                </option>
+                            {{-- Giá trị gửi về Controller --}}
+                            <input
+                                id="city"
+                                type="hidden"
+                                name="city"
+                                :value="selected"
+                            >
 
-                                @foreach (config('homestay_locations') as $location)
-                                    <option value="{{ $location }}" @selected(old('city', $homestay->city) === $location)>
-                                        {{ $location }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            {{-- Nút mở dropdown --}}
+                            <button
+                                id="city_selector"
+                                type="button"
+                                @click="open = !open"
+                                :aria-expanded="open"
+                                :class="{
+                                    'border-red-400 ring-4 ring-red-100':
+                                        {{ $errors->has('city') ? 'true' : 'false' }},
+
+                                    'border-blue-500 ring-4 ring-blue-100':
+                                        open &&
+                                        !{{ $errors->has('city') ? 'true' : 'false' }},
+
+                                    'border-slate-300 hover:border-slate-400':
+                                        !open &&
+                                        !{{ $errors->has('city') ? 'true' : 'false' }}
+                                }"
+                                class="flex w-full items-center justify-between rounded-xl border bg-white px-4 py-3 text-left text-sm text-slate-900 outline-none transition"
+                            >
+                                <span
+                                    x-show="selected"
+                                    x-text="selected"
+                                    class="truncate font-medium"
+                                ></span>
+
+                                <span
+                                    x-show="!selected && !loading"
+                                    class="text-slate-400"
+                                >
+                                    -- Chọn tỉnh/thành phố --
+                                </span>
+
+                                <span
+                                    x-show="loading"
+                                    class="flex items-center gap-2 text-slate-500"
+                                >
+                                    <svg
+                                        class="h-4 w-4 animate-spin"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <circle
+                                            class="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            stroke-width="4"
+                                        ></circle>
+
+                                        <path
+                                            class="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                        ></path>
+                                    </svg>
+
+                                    Đang tải dữ liệu...
+                                </span>
+
+                                <svg
+                                    class="ml-3 h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200"
+                                    :class="{ 'rotate-180': open }"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="m19 9-7 7-7-7"
+                                    />
+                                </svg>
+                            </button>
+
+                            {{-- Danh sách tỉnh/thành phố --}}
+                            <div
+                                x-cloak
+                                x-show="open"
+                                x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-100"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 -translate-y-2"
+                                class="absolute left-0 right-0 top-full z-50 mt-2 max-h-72 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+                            >
+                                {{-- Đang tải --}}
+                                <div
+                                    x-show="loading"
+                                    class="flex items-center justify-center gap-2 px-4 py-6 text-sm text-slate-500"
+                                >
+                                    <svg
+                                        class="h-5 w-5 animate-spin"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <circle
+                                            class="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            stroke-width="4"
+                                        ></circle>
+
+                                        <path
+                                            class="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                        ></path>
+                                    </svg>
+
+                                    Đang tải danh sách tỉnh/thành phố...
+                                </div>
+
+                                {{-- Lỗi API --}}
+                                <div
+                                    x-show="!loading && loadError"
+                                    class="px-3 py-4 text-center"
+                                >
+                                    <p
+                                        x-text="loadError"
+                                        class="text-sm font-medium text-red-600"
+                                    ></p>
+
+                                    <button
+                                        type="button"
+                                        @click="loadLocations(true)"
+                                        class="mt-3 inline-flex cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                                    >
+                                        Tải lại dữ liệu
+                                    </button>
+                                </div>
+
+                                {{-- Bỏ lựa chọn --}}
+                                <button
+                                    x-show="!loading && !loadError"
+                                    type="button"
+                                    @click="clearLocation()"
+                                    class="flex w-full cursor-pointer items-center rounded-lg px-3 py-2.5 text-left text-sm text-slate-500 transition hover:bg-slate-100"
+                                >
+                                    -- Chọn tỉnh/thành phố --
+                                </button>
+
+                                {{-- Danh sách lấy từ API --}}
+                                <template
+                                    x-for="location in locations"
+                                    :key="location.code"
+                                >
+                                    <button
+                                        type="button"
+                                        @click="selectLocation(location)"
+                                        :class="
+                                            selected === location.name
+                                                ? 'bg-blue-50 text-blue-700'
+                                                : 'text-slate-700 hover:bg-slate-100'
+                                        "
+                                        class="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition"
+                                    >
+                                        <span
+                                            x-text="location.name"
+                                            class="truncate"
+                                        ></span>
+
+                                        <svg
+                                            x-show="selected === location.name"
+                                            class="h-5 w-5 shrink-0 text-blue-600"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="m5 13 4 4L19 7"
+                                            />
+                                        </svg>
+                                    </button>
+                                </template>
+
+                                {{-- Không có dữ liệu --}}
+                                <div
+                                    x-show="
+                                        !loading &&
+                                        !loadError &&
+                                        locations.length === 0
+                                    "
+                                    class="px-3 py-5 text-center text-sm text-slate-500"
+                                >
+                                    Không có dữ liệu tỉnh/thành phố.
+                                </div>
+                            </div>
 
                             @error('city')
                                 <p class="mt-2 text-sm font-medium text-red-600">
                                     {{ $message }}
                                 </p>
                             @enderror
-
                         </div>
 
                         {{-- Số điện thoại --}}

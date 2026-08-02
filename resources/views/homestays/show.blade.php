@@ -732,7 +732,7 @@
 
                                                                     <span class="inline-flex items-center gap-1 font-medium text-blue-500">
 
-                                                                        <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+                                                                        <span class="h-1 w-1 rounded-full bg-blue-500"></span>
 
                                                                         Đã chỉnh sửa
                                                                     </span>

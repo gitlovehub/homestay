@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Trang giới thiệu
-Route::view('/about', 'about')->name('about');
+Route::view('/about', 'about.index')->name('about');
 
 // Ai cũng xem được trang liên hệ
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');

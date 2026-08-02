@@ -15,7 +15,7 @@ class ContactController extends Controller
      */
     public function index(): View
     {
-        return view('contact');
+        return view('contact.index');
     }
 
     /**
@@ -84,7 +84,7 @@ class ContactController extends Controller
         ]);
 
         return redirect()
-            ->route('contact')
+            ->route('contact.index')
             ->with(
                 'success',
                 'Yêu cầu hỗ trợ đã được gửi thành công.'

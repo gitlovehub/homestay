@@ -33,7 +33,7 @@
                     {{-- Bản đồ --}}
                     <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg">
                         <div class="p-5 sm:p-6">
-                            <p class="text-sm font-semibold text-blue-600">
+                            <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">
                                 Vị trí của chúng tôi
                             </p>
                             <h3 class="mt-1 text-xl font-bold text-slate-900">
@@ -78,7 +78,7 @@
                             Thông tin hỗ trợ
                         </p>
                         <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-                            Chúng tôi luôn sẵn sàng hỗ trợ
+                            Chúng tôi luôn sẵn sàng hỗ trợ bạn
                         </h2>
                         <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
                             Bạn có thể liên hệ với HomeStayGo qua email, hotline hoặc gửi yêu cầu
@@ -172,7 +172,7 @@
 
                 {{-- Cột phải: Form liên hệ --}}
                 <div class="lg:col-span-3">
-                    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/5 sm:p-8 lg:p-9">
+                    <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-900/5 sm:p-6 lg:p-8">
                         <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">
                             Yêu cầu hỗ trợ
                         </p>

@@ -364,7 +364,7 @@
                                     value="{{ old('name', auth()->user()->name ?? '') }}"
                                     placeholder="Nhập họ và tên"
                                     maxlength="100"
-                                    required
+                                    
                                     autocomplete="name"
                                     class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                         {{ $errors->has('name')
@@ -396,7 +396,7 @@
                                     value="{{ old('email', auth()->user()->email ?? '') }}"
                                     placeholder="example@gmail.com"
                                     maxlength="255"
-                                    required
+                                    
                                     autocomplete="email"
                                     class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                         {{ $errors->has('email')
@@ -459,7 +459,7 @@
                             <select
                                 id="subject"
                                 name="subject"
-                                required
+                                
                                 class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
                                     {{ $errors->has('subject')
                                         ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
@@ -543,7 +543,7 @@
                                 name="message"
                                 rows="7"
                                 maxlength="5000"
-                                required
+                                
                                 placeholder="Hãy mô tả rõ vấn đề bạn đang gặp phải. Bạn có thể cung cấp mã đặt phòng nếu có..."
                                 class="w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400
                                     {{ $errors->has('message')

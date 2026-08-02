@@ -68,22 +68,10 @@ class ReviewController extends Controller
         StoreReviewRequest $request,
         Booking $booking
     ): RedirectResponse {
-        /*
-        |--------------------------------------------------------------------------
-        | Kiểm tra Booking thuộc người đang đăng nhập
-        |--------------------------------------------------------------------------
-        */
-
         abort_unless(
             (int) $booking->user_id === (int) auth()->id(),
             403
         );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Lấy thông tin phòng và Homestay
-        |--------------------------------------------------------------------------
-        */
 
         $booking->loadMissing([
             'room.homestay',
@@ -100,45 +88,23 @@ class ReviewController extends Controller
                 );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Booking phải hoàn thành
-        |--------------------------------------------------------------------------
-        */
-
         if ($booking->status !== 'completed') {
-            return redirect(
-                route('homestays.show', [
-                    'slug' => $homestay->slug,
-                ]) . '#reviews'
-            )->with(
+            return redirect()
+                ->route('bookings.history')
+                ->with(
                     'error',
                     'Bạn chỉ có thể đánh giá sau khi hoàn thành chuyến lưu trú.'
                 );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Không cho đánh giá trùng Booking
-        |--------------------------------------------------------------------------
-        */
-
         if ($booking->reviews()->exists()) {
-            return redirect(
-                route('homestays.show', [
-                    'slug' => $homestay->slug,
-                ]) . '#reviews'
-            )->with(
+            return redirect()
+                ->route('bookings.history')
+                ->with(
                     'error',
                     'Bạn đã đánh giá cho đơn đặt phòng này.'
                 );
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Lưu đánh giá
-        |--------------------------------------------------------------------------
-        */
 
         Review::create([
             'booking_id' => $booking->id,
@@ -151,25 +117,54 @@ class ReviewController extends Controller
             'title' => $request->input('title'),
             'content' => $request->input('content'),
 
-            /*
-            | Đánh giá cần Admin duyệt trước khi xuất hiện.
-            */
-            'status' => 'pending',
+            'status' => 'approved',
+            'edited_at' => null,
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Quay về khu vực đánh giá
-        |--------------------------------------------------------------------------
-        */
-
-        return redirect(
-            route('homestays.show', [
-                'slug' => $homestay->slug,
-            ]) . '#reviews'
-        )->with(
+        return redirect()
+            ->route('bookings.history')
+            ->with(
                 'success',
-                'Gửi đánh giá thành công. Đánh giá đang chờ quản trị viên duyệt.'
+                'Gửi đánh giá thành công.'
             );
     }
+
+    public function update(
+        StoreReviewRequest $request,
+        Review $review
+    ): RedirectResponse {
+        abort_unless(
+            (int) $review->user_id === (int) auth()->id(),
+            403
+        );
+
+        if ((int) $review->review_number >= 2) {
+            return redirect()
+                ->route('bookings.history')
+                ->with(
+                    'error',
+                    'Bạn đã sử dụng hết số lần sửa đánh giá.'
+                );
+        }
+
+        $review->update([
+            'review_number' =>
+                (int) $review->review_number + 1,
+
+            'rating' => $request->integer('rating'),
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+
+            'status' => 'approved',
+            'edited_at' => now(),
+        ]);
+
+        return redirect()
+            ->route('bookings.history')
+            ->with(
+                'success',
+                'Sửa đánh giá thành công.'
+            );
+    }
+
 }

@@ -25,7 +25,7 @@
         $statusLabels = [
             'pending' => 'Chờ xác nhận',
             'confirmed' => 'Đã xác nhận',
-            'checked_in' => 'Đã nhận phòng',
+            'checked_in' => 'Đang lưu trú',
             'completed' => 'Đã hoàn thành',
             'cancelled' => 'Đã hủy',
         ];

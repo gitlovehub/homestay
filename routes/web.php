@@ -96,7 +96,12 @@ Route::middleware('auth')->group(function () {
         [FrontendReviewController::class, 'store']
     )->name('reviews.store');
 
-    // Chỉ người đã đăng nhập mới gửi được
+    Route::put(
+        '/reviews/{review}',
+        [FrontendReviewController::class, 'update']
+    )->whereNumber('review')->name('reviews.update');
+
+    // Contact Chỉ người đã đăng nhập mới gửi được
     Route::post('/contact', [ContactController::class, 'store'])
         ->name('contact.store');
 
@@ -132,7 +137,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // --- Quản lý Homestay ---
     Route::resource('homestays', HomestayController::class);
-    
+
     // --- Quản lý Room ---
     Route::resource('rooms', RoomController::class);
 
@@ -154,11 +159,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // --- Quản lý Review ---
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
-    
-    Route::patch('/reviews/{review}/status', [ReviewController::class, 'updateStatus']
+
+    Route::patch(
+        '/reviews/{review}/status',
+        [ReviewController::class, 'updateStatus']
     )->name('reviews.update-status');
 
-    Route::get('/reviews/{review}', [ReviewController::class, 'show']
+    Route::get(
+        '/reviews/{review}',
+        [ReviewController::class, 'show']
     )->name('reviews.show');
 
     // --- Quản lý liên hệ ---

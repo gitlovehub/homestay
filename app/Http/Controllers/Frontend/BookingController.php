@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\Room;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -124,18 +125,68 @@ class BookingController extends Controller
             );
     }
 
-    public function history()
+    public function history(Request $request)
     {
+        $allowedFilters = [
+            'pending',
+            'need_payment',
+            'confirmed',
+            'checked_in',
+            'completed',
+            'cancelled',
+            'needs_review',
+        ];
+
+        $filter = (string) $request->query('filter', '');
+
+        if (!in_array($filter, $allowedFilters, true)) {
+            $filter = '';
+        }
+
         $bookings = Booking::query()
             ->with([
                 'room.homestay',
-                'reviews:id,booking_id,status',
+                'reviews:id,booking_id,status,review_number,rating,title,content,edited_at',
             ])
             ->where('user_id', auth()->id())
+            ->when(
+                in_array(
+                    $filter,
+                    [
+                        'pending',
+                        'confirmed',
+                        'checked_in',
+                        'completed',
+                        'cancelled',
+                    ],
+                    true
+                ),
+                fn ($query) => $query->where('status', $filter)
+            )
+            ->when(
+                $filter === 'needs_review',
+                fn ($query) => $query
+                    ->where('status', 'completed')
+                    ->whereDoesntHave('reviews')
+            )
+            ->when(
+                $filter === 'need_payment',
+                fn ($query) => $query->whereIn(
+                    'payment_status',
+                    [
+                        'unpaid',
+                        'failed',
+                    ]
+                )
+            )
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('bookings.history', compact('bookings'));
+        return view(
+            'bookings.history',
+            compact('bookings')
+        );
     }
 
     public function show(Booking $booking)

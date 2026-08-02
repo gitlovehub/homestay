@@ -9,11 +9,17 @@ use Illuminate\View\View;
 
 class ContactController extends Controller
 {
+    /**
+     * Hiển thị trang liên hệ.
+     */
     public function index(): View
     {
         return view('contact');
     }
 
+    /**
+     * Lưu thư liên hệ.
+     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate(
@@ -63,6 +69,9 @@ class ContactController extends Controller
 
         return redirect()
             ->route('contact')
-            ->with('success', 'Gửi liên hệ thành công. Chúng tôi sẽ phản hồi sớm nhất.');
+            ->with(
+                'success',
+                'Gửi liên hệ thành công. Chúng tôi sẽ phản hồi sớm nhất.'
+            );
     }
 }

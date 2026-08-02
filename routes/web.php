@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\ContactLocationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Frontend\HomestaySearchController;
@@ -166,6 +167,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
                 '/contacts',
                 [ContactMessageController::class, 'index']
             )->name('contacts.index');
+    // --- Quản lý vị trí bản đồ liên hệ ---
+    Route::post(
+        '/contacts/locations',
+        [ContactLocationController::class, 'store']
+    )->name('contacts.locations.store');
+
+    Route::put(
+        '/contacts/locations/{contactLocation}',
+        [ContactLocationController::class, 'update']
+    )
+        ->whereNumber('contactLocation')
+        ->name('contacts.locations.update');
+
+    Route::delete(
+        '/contacts/locations/{contactLocation}',
+        [ContactLocationController::class, 'destroy']
+    )
+    ->whereNumber('contactLocation')
+    ->name('contacts.locations.destroy');
 
     // Xem chi tiết thư liên hệ
     Route::get(

@@ -97,7 +97,7 @@
     </div>
 </div>
 
-    <p class="font-semibold uppercase tracking-widest text-blue-600">
+    <p class="mt-10 font-semibold uppercase tracking-widest text-blue-600">
         Thông tin hỗ trợ
     </p>
 

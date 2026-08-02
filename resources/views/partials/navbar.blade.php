@@ -13,10 +13,22 @@
 
         {{-- Desktop Menu --}}
         <div class="hidden items-center gap-8 md:flex">
-            <a href="{{ route('home') }}" class="font-medium text-blue-600 transition hover:text-blue-700">
+            <a
+                href="{{ route('home') }}"
+                class="inline-flex h-10 items-center font-medium transition
+                    {{ request()->routeIs('home')
+                        ? 'text-blue-600'
+                        : 'text-slate-600 hover:text-blue-600' }}"
+            >
                 Trang chủ
             </a>
-            <a href="{{ route('homestays.index') }}" class="font-medium text-slate-600 transition hover:text-blue-600">
+            <a
+                href="{{ route('homestays.index') }}"
+                class="inline-flex h-10 items-center font-medium transition
+                    {{ request()->routeIs('homestays.*')
+                        ? 'text-blue-600'
+                        : 'text-slate-600 hover:text-blue-600' }}"
+            >
                 Homestay
             </a>
 
@@ -29,7 +41,7 @@
             >
                 {{-- Nút Danh mục --}}
                 <div
-                    class="flex items-center rounded-lg px-3 py-2.5 relative after:absolute after:left-0 after:right-0 after:top-full after:h-5 after:content-['']"
+                    class="relative flex h-10 items-center after:absolute after:left-0 after:right-0 after:top-full after:h-5 after:content-['']"
                 >
                     <a
                         href="{{ route('categories.index') }}"
@@ -141,22 +153,24 @@
                 </div>
             </div>
 
-            <a href="{{ route('about') }}"
-                class="font-semibold transition
+            <a
+                href="{{ route('about') }}"
+                class="inline-flex h-10 items-center font-medium transition
                     {{ request()->routeIs('about')
                         ? 'text-blue-600'
-                        : 'text-slate-600 hover:text-blue-600' }}">
+                        : 'text-slate-600 hover:text-blue-600' }}"
+            >
                 Giới thiệu
             </a>
-        <a
-            href="{{ route('contact') }}"
-            class="inline-block text-base font-medium transition
-                {{ request()->routeIs('contact.*')
-                    ? 'text-blue-600'
-                    : 'text-slate-600 hover:text-blue-600' }}"
-        >
-            Liên hệ
-        </a>
+            <a
+                href="{{ route('contact') }}"
+                class="inline-flex h-10 items-center font-medium transition
+                    {{ request()->routeIs('contact')
+                        ? 'text-blue-600'
+                        : 'text-slate-600 hover:text-blue-600' }}"
+            >
+                Liên hệ
+            </a>
         </div>
 
         {{-- Right side (Desktop) --}}
@@ -442,15 +456,23 @@
                 </div>
             </div>
 
-            <a href="#about"
-                class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+            <a
+                href="{{ route('about') }}"
+                class="block rounded-lg px-3 py-2.5 text-base font-medium transition
+                    {{ request()->routeIs('about')
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600' }}"
+            >
                 Giới thiệu
             </a>
 
-            <a href="{{ route('contact') }}"
-                class="{{ request()->routeIs('contact')
-                    ? 'font-semibold text-blue-600'
-                    : 'font-medium text-slate-600 transition hover:text-blue-600' }}">
+            <a
+                href="{{ route('contact') }}"
+                class="block rounded-lg px-3 py-2.5 text-base font-medium transition
+                    {{ request()->routeIs('contact')
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-blue-600' }}"
+            >
                 Liên hệ
             </a>
         </div>

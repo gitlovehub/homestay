@@ -22,18 +22,12 @@ use Illuminate\Support\Facades\Route;
 
 // --- Trang chủ ---
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 // Trang giới thiệu
 Route::view('/about', 'about')->name('about');
 
-
 // Ai cũng xem được trang liên hệ
-Route::get('/contact', [ContactController::class, 'index'])
-    ->name('contact');
-
-// Chỉ người đã đăng nhập mới gửi được
-Route::post('/contact', [ContactController::class, 'store'])
-    ->middleware('auth')
-    ->name('contact.store');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 // --- Tìm Homestay còn phòng ---
 Route::get(
@@ -100,6 +94,10 @@ Route::middleware('auth')->group(function () {
         '/bookings/{booking}/reviews',
         [FrontendReviewController::class, 'store']
     )->name('reviews.store');
+
+    // Chỉ người đã đăng nhập mới gửi được
+    Route::post('/contact', [ContactController::class, 'store'])
+        ->name('contact.store');
 
 });
 

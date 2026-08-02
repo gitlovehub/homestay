@@ -18,12 +18,12 @@
     $filterTabs = [
         '' => ['label' => 'Tất cả đơn', 'color' => 'slate'],
         'pending' => ['label' => 'Chờ xác nhận', 'color' => 'amber'],
-        'need_payment' => ['label' => 'Chờ thanh toán', 'color' => 'orange'],
+        'need_payment' => ['label' => 'Chờ thanh toán', 'color' => 'gray'],
         'confirmed' => ['label' => 'Đã xác nhận', 'color' => 'blue'],
         'checked_in' => ['label' => 'Đang lưu trú', 'color' => 'violet'],
         'completed' => ['label' => 'Đã hoàn thành', 'color' => 'emerald'],
         'cancelled' => ['label' => 'Đã hủy', 'color' => 'red'],
-        'needs_review' => ['label' => 'Cần đánh giá', 'color' => 'green'],
+        'needs_review' => ['label' => 'Cần đánh giá', 'color' => 'orange'],
     ];
 
     $filterActive = [
@@ -33,8 +33,8 @@
         'violet' => 'border-violet-600 bg-violet-600 text-white shadow-sm',
         'emerald' => 'border-emerald-600 bg-emerald-600 text-white shadow-sm',
         'red' => 'border-red-600 bg-red-600 text-white shadow-sm',
-        'orange' => 'border-orange-500 bg-orange-500 text-white shadow-sm',
-        'green' => 'border-green-600 bg-green-600 text-white shadow-sm',
+        'gray' => 'border-gray-500 bg-gray-500 text-white shadow-sm',
+        'orange' => 'border-orange-600 bg-orange-600 text-white shadow-sm',
     ];
 
     $filterInactive = [
@@ -44,8 +44,8 @@
         'violet' => 'border-violet-200 bg-violet-50 text-violet-700 hover:border-violet-300 hover:bg-violet-100',
         'emerald' => 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-100',
         'red' => 'border-red-200 bg-red-50 text-red-700 hover:border-red-300 hover:bg-red-100',
+        'gray' => 'border-gray-200 bg-gray-100 text-gray-700 hover:border-gray-400 hover:bg-gray-200',
         'orange' => 'border-orange-200 bg-orange-50 text-orange-700 hover:border-orange-300 hover:bg-orange-100',
-        'green' => 'border-green-200 bg-green-50 text-green-700 hover:border-green-300 hover:bg-green-100',
     ];
 
     $currentFilter = request('filter', '');

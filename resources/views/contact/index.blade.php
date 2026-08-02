@@ -217,7 +217,7 @@
                                         placeholder="Nhập họ và tên"
                                         maxlength="100"
                                         autocomplete="name"
-                                        class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                        class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                             {{ $errors->has('name')
                                                 ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                                 : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
@@ -238,7 +238,7 @@
                                         placeholder="example@gmail.com"
                                         maxlength="255"
                                         autocomplete="email"
-                                        class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                        class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                             {{ $errors->has('email')
                                                 ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                                 : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
@@ -262,7 +262,7 @@
                                     placeholder="Ví dụ: 0912345678"
                                     maxlength="20"
                                     autocomplete="tel"
-                                    class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                    class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                         {{ $errors->has('phone')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
@@ -280,7 +280,7 @@
                                 <select
                                     id="subject"
                                     name="subject"
-                                    class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
+                                    class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
                                         {{ $errors->has('subject')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"

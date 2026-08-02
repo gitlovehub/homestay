@@ -241,24 +241,37 @@
                 </div>
 
                 {{-- Ngày nhận phòng --}}
-                <div>
-                    <label for="check_in" class="mb-2 block text-sm font-semibold text-slate-700">
+                <div class="w-full min-w-0">
+                    <label
+                        for="check_in"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                         Ngày nhận phòng
                     </label>
 
-                    <input id="check_in" type="date" name="check_in"
-                        value="{{ old('check_in', request('check_in')) }}" min="{{ now()->toDateString() }}" required
+                    <input
+                        id="check_in"
+                        type="date"
+                        name="check_in"
+                        value="{{ old('check_in', request('check_in')) }}"
+                        min="{{ now()->toDateString() }}"
+                        required
+                        autocomplete="off"
                         onclick="
-            if (typeof this.showPicker === 'function') {
-                this.showPicker();
-            }
-        "
-                        class="block min-h-12 w-full cursor-pointer rounded-xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none transition
-            @error('check_in')
-                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
-            @else
-                border-slate-300 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-            @enderror">
+                            if (typeof this.showPicker === 'function') {
+                                this.showPicker();
+                            }
+                        "
+                        class="date-input block h-12 w-full min-w-0 max-w-full cursor-pointer
+                            rounded-xl border bg-white px-4 py-3 text-base text-slate-700
+                            outline-none transition
+                            @error('check_in')
+                                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
+                            @else
+                                border-slate-300 hover:border-blue-400
+                                focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+                            @enderror"
+                    >
 
                     @error('check_in')
                         <p class="mt-2 text-sm font-medium text-red-600">
@@ -268,25 +281,37 @@
                 </div>
 
                 {{-- Ngày trả phòng --}}
-                <div>
-                    <label for="check_out" class="mb-2 block text-sm font-semibold text-slate-700">
+                <div class="w-full min-w-0">
+                    <label
+                        for="check_out"
+                        class="mb-2 block text-sm font-semibold text-slate-700"
+                    >
                         Ngày trả phòng
                     </label>
 
-                    <input id="check_out" type="date" name="check_out"
-                        value="{{ old('check_out', request('check_out')) }}" min="{{ now()->addDay()->toDateString() }}"
+                    <input
+                        id="check_out"
+                        type="date"
+                        name="check_out"
+                        value="{{ old('check_out', request('check_out')) }}"
+                        min="{{ now()->addDay()->toDateString() }}"
                         required
+                        autocomplete="off"
                         onclick="
-            if (typeof this.showPicker === 'function') {
-                this.showPicker();
-            }
-        "
-                        class="block min-h-12 w-full cursor-pointer rounded-xl border bg-white px-4 py-3 text-sm text-slate-700 outline-none transition
-            @error('check_out')
-                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
-            @else
-                border-slate-300 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100
-            @enderror">
+                            if (typeof this.showPicker === 'function') {
+                                this.showPicker();
+                            }
+                        "
+                        class="date-input block h-12 w-full min-w-0 max-w-full cursor-pointer
+                            rounded-xl border bg-white px-4 py-3 text-base text-slate-700
+                            outline-none transition
+                            @error('check_out')
+                                border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100
+                            @else
+                                border-slate-300 hover:border-blue-400
+                                focus:border-blue-500 focus:ring-4 focus:ring-blue-100
+                            @enderror"
+                    >
 
                     @error('check_out')
                         <p class="mt-2 text-sm font-medium text-red-600">
@@ -540,3 +565,54 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkInInput = document.getElementById('check_in');
+            const checkOutInput = document.getElementById('check_out');
+
+            if (!checkInInput || !checkOutInput) {
+                return;
+            }
+
+            function formatDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+
+                return `${year}-${month}-${day}`;
+            }
+
+            function updateCheckOutMinimumDate() {
+                if (!checkInInput.value) {
+                    return;
+                }
+
+                const selectedCheckIn = new Date(
+                    checkInInput.value + 'T00:00:00'
+                );
+
+                selectedCheckIn.setDate(selectedCheckIn.getDate() + 1);
+
+                const minimumCheckOut = formatDate(selectedCheckIn);
+
+                checkOutInput.min = minimumCheckOut;
+
+                if (
+                    checkOutInput.value &&
+                    checkOutInput.value < minimumCheckOut
+                ) {
+                    checkOutInput.value = '';
+                }
+            }
+
+            checkInInput.addEventListener(
+                'change',
+                updateCheckOutMinimumDate
+            );
+
+            updateCheckOutMinimumDate();
+        });
+    </script>
+@endpush

@@ -7,7 +7,7 @@
     @php
         $selectedAmenities = collect(request('amenities', []))->map(fn($id) => (int) $id)->all();
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Chỉ đếm các bộ lọc phụ
     |--------------------------------------------------------------------------
@@ -65,95 +65,39 @@
     ]" />
 
     {{-- Modal sửa ngày --}}
-    <div x-data="{
-        editSearchOpen: false,
-    
-        originalLocation: @js(old('location', $selectedLocation)),
-        originalCheckIn: @js(old('check_in', $checkIn)),
-        originalCheckOut: @js(old('check_out', $checkOut)),
-    
-        location: @js(old('location', $selectedLocation)),
-        checkIn: @js(old('check_in', $checkIn)),
-        checkOut: @js(old('check_out', $checkOut)),
-    
-        openEditSearch() {
-            this.location = this.originalLocation;
-            this.checkIn = this.originalCheckIn;
-            this.checkOut = this.originalCheckOut;
-            this.editSearchOpen = true;
-        },
-    
-        closeEditSearch() {
-            this.editSearchOpen = false;
-        },
-    
-        openDatePicker(input) {
-            if (!input || input.disabled) {
-                return;
+    <div
+        x-data="{
+            editSearchOpen: false,
+
+            originalLocation: @js(old('location', $selectedLocation)),
+            originalCheckIn: @js(old('check_in', $checkIn)),
+            originalCheckOut: @js(old('check_out', $checkOut)),
+
+            location: @js(old('location', $selectedLocation)),
+
+            openEditSearch() {
+                this.location = this.originalLocation;
+                this.editSearchOpen = true;
+
+                this.$nextTick(() => {
+                    this.$dispatch('reset-edit-search-dates', {
+                        checkIn: this.originalCheckIn,
+                        checkOut: this.originalCheckOut,
+                    });
+                });
+            },
+
+            closeEditSearch() {
+                this.editSearchOpen = false;
             }
-    
-            if (typeof input.showPicker === 'function') {
-                input.showPicker();
-                return;
-            }
-    
-            input.focus();
-            input.click();
-        },
-    
-        formatDate(value) {
-            if (!value) {
-                return '';
-            }
-    
-            const [year, month, day] = value.split('-');
-    
-            return `${day}/${month}/${year}`;
-        },
-    
-        nextDay(value) {
-            if (!value) {
-                return @js(now()->toDateString());
-            }
-    
-            const [year, month, day] = value
-                .split('-')
-                .map(Number);
-    
-            const date = new Date(
-                year,
-                month - 1,
-                day
-            );
-    
-            date.setDate(date.getDate() + 1);
-    
-            const nextYear = date.getFullYear();
-    
-            const nextMonth = String(
-                date.getMonth() + 1
-            ).padStart(2, '0');
-    
-            const nextDate = String(
-                date.getDate()
-            ).padStart(2, '0');
-    
-            return `${nextYear}-${nextMonth}-${nextDate}`;
-        },
-    
-        handleCheckInChange() {
-            if (
-                this.checkOut &&
-                this.checkOut < this.nextDay(this.checkIn)
-            ) {
-                this.checkOut = '';
-            }
-        }
-    }" x-init="$watch('editSearchOpen', (isOpen) => {
-        document.body.style.overflow = isOpen ?
-            'hidden' :
-            '';
-    })" @keydown.escape.window="closeEditSearch()">
+        }"
+        x-init="$watch('editSearchOpen', (isOpen) => {
+            document.body.style.overflow = isOpen
+                ? 'hidden'
+                : '';
+        })"
+        @keydown.escape.window="closeEditSearch()"
+    >
 
         {{-- Header kết quả tìm kiếm --}}
         <section class="border-b border-slate-200 bg-linear-to-br from-blue-50 via-white to-indigo-50">
@@ -248,7 +192,7 @@
 
         {{-- Modal chỉnh sửa tìm kiếm --}}
         <div x-show="editSearchOpen" x-cloak style="display: none;"
-            class="fixed inset-0 z-100 flex items-center justify-center p-4">
+            class="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-4 py-8 sm:items-center">
             {{-- Overlay --}}
             <button type="button" x-transition.opacity @click="closeEditSearch()"
                 class="absolute inset-0 cursor-default bg-slate-950/50 backdrop-blur-sm" aria-label="Đóng modal"></button>
@@ -258,7 +202,8 @@
                 x-transition:enter-start="scale-95 opacity-0" x-transition:enter-end="scale-100 opacity-100"
                 x-transition:leave="transition duration-150 ease-in" x-transition:leave-start="scale-100 opacity-100"
                 x-transition:leave-end="scale-95 opacity-0" @click.stop
-                class="relative z-10 w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+                class="relative z-10 w-full max-w-3xl overflow-visible rounded-3xl bg-white shadow-2xl">
+                
                 {{-- Header modal --}}
                 <div class="flex items-start justify-between border-b border-slate-200 px-6 py-5">
                     <div>
@@ -282,7 +227,27 @@
                 </div>
 
                 {{-- Form --}}
-                <form method="GET" action="{{ route('homestays.search') }}" class="p-6">
+                <form
+                    method="GET"
+                    action="{{ route('homestays.search') }}"
+                    class="p-6"
+                    x-data="dateRangePicker({
+                        checkIn: @js(old('check_in', $checkIn)),
+                        checkOut: @js(old('check_out', $checkOut)),
+                        minDate: @js(now()->toDateString())
+                    })"
+                    @reset-edit-search-dates.window="
+                        checkIn = $event.detail.checkIn || '';
+                        checkOut = $event.detail.checkOut || '';
+
+                        checkInError = false;
+                        checkOutError = false;
+                        activePicker = null;
+
+                        setVisibleMonth(checkIn || minDate);
+                    "
+                    @submit="validateBeforeSubmit($event)"
+                >
                     <div class="grid gap-5 md:grid-cols-3">
                         {{-- Thành phố --}}
                         <div>
@@ -319,36 +284,186 @@
                         </div>
 
                         {{-- Ngày nhận phòng --}}
-                        <div>
-                            <label for="edit-check-in" class="mb-2 block text-sm font-semibold text-slate-700">
+                        <div class="relative min-w-0">
+                            <label
+                                for="edit-check-in"
+                                class="mb-2 block text-sm font-semibold text-slate-700"
+                            >
                                 Ngày nhận phòng
                             </label>
 
-                            <div class="relative">
-                                {{-- Input thật gửi về Laravel --}}
-                                <input x-ref="editCheckInInput" id="edit-check-in" type="date" name="check_in"
-                                    x-model="checkIn" min="{{ now()->toDateString() }}" @change="handleCheckInChange()"
-                                    required class="absolute left-0 top-0 h-px w-px opacity-0">
+                            {{-- Giá trị thật gửi về Laravel --}}
+                            <input
+                                id="edit-check-in"
+                                type="hidden"
+                                name="check_in"
+                                x-model="checkIn"
+                            >
 
-                                {{-- Ô hiển thị dd/mm/yyyy --}}
-                                <button type="button" @click="openDatePicker($refs.editCheckInInput)"
-                                    class="flex min-h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-                                    <span class="text-sm font-medium"
-                                        :class="checkIn
-                                            ?
-                                            'text-slate-700' :
-                                            'text-slate-400'"
-                                        x-text="checkIn
-                                    ? formatDate(checkIn)
-                                    : 'dd/mm/yyyy'"></span>
+                            {{-- Nút mở lịch --}}
+                            <button
+                                type="button"
+                                @click="toggleDatePicker('checkIn')"
+                                class="flex h-12 w-full cursor-pointer items-center
+                                    justify-between rounded-xl border bg-white px-4
+                                    text-left outline-none transition"
+                                :class="checkInError
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'"
+                            >
+                                <span
+                                    class="truncate text-sm font-medium"
+                                    :class="checkIn
+                                        ? 'text-slate-700'
+                                        : 'text-slate-400'"
+                                    x-text="checkIn
+                                        ? formatDisplayDate(checkIn)
+                                        : 'dd/mm/yyyy'"
+                                ></span>
 
-                                    <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                                    </svg>
-                                </button>
-                            </div>
+                                <svg
+                                    class="ml-3 h-5 w-5 shrink-0 text-slate-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+                                    />
+                                </svg>
+                            </button>
+
+                            {{-- Lịch ngày nhận phòng --}}
+                            <template x-teleport="body">
+                                <div
+                                    x-show="activePicker === 'checkIn'"
+                                    x-cloak
+                                    x-transition.opacity
+                                    @keydown.escape.window="closeDatePicker()"
+                                    class="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+                                >
+                                    {{-- Nền phía sau lịch --}}
+                                    <button
+                                        type="button"
+                                        @click="closeDatePicker()"
+                                        class="absolute inset-0 cursor-default bg-slate-950/30"
+                                        aria-label="Đóng lịch"
+                                    ></button>
+
+                                    {{-- Khung lịch --}}
+                                    <div
+                                        @click.stop
+                                        class="relative z-10 w-full max-w-[340px]
+                                            rounded-2xl border border-slate-200
+                                            bg-white p-4 shadow-2xl"
+                                    >
+                                        {{-- Giữ nguyên toàn bộ nội dung lịch hiện tại ở đây --}}
+
+                                        {{-- Chuyển tháng --}}
+                                        <div class="flex items-center justify-between">
+                                            <button
+                                                type="button"
+                                                @click="previousMonth()"
+                                                :disabled="!canGoPreviousMonth()"
+                                                class="flex h-9 w-9 items-center justify-center
+                                                    rounded-lg text-slate-600 transition
+                                                    enabled:cursor-pointer enabled:hover:bg-slate-100
+                                                    disabled:cursor-not-allowed disabled:opacity-30"
+                                            >
+                                                <svg
+                                                    class="h-5 w-5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 19l-7-7 7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+
+                                            <p
+                                                class="font-bold capitalize text-slate-900"
+                                                x-text="monthLabel"
+                                            ></p>
+
+                                            <button
+                                                type="button"
+                                                @click="nextMonth()"
+                                                class="flex h-9 w-9 cursor-pointer items-center
+                                                    justify-center rounded-lg text-slate-600
+                                                    transition hover:bg-slate-100"
+                                            >
+                                                <svg
+                                                    class="h-5 w-5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 5l7 7-7 7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        {{-- Thứ trong tuần --}}
+                                        <div class="mt-4 grid grid-cols-7 text-center">
+                                            <template
+                                                x-for="weekday in ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
+                                                :key="weekday"
+                                            >
+                                                <span
+                                                    class="py-2 text-xs font-semibold text-slate-400"
+                                                    x-text="weekday"
+                                                ></span>
+                                            </template>
+                                        </div>
+
+                                        {{-- Các ngày --}}
+                                        <div class="grid grid-cols-7 gap-1 text-center">
+                                            <template
+                                                x-for="blank in leadingBlankDays()"
+                                                :key="`check-in-blank-${blank}`"
+                                            >
+                                                <span class="h-9"></span>
+                                            </template>
+
+                                            <template
+                                                x-for="date in monthDays()"
+                                                :key="`check-in-${date}`"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    @click="selectDate(date)"
+                                                    :disabled="isDateDisabled(date)"
+                                                    :class="dateButtonClasses(date)"
+                                                    class="flex h-9 w-9 items-center justify-center
+                                                        rounded-lg text-sm transition"
+                                                    x-text="dayNumber(date)"
+                                                ></button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <p
+                                x-show="checkInError"
+                                x-cloak
+                                class="mt-2 text-sm font-medium text-red-600"
+                            >
+                                Vui lòng chọn ngày nhận phòng.
+                            </p>
 
                             @error('check_in')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -358,39 +473,190 @@
                         </div>
 
                         {{-- Ngày trả phòng --}}
-                        <div>
-                            <label for="edit-check-out" class="mb-2 block text-sm font-semibold text-slate-700">
+                        <div class="relative min-w-0" :class="!checkIn ? 'opacity-60' : ''">
+                            <label
+                                for="edit-check-out"
+                                class="mb-2 block text-sm font-semibold text-slate-700"
+                            >
                                 Ngày trả phòng
                             </label>
 
-                            <div class="relative" :class="!checkIn ? 'opacity-60' : ''">
-                                {{-- Input thật gửi về Laravel --}}
-                                <input x-ref="editCheckOutInput" id="edit-check-out" type="date" name="check_out"
-                                    x-model="checkOut" :min="nextDay(checkIn)" :disabled="!checkIn" required
-                                    class="absolute left-0 top-0 h-px w-px opacity-0">
+                            {{-- Giá trị thật gửi về Laravel --}}
+                            <input
+                                id="edit-check-out"
+                                type="hidden"
+                                name="check_out"
+                                x-model="checkOut"
+                            >
 
-                                {{-- Ô hiển thị dd/mm/yyyy --}}
-                                <button type="button" :disabled="!checkIn"
-                                    @click="openDatePicker($refs.editCheckOutInput)"
-                                    class="flex min-h-12 w-full items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition enabled:cursor-pointer enabled:hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed">
-                                    <span class="text-sm font-medium"
-                                        :class="checkOut
-                                            ?
-                                            'text-slate-700' :
-                                            'text-slate-400'"
-                                        x-text="checkOut
-                                    ? formatDate(checkOut)
-                                    : checkIn
-                                        ? 'dd/mm/yyyy'
-                                        : 'Chọn ngày nhận trước'"></span>
+                            {{-- Nút mở lịch --}}
+                            <button
+                                type="button"
+                                :disabled="!checkIn"
+                                @click="toggleDatePicker('checkOut')"
+                                class="flex h-12 w-full items-center justify-between
+                                    rounded-xl border bg-white px-4 text-left
+                                    outline-none transition
+                                    enabled:cursor-pointer disabled:cursor-not-allowed"
+                                :class="checkOutError
+                                    ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 enabled:hover:border-blue-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'"
+                            >
+                                <span
+                                    class="truncate text-sm font-medium"
+                                    :class="checkOut
+                                        ? 'text-slate-700'
+                                        : 'text-slate-400'"
+                                    x-text="checkOut
+                                        ? formatDisplayDate(checkOut)
+                                        : checkIn
+                                            ? 'dd/mm/yyyy'
+                                            : 'Chọn ngày nhận trước'"
+                                ></span>
 
-                                    <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                                    </svg>
-                                </button>
-                            </div>
+                                <svg
+                                    class="ml-3 h-5 w-5 shrink-0 text-slate-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+                                    />
+                                </svg>
+                            </button>
+
+                            {{-- Lịch ngày trả phòng --}}
+                            <template x-teleport="body">
+                                <div
+                                    x-show="activePicker === 'checkOut'"
+                                    x-cloak
+                                    x-transition.opacity
+                                    @keydown.escape.window="closeDatePicker()"
+                                    class="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+                                >
+                                    {{-- Nền phía sau lịch --}}
+                                    <button
+                                        type="button"
+                                        @click="closeDatePicker()"
+                                        class="absolute inset-0 cursor-default bg-slate-950/30"
+                                        aria-label="Đóng lịch"
+                                    ></button>
+
+                                    {{-- Khung lịch --}}
+                                    <div
+                                        @click.stop
+                                        class="relative z-10 w-full max-w-[340px]
+                                            rounded-2xl border border-slate-200
+                                            bg-white p-4 shadow-2xl"
+                                    >
+                                        {{-- Giữ nguyên toàn bộ nội dung lịch hiện tại ở đây --}}
+
+                                        {{-- Chuyển tháng --}}
+                                        <div class="flex items-center justify-between">
+                                            <button
+                                                type="button"
+                                                @click="previousMonth()"
+                                                :disabled="!canGoPreviousMonth()"
+                                                class="flex h-9 w-9 items-center justify-center
+                                                    rounded-lg text-slate-600 transition
+                                                    enabled:cursor-pointer enabled:hover:bg-slate-100
+                                                    disabled:cursor-not-allowed disabled:opacity-30"
+                                            >
+                                                <svg
+                                                    class="h-5 w-5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 19l-7-7 7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+
+                                            <p
+                                                class="font-bold capitalize text-slate-900"
+                                                x-text="monthLabel"
+                                            ></p>
+
+                                            <button
+                                                type="button"
+                                                @click="nextMonth()"
+                                                class="flex h-9 w-9 cursor-pointer items-center
+                                                    justify-center rounded-lg text-slate-600
+                                                    transition hover:bg-slate-100"
+                                            >
+                                                <svg
+                                                    class="h-5 w-5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 5l7 7-7 7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        {{-- Thứ trong tuần --}}
+                                        <div class="mt-4 grid grid-cols-7 text-center">
+                                            <template
+                                                x-for="weekday in ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']"
+                                                :key="weekday"
+                                            >
+                                                <span
+                                                    class="py-2 text-xs font-semibold text-slate-400"
+                                                    x-text="weekday"
+                                                ></span>
+                                            </template>
+                                        </div>
+
+                                        {{-- Các ngày --}}
+                                        <div class="grid grid-cols-7 gap-1 text-center">
+                                            <template
+                                                x-for="blank in leadingBlankDays()"
+                                                :key="`check-out-blank-${blank}`"
+                                            >
+                                                <span class="h-9"></span>
+                                            </template>
+
+                                            <template
+                                                x-for="date in monthDays()"
+                                                :key="`check-out-${date}`"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    @click="selectDate(date)"
+                                                    :disabled="isDateDisabled(date)"
+                                                    :class="dateButtonClasses(date)"
+                                                    class="flex h-9 w-9 items-center justify-center
+                                                        rounded-lg text-sm transition"
+                                                    x-text="dayNumber(date)"
+                                                ></button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <p
+                                x-show="checkOutError"
+                                x-cloak
+                                class="mt-2 text-sm font-medium text-red-600"
+                            >
+                                Vui lòng chọn ngày trả phòng.
+                            </p>
 
                             @error('check_out')
                                 <p class="mt-2 text-sm font-medium text-red-600">

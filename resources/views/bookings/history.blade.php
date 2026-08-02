@@ -300,7 +300,7 @@
                                             Đặt lúc {{ $booking->created_at->format('H:i d/m/Y') }}
                                         </p>
 
-                                        <div class="flex flex-wrap items-center gap-3">
+                                        <div class="flex flex-wrap items-center justify-end gap-3">
                                             @if ($canReview)
                                                 <button type="button" data-open-review-modal
                                                     data-booking-id="{{ $booking->id }}"

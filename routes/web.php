@@ -31,12 +31,6 @@ Route::view('/about', 'about')->name('about');
 // Ai cũng xem được trang liên hệ
 Route::get('/contact', [ContactController::class, 'index'])
     ->name('contact');
-
-// Chỉ người đã đăng nhập mới gửi được
-Route::post('/contact', [ContactController::class, 'store'])
-    ->middleware('auth')
-    ->name('contact.store');
-
 // --- Tìm Homestay còn phòng ---
 Route::get(
     '/search',
@@ -68,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Chỉ người đã đăng nhập mới gửi được
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
     // Bookings (Client)
     Route::prefix('bookings')->name('bookings.')->group(function () {

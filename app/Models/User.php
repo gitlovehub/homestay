@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -60,19 +59,29 @@ class User extends Authenticatable
 
     /*
     |--------------------------------------------------------------------------
-    | Thanh toán của người dùng
+    | Các giao dịch VNPAY của người dùng
     |--------------------------------------------------------------------------
     */
 
-    public function payments(): HasManyThrough
+    public function payments(): HasMany
     {
-        return $this->hasManyThrough(
+        return $this->hasMany(
             Payment::class,
-            Booking::class,
-            'user_id',
-            'booking_id',
-            'id',
-            'id'
+            'user_id'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lịch sử thanh toán do người dùng thực hiện
+    |--------------------------------------------------------------------------
+    */
+
+    public function paymentHistories(): HasMany
+    {
+        return $this->hasMany(
+            PaymentHistory::class,
+            'actor_id'
         );
     }
 

@@ -97,10 +97,42 @@ class Booking extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function payment(): HasOne
-    {
-        return $this->hasOne(Payment::class);
-    }
+/**
+ * Các lần thanh toán VNPAY của booking.
+ */
+public function payments(): HasMany
+{
+    return $this->hasMany(Payment::class);
+}
+
+/**
+ * Lần thanh toán mới nhất.
+ */
+public function latestPayment(): HasOne
+{
+    return $this->hasOne(Payment::class)
+        ->latestOfMany();
+}
+
+/**
+ * Giao dịch thanh toán thành công của booking.
+ */
+public function paidPayment(): HasOne
+{
+    return $this->hasOne(Payment::class)
+        ->where('status', Payment::STATUS_PAID)
+        ->latestOfMany();
+}
+
+/**
+ * Kiểm tra booking đã được thanh toán hay chưa.
+ */
+public function isPaid(): bool
+{
+    return $this->payments()
+        ->where('status', Payment::STATUS_PAID)
+        ->exists();
+}
 
     /*
     |--------------------------------------------------------------------------

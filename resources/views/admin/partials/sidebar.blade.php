@@ -1,4 +1,12 @@
 @php
+
+    $unreadContactCount =
+        \Illuminate\Support\Facades\Schema::hasTable('contact_messages')
+            ? \App\Models\ContactMessage::query()
+                ->where('status', 'unread')
+                ->count()
+            : 0;
+
     $adminMenus = [
         [
             'label' => 'Tổng quan',
@@ -47,6 +55,13 @@
             'route' => 'admin.reviews.index',
             'active' => 'admin.reviews.*',
             'icon' => 'reviews',
+        ],
+        [
+            'label' => 'Liên hệ',
+            'route' => 'admin.contact-messages.index',
+            'active' => 'admin.contact-messages.*',
+            'icon' => 'contacts',
+            'badge' => $unreadContactCount,
         ],
     ];
 @endphp
@@ -203,6 +218,13 @@
                                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                 </svg>
                             @break
+
+                            @case('contacts')
+                                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                                </svg>
+                            @break
                         @endswitch
                     </span>
 
@@ -211,6 +233,22 @@
                         class="truncate whitespace-nowrap">
                         {{ $menu['label'] }}
                     </span>
+
+                    @if (($menu['badge'] ?? 0) > 0)
+                        {{-- Badge khi Sidebar mở rộng --}}
+                        <span
+                            x-show="!adminSidebarCollapsed"
+                            class="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-semibold text-white"
+                        >
+                            {{ $menu['badge'] > 99 ? '99+' : $menu['badge'] }}
+                        </span>
+
+                        {{-- Chấm đỏ khi Sidebar thu gọn --}}
+                        <span
+                            x-show="adminSidebarCollapsed"
+                            class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"
+                        ></span>
+                    @endif
 
                     @if (!$routeExists)
                         <span x-show="!adminSidebarCollapsed"

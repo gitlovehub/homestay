@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomestayController;
 use App\Http\Controllers\Admin\ReviewController;
@@ -159,6 +160,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/reviews/{review}', [ReviewController::class, 'show']
     )->name('reviews.show');
+
+    // --- Quản lý liên hệ ---
+    Route::get(
+        '/contact-messages',
+        [ContactMessageController::class, 'index']
+    )->name('contact-messages.index');
+
+    Route::get(
+        '/contact-messages/{contactMessage}',
+        [ContactMessageController::class, 'show']
+    )->name('contact-messages.show');
 
 });
 

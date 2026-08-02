@@ -213,8 +213,7 @@
                                     <input
                                         id="name"
                                         type="text"
-                                        name="name"
-                                        value="{{ old('name', auth()->user()->name ?? '') }}"
+                                        value="{{ auth()->user()->name ?? '' }}"
                                         placeholder="Nhập họ và tên"
                                         maxlength="100"
                                         autocomplete="name"
@@ -235,8 +234,7 @@
                                     <input
                                         id="email"
                                         type="email"
-                                        name="email"
-                                        value="{{ old('email', auth()->user()->email ?? '') }}"
+                                        value="{{ auth()->user()->email ?? '' }}"
                                         placeholder="example@gmail.com"
                                         maxlength="255"
                                         autocomplete="email"
@@ -260,8 +258,7 @@
                                 <input
                                     id="phone"
                                     type="tel"
-                                    name="phone"
-                                    value="{{ old('phone') }}"
+                                    value="{{ old('phone', auth()->user()->phone ?? '') }}"
                                     placeholder="Ví dụ: 0912345678"
                                     maxlength="20"
                                     autocomplete="tel"

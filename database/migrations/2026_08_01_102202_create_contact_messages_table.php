@@ -19,6 +19,7 @@ return new class extends Migration
 
             // unread: chưa đọc
             // read: đã đọc
+            // replied: đã phản hồi
             $table->string('status')->default('unread');
 
             $table->timestamps();

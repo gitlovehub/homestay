@@ -30,7 +30,7 @@
 
                         <input id="name" name="name" type="text" value="{{ old('name', $category->name) }}"
                             autofocus placeholder="Ví dụ: Villa, Nhà gỗ, Căn hộ..."
-                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                            class="h-12 w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('name')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -54,7 +54,7 @@
 
                         <input id="slug" name="slug" type="text" value="{{ old('slug', $category->slug) }}"
                             placeholder="Để trống để hệ thống tự tạo"
-                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                            class="h-12w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('slug')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">

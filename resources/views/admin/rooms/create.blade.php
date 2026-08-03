@@ -142,7 +142,7 @@
 
                             <input id="name" name="name" type="text" value="{{ old('name') }}"
                                 placeholder="Ví dụ: Phòng Deluxe 01"
-                                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                             @error('name')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -160,7 +160,7 @@
 
                             <input id="room_code" name="room_code" type="text" value="{{ old('room_code') }}"
                                 placeholder="Ví dụ: DLX-001"
-                                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 uppercase text-slate-900 outline-none transition placeholder:normal-case placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 uppercase text-slate-900 outline-none transition placeholder:normal-case placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                             @error('room_code')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -178,7 +178,7 @@
 
                             <input id="room_type" name="room_type" type="text" value="{{ old('room_type') }}"
                                 placeholder="Ví dụ: Phòng đơn, Phòng đôi, Phòng gia đình..."
-                                class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                             @error('room_type')
                                 <p class="mt-2 text-sm font-medium text-red-600">
@@ -218,7 +218,7 @@
                             <div class="relative">
                                 <input id="price_per_night" name="price_per_night" type="number" step="100000"
                                     value="{{ old('price_per_night') }}" min="0" placeholder="500000"
-                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-16 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                    class="h-12 w-full rounded-xl border border-slate-300 px-4 py-3 pr-16 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                                 <span
                                     class="absolute inset-y-0 right-4 flex items-center text-sm font-semibold text-slate-400">
@@ -242,7 +242,7 @@
 
                             <input id="capacity" name="capacity" type="number" value="{{ old('capacity', 2) }}"
                                 min="1"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                class="h-12 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                             @error('capacity')
                                 <p class="mt-2 text-sm text-red-600">
@@ -260,7 +260,7 @@
 
                             <input id="number_of_beds" name="number_of_beds" type="number"
                                 value="{{ old('number_of_beds', 1) }}" min="1"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                class="h-12 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                             @error('number_of_beds')
                                 <p class="mt-2 text-sm text-red-600">
@@ -278,7 +278,7 @@
                             <div class="relative max-w-md">
                                 <input id="area" name="area" type="number" value="{{ old('area') }}"
                                     min="0" step="1" placeholder="25"
-                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-14 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                                    class="h-12 w-full rounded-xl border border-slate-300 px-4 py-3 pr-14 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
 
                                 <span
                                     class="absolute inset-y-0 right-4 flex items-center text-sm font-semibold text-slate-400">

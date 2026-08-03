@@ -219,7 +219,7 @@
                                     required
                                     autocomplete="name"
                                     placeholder="Nhập họ và tên"
-                                    class="w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
+                                    class="h-12 w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
                                         {{ $errors->has('customer_name')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100' }}"
@@ -252,7 +252,7 @@
                                     required
                                     autocomplete="email"
                                     placeholder="example@email.com"
-                                    class="w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
+                                    class="h-12w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
                                         {{ $errors->has('customer_email')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100' }}"
@@ -285,7 +285,7 @@
                                     required
                                     autocomplete="tel"
                                     placeholder="Nhập số điện thoại"
-                                    class="w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
+                                    class="h-12w-full rounded-xl border px-4 py-3 outline-none transition placeholder:text-slate-400 focus:ring-4
                                         {{ $errors->has('customer_phone')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100' }}"
@@ -333,7 +333,7 @@
                                     name="check_in"
                                     value="{{ old('check_in') }}"
                                     required
-                                    class="w-full cursor-pointer rounded-xl border px-4 py-3 text-slate-700 outline-none transition focus:ring-4
+                                    class="h-12w-full cursor-pointer rounded-xl border px-4 py-3 text-slate-700 outline-none transition focus:ring-4
                                         {{ $errors->has('check_in')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100' }}"
@@ -364,7 +364,7 @@
                                     name="check_out"
                                     value="{{ old('check_out') }}"
                                     required
-                                    class="w-full cursor-pointer rounded-xl border px-4 py-3 text-slate-700 outline-none transition focus:ring-4
+                                    class="h-12 w-full cursor-pointer rounded-xl border px-4 py-3 text-slate-700 outline-none transition focus:ring-4
                                         {{ $errors->has('check_out')
                                             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100' }}"

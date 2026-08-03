@@ -61,7 +61,7 @@
 
                         <input id="name" type="text" name="name" value="{{ old('name', $amenity->name) }}"
                             maxlength="255" placeholder="Ví dụ: Ghế tình yêu" autocomplete="off" autofocus
-                            class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                            class="h-12 w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                             {{ $errors->has('name')
                                 ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                 : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -85,7 +85,7 @@
 
                             <input id="icon" type="text" name="icon" value="{{ old('icon', $amenity->icon) }}"
                                 maxlength="255" placeholder="Ví dụ: 🪑" autocomplete="off"
-                                class="w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('icon')
                                     ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">

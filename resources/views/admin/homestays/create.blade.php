@@ -42,7 +42,7 @@
 
                             <input id="name" name="name" type="text" value="{{ old('name') }}" autofocus
                                 placeholder="Ví dụ: Ocean View Homestay"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('name')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -64,7 +64,7 @@
 
                             <input id="slug" name="slug" type="text" value="{{ old('slug') }}"
                                 placeholder="Để trống để hệ thống tự tạo từ tên Homestay"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('slug')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -337,7 +337,7 @@
 
                                 <input id="base_price" name="base_price" type="number" min="0" step="100000"
                                     value="{{ old('base_price') }}" placeholder="Ví dụ: 2000000"
-                                    class="w-full rounded-xl border px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                    class="h-12 w-full rounded-xl border px-4 py-3 pr-16 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                     {{ $errors->has('base_price')
                                         ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                         : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -366,7 +366,7 @@
 
                             <input id="check_in_time" name="check_in_time" type="time"
                                 value="{{ old('check_in_time', '14:00') }}"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
                                 {{ $errors->has('check_in_time')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -388,7 +388,7 @@
 
                             <input id="check_out_time" name="check_out_time" type="time"
                                 value="{{ old('check_out_time', '12:00') }}"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition
                                 {{ $errors->has('check_out_time')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -434,7 +434,7 @@
 
                             <input id="address" name="address" type="text" value="{{ old('address') }}"
                                 placeholder="Ví dụ: 123 đường Trần Phú"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('address')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -668,7 +668,7 @@
 
                             <input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="11"
                                 value="{{ old('phone') }}" placeholder="Ví dụ: 0987654321"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('phone')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -690,7 +690,7 @@
 
                             <input id="latitude" name="latitude" type="number" step="0.0000001"
                                 value="{{ old('latitude') }}" placeholder="Ví dụ: 11.940419"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('latitude')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -712,7 +712,7 @@
 
                             <input id="longitude" name="longitude" type="number" step="0.0000001"
                                 value="{{ old('longitude') }}" placeholder="Ví dụ: 108.458313"
-                                class="w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('longitude')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
@@ -925,7 +925,7 @@
 
                             <textarea id="description" name="description" rows="7" maxlength="3000"
                                 placeholder="Nhập nội dung giới thiệu về Homestay..."
-                                class="w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('description')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description') }}</textarea>
@@ -955,7 +955,7 @@
 
                             <textarea id="policy" name="policy" rows="6" maxlength="3000"
                                 placeholder="Ví dụ: Không hút thuốc, không mang vật nuôi, giữ yên lặng sau 22 giờ..."
-                                class="w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class="h-12 w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('policy')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('policy') }}</textarea>

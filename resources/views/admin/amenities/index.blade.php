@@ -175,7 +175,7 @@
 
                             <input id="search" name="search" type="search" value="{{ request('search') }}"
                                 placeholder="Tên tiện ích, slug hoặc mô tả..."
-                                class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                class="h-12 w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                                 onsearch="this.form.submit()" oninput="if(this.value === '') this.form.submit()">
 
                         </div>
@@ -190,7 +190,7 @@
                         </label>
 
                         <select id="status" name="status"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                            class="h-12 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                             <option value="">
                                 Tất cả trạng thái
                             </option>

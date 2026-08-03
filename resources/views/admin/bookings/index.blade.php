@@ -49,7 +49,7 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Mã đơn, tên khách, SĐT..."
-                    class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 sm:w-64"
+                    class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 sm:w-64"
                     onsearch="this.form.submit()"
                     oninput="if(this.value === '') this.form.submit()"
                 >
@@ -57,7 +57,7 @@
                 {{-- Lọc trạng thái Booking --}}
                 <select
                     name="status"
-                    class="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    class="h-12 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     onchange="this.form.submit()"
                 >
                     <option value="">
@@ -77,21 +77,12 @@
                 {{-- Lọc thanh toán --}}
                 <select
                     name="payment_status"
-                    class="cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    class="h-12 cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     onchange="this.form.submit()"
                 >
                     <option value="">
                         Tất cả thanh toán
                     </option>
-
-                    @foreach ($paymentLabels as $value => $label)
-                        <option
-                            value="{{ $value }}"
-                            @selected(request('payment_status') === $value)
-                        >
-                            {{ $label }}
-                        </option>
-                    @endforeach
                 </select>
 
                 {{-- Đặt lại --}}

@@ -18,7 +18,7 @@
             <div class="flex items-center justify-between gap-4">
                 <form method="GET">
                     <input type="search" name="search" value="{{ request('search') }}" placeholder="Tìm kiếm Homestays..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-2" onsearch="this.form.submit()"
+                        class="h-12 w-full rounded-xl border border-slate-300 px-4 py-2" onsearch="this.form.submit()"
                         oninput="if(this.value === '') this.form.submit()">
                 </form>
 

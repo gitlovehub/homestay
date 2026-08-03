@@ -52,7 +52,7 @@
                                 @foreach ($tabItems as $tab)
                                     <button type="button" role="tab" data-tab-target="{{ $tab['id'] }}"
                                         aria-selected="{{ $loop->first ? 'true' : 'false' }}"
-                                        class="homestay-tab cursor-pointer border-b-5 inline-flex min-h-11 shrink-0 items-center justify-center py-2.5 pt-[5px] text-sm font-semibold transition lg:flex-1
+                                        class="homestay-tab cursor-pointer border-b-5 inline-flex min-h-11 shrink-0 items-center justify-center py-2.5 pt-3 text-sm font-semibold transition lg:flex-1
                                             {{ $loop->first
                                                 ? 'border-b-blue-600 text-blue-600'
                                                 : 'border-b-transparent text-slate-600 hover:border-b-slate-300 hover:text-slate-900' }}"

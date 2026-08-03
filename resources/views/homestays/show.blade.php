@@ -38,7 +38,7 @@
                     <div id="homestay-tab-navigation"
                         class="sticky top-20 z-30 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-sm backdrop-blur">
                         <div class="overflow-x-auto">
-                            <div class="flex min-w-max gap-2 p-2 lg:min-w-0" role="tablist" aria-label="Nội dung Homestay">
+                            <div class="flex min-w-max gap-6 px-6 py-2 items-center justify-between lg:min-w-0" role="tablist" aria-label="Nội dung Homestay">
                                 @php
                                     $tabItems = [
                                         ['id' => 'rooms', 'label' => 'Danh sách phòng'],
@@ -52,7 +52,7 @@
                                 @foreach ($tabItems as $tab)
                                     <button type="button" role="tab" data-tab-target="{{ $tab['id'] }}"
                                         aria-selected="{{ $loop->first ? 'true' : 'false' }}"
-                                        class="homestay-tab cursor-pointer border-b-5 inline-flex min-h-11 shrink-0 items-center justify-center gap-2 py-2.5 text-sm font-semibold transition lg:flex-1
+                                        class="homestay-tab cursor-pointer border-b-5 inline-flex min-h-11 shrink-0 items-center justify-center py-2.5 text-sm font-semibold transition lg:flex-1
                                             {{ $loop->first
                                                 ? 'border-b-blue-600 text-blue-600'
                                                 : 'border-b-transparent text-slate-600 hover:border-b-slate-300 hover:text-slate-900' }}"

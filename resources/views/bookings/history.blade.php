@@ -67,22 +67,11 @@
     ];
 @endphp
 
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Lịch sử đặt phòng | HomeStayGo')
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Lịch sử đặt phòng | HomeStayGo</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body class="min-h-screen bg-slate-50">
-
-    @include('partials.navbar')
+@section('content')
 
     <x-alert />
 
@@ -339,8 +328,14 @@
                 </div>
 
                 @if ($bookings->hasPages())
-                    <div class="mt-10">
-                        {{ $bookings->appends(request()->query())->links() }}
+                    <div class="mt-10 border-t border-slate-200 pt-5">
+                        {{ $bookings
+                            ->appends(request()->query())
+                            ->onEachSide(1)
+                            ->links('components.pagination', [
+                                'layout' => 'row',
+                                'showInfo' => true,
+                            ]) }}
                     </div>
                 @endif
 
@@ -744,6 +739,4 @@
         });
     </script>
 
-</body>
-
-</html>
+@endsection

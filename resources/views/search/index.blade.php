@@ -836,140 +836,183 @@
                                     $availableRoomCount = (int) ($homestay->available_rooms_count ?? 0);
                                 @endphp
 
-                                <article
-                                    class="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl">
-                                    {{-- Hình ảnh --}}
-                                    <div class="relative aspect-4/3 overflow-hidden bg-slate-100">
-                                        @if ($homestay->thumbnail)
-                                            <img src="{{ Storage::url($homestay->thumbnail) }}"
-                                                alt="{{ $homestay->name }}" loading="lazy"
-                                                class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                                        @else
-                                            <div class="flex h-full items-center justify-center">
-                                                <div class="text-center">
-                                                    <div class="text-4xl">
-                                                        🏡
+                                <a href="{{ route('homestays.show', $homestay->slug) }}"
+                                    aria-label="Xem chi tiết {{ $homestay->name }}"
+                                    class="group block h-full rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-100">
+
+                                    <article
+                                        class="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm
+                                            transition duration-300
+                                            group-hover:-translate-y-1
+                                            group-hover:border-blue-200
+                                            group-hover:shadow-xl">
+
+                                        {{-- Hình ảnh --}}
+                                        <div class="relative aspect-4/3 overflow-hidden bg-slate-100">
+                                            @if ($homestay->thumbnail)
+                                                <img
+                                                    src="{{ Storage::url($homestay->thumbnail) }}"
+                                                    alt="{{ $homestay->name }}"
+                                                    loading="lazy"
+                                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                                >
+                                            @else
+                                                <div class="flex h-full items-center justify-center">
+                                                    <div class="text-center">
+                                                        <div class="text-4xl">
+                                                            🏡
+                                                        </div>
+
+                                                        <p class="mt-2 text-xs font-medium text-slate-400">
+                                                            Chưa có hình ảnh
+                                                        </p>
                                                     </div>
+                                                </div>
+                                            @endif
 
-                                                    <p class="mt-2 text-xs font-medium text-slate-400">
-                                                        Chưa có hình ảnh
+                                            {{-- Danh mục --}}
+                                            <span
+                                                class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5
+                                                    text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur">
+                                                {{ $homestay->category?->name ?? 'Homestay' }}
+                                            </span>
+
+                                            {{-- Đánh giá --}}
+                                            @if ($reviewCount > 0)
+                                                <span
+                                                    class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full
+                                                        bg-white/95 px-3 py-1.5 text-[11px] font-bold text-slate-800
+                                                        shadow-sm backdrop-blur">
+
+                                                    <x-icon-star class="h-3.5 w-3.5 text-amber-400" />
+
+                                                    {{ number_format($averageRating, 1) }}
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        {{-- Nội dung --}}
+                                        <div class="flex flex-1 flex-col p-4">
+
+                                            {{-- Thành phố --}}
+                                            <p class="truncate text-xs font-semibold text-blue-600">
+                                                {{ $homestay->city ?: 'Chưa cập nhật thành phố' }}
+                                            </p>
+
+                                            {{-- Tên --}}
+                                            <h2 class="mt-1 line-clamp-1 text-lg font-bold text-slate-950">
+                                                {{ $homestay->name }}
+                                            </h2>
+
+                                            {{-- Thống kê --}}
+                                            <div class="mt-3 flex flex-wrap gap-2">
+
+                                                <span
+                                                    class="inline-flex items-center gap-1 rounded-full border border-emerald-200
+                                                        bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+
+                                                    <svg
+                                                        class="h-3.5 w-3.5"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M5 13l4 4L19 7"
+                                                        />
+                                                    </svg>
+
+                                                    {{ $availableRoomCount }} phòng phù hợp
+                                                </span>
+
+                                                <span
+                                                    class="inline-flex items-center gap-1 rounded-full border border-amber-200
+                                                        bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+
+                                                    <x-icon-star class="h-3 w-3 text-amber-400" />
+
+                                                    {{ $reviewCount }} đánh giá
+                                                </span>
+                                            </div>
+
+                                            {{-- Mô tả --}}
+                                            <p class="mt-3 line-clamp-2 min-h-10 text-xs leading-5 text-slate-500">
+                                                {{ \Illuminate\Support\Str::limit(
+                                                    $homestay->description
+                                                        ?: 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
+                                                    90,
+                                                ) }}
+                                            </p>
+
+                                            {{-- Tiện ích --}}
+                                            @if ($homestay->amenities->isNotEmpty())
+                                                <div class="mt-3 flex flex-wrap gap-1.5">
+                                                    @foreach ($homestay->amenities->take(2) as $amenity)
+                                                        <span
+                                                            class="rounded-lg bg-slate-100 px-2 py-1 text-[11px]
+                                                                font-semibold text-slate-600">
+                                                            {{ $amenity->icon ?: '✨' }}
+                                                            {{ $amenity->name }}
+                                                        </span>
+                                                    @endforeach
+
+                                                    @if ($homestay->amenities->count() > 2)
+                                                        <span
+                                                            class="rounded-lg bg-slate-100 px-2 py-1 text-[11px]
+                                                                font-semibold text-slate-500">
+                                                            +{{ $homestay->amenities->count() - 2 }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @endif
+
+                                            {{-- Giá và nút chi tiết --}}
+                                            <div class="mt-auto flex items-end justify-between gap-3 border-t border-slate-100 pt-4">
+
+                                                <div class="min-w-0">
+                                                    <p class="text-[11px] text-slate-400">
+                                                        Giá phòng phù hợp từ
                                                     </p>
+
+                                                    <div class="mt-0.5">
+                                                        <span class="text-lg font-bold text-blue-600">
+                                                            {{ number_format($minimumPrice, 0, ',', '.') }}đ
+                                                        </span>
+
+                                                        <span class="text-[11px] text-slate-400">
+                                                            / đêm
+                                                        </span>
+                                                    </div>
                                                 </div>
+
+                                                {{-- Card đã là thẻ a nên nút bên trong dùng span --}}
+                                                <span
+                                                    class="inline-flex shrink-0 items-center justify-center rounded-xl
+                                                        bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white
+                                                        transition group-hover:bg-blue-700">
+                                                    Xem chi tiết
+                                                </span>
+
                                             </div>
-                                        @endif
-
-                                        {{-- Danh mục --}}
-                                        <span
-                                            class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur">
-                                            {{ $homestay->category?->name ?? 'Homestay' }}
-                                        </span>
-
-                                        {{-- Đánh giá --}}
-                                        @if ($reviewCount > 0)
-                                            <span
-                                                class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-slate-800 shadow-sm backdrop-blur">
-                                                <x-icon-star class="h-3.5 w-3.5 text-amber-400" />
-
-                                                {{ number_format($averageRating, 1) }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    {{-- Nội dung --}}
-                                    <div class="flex flex-1 flex-col p-4">
-                                        {{-- Thành phố --}}
-                                        <p class="truncate text-xs font-semibold text-blue-600">
-                                            {{ $homestay->city ?: 'Chưa cập nhật thành phố' }}
-                                        </p>
-
-                                        {{-- Tên --}}
-                                        <h2 class="mt-1 line-clamp-1 text-lg font-bold text-slate-950">
-                                            {{ $homestay->name }}
-                                        </h2>
-
-                                        {{-- Thống kê --}}
-                                        <div class="mt-3 flex flex-wrap gap-2">
-                                            <span
-                                                class="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
-                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 13l4 4L19 7" />
-                                                </svg>
-
-                                                {{ $availableRoomCount }}
-                                                phòng phù hợp
-                                            </span>
-
-                                            <span
-                                                class="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-                                                <x-icon-star class="h-3 w-3 text-amber-400" />
-
-                                                {{ $reviewCount }} đánh giá
-                                            </span>
                                         </div>
 
-                                        {{-- Mô tả --}}
-                                        <p class="mt-3 line-clamp-2 min-h-10 text-xs leading-5 text-slate-500">
-                                            {{ \Illuminate\Support\Str::limit(
-                                                $homestay->description ?: 'Không gian nghỉ dưỡng tiện nghi, phù hợp cho gia đình và nhóm bạn.',
-                                                90,
-                                            ) }}
-                                        </p>
+                                    </article>
 
-                                        {{-- Tiện ích --}}
-                                        @if ($homestay->amenities->isNotEmpty())
-                                            <div class="mt-3 flex flex-wrap gap-1.5">
-                                                @foreach ($homestay->amenities->take(2) as $amenity)
-                                                    <span
-                                                        class="rounded-lg bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-600">
-                                                        {{ $amenity->icon ?: '✨' }}
-                                                        {{ $amenity->name }}
-                                                    </span>
-                                                @endforeach
+                                </a>
 
-                                                @if ($homestay->amenities->count() > 2)
-                                                    <span
-                                                        class="rounded-lg bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-500">
-                                                        +{{ $homestay->amenities->count() - 2 }}
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                        {{-- Giá và nút chi tiết --}}
-                                        <div
-                                            class="mt-auto flex items-end justify-between gap-3 border-t border-slate-100 pt-4">
-                                            <div class="min-w-0">
-                                                <p class="text-[11px] text-slate-400">
-                                                    Giá phòng phù hợp từ
-                                                </p>
-
-                                                <div class="mt-0.5">
-                                                    <span class="text-lg font-bold text-blue-600">
-                                                        {{ number_format($minimumPrice, 0, ',', '.') }}đ
-                                                    </span>
-
-                                                    <span class="text-[11px] text-slate-400">
-                                                        / đêm
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <a href="{{ route('homestays.show', $homestay->slug) }}"
-                                                class="inline-flex shrink-0 items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                                                Xem chi tiết
-                                            </a>
-                                        </div>
-                                    </div>
-                                </article>
                             @endforeach
                         </div>
 
                         {{-- Phân trang --}}
                         @if ($homestays->hasPages())
                             <div class="mt-8">
-                                {{ $homestays->links() }}
+                                {{ $homestays->onEachSide(1)->links('components.pagination', [
+                                    'layout' => 'row',
+                                    'showInfo' => true,
+                                ]) }}
                             </div>
                         @endif
                     @endif

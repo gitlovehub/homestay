@@ -1,25 +1,8 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Chi tiết đơn đặt phòng | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Chi tiết đơn {{ $booking->booking_code }} | HomeStayGo</title>
-
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-
-<body class="min-h-screen bg-slate-50">
-
-    @include('partials.navbar')
+@section('content')
 
     @php
         $statusLabels = [
@@ -453,6 +436,4 @@
 
     </main>
 
-</body>
-
-</html>
+@endsection

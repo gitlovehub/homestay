@@ -1,25 +1,8 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
+@section('title', 'Đặt phòng ' . $room->name . ' | HomeStayGo')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Đặt phòng {{ $room->name }} | HomeStayGo</title>
-
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-</head>
-
-<body class="min-h-screen bg-slate-50">
-
-    @include('partials.navbar')
+@section('content')
 
     <main>
 
@@ -759,6 +742,4 @@
         });
     </script>
 
-</body>
-
-</html>
+@endsection

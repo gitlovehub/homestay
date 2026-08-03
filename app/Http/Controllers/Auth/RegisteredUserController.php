@@ -45,6 +45,9 @@ class RegisteredUserController extends Controller
                 'confirmed',
                 Rules\Password::defaults(),
             ],
+            'terms' => [
+                'accepted',
+            ],
         ]);
 
         $user = User::create([

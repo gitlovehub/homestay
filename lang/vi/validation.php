@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'accepted' => 'Trường :attribute phải được chấp nhận.',
+    'accepted' => 'Bạn phải đồng ý với :attribute.',
     'confirmed' => 'Xác nhận :attribute không khớp.',
     'email' => 'Trường :attribute phải là địa chỉ email hợp lệ.',
     'exists' => ':attribute không tồn tại trong hệ thống.',
@@ -23,5 +23,6 @@ return [
         'password_confirmation' => 'Xác nhận mật khẩu',
         'current_password' => 'Mật khẩu hiện tại',
         'token' => 'Mã xác nhận',
+        'terms' => 'Điều khoản sử dụng và chính sách bảo mật',
     ],
 ];

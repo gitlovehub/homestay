@@ -104,23 +104,39 @@
                     </div>
 
                     {{-- Điều khoản --}}
-                    <label class="flex items-start gap-3">
+                    <div>
+                        <label class="flex items-start gap-3">
 
-                        <input type="checkbox" name="terms"
-                            class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                            <input
+                                type="checkbox"
+                                name="terms"
+                                value="1"
+                                {{ old('terms') ? 'checked' : '' }}
+                                class="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            >
 
-                        <span class="text-sm leading-6 text-slate-600">
-                            Tôi đồng ý với
-                            <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
-                                điều khoản sử dụng
-                            </a>
-                            và
-                            <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
-                                chính sách bảo mật
-                            </a>.
-                        </span>
+                            <span class="text-sm leading-6 text-slate-600">
+                                Tôi đồng ý với
 
-                    </label>
+                                <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
+                                    điều khoản sử dụng
+                                </a>
+
+                                và
+
+                                <a href="#" class="font-semibold text-blue-600 hover:text-blue-700">
+                                    chính sách bảo mật
+                                </a>.
+                            </span>
+
+                        </label>
+
+                        @error('terms')
+                            <p class="mt-2 text-sm font-medium text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
                     <button type="submit"
                         class="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">

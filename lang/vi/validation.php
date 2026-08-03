@@ -17,11 +17,11 @@ return [
     'current_password' => 'Mật khẩu hiện tại không chính xác.',
 
     'attributes' => [
-        'name' => 'họ và tên',
-        'email' => 'địa chỉ email',
-        'password' => 'mật khẩu',
-        'password_confirmation' => 'xác nhận mật khẩu',
-        'current_password' => 'mật khẩu hiện tại',
-        'token' => 'mã xác nhận',
+        'name' => 'Họ và tên',
+        'email' => 'Địa chỉ email',
+        'password' => 'Mật khẩu',
+        'password_confirmation' => 'Xác nhận mật khẩu',
+        'current_password' => 'Mật khẩu hiện tại',
+        'token' => 'Mã xác nhận',
     ],
 ];

@@ -334,6 +334,7 @@
                                                         type="hidden"
                                                         name="status"
                                                         value="confirmed"
+                                                        class="h-12"
                                                     >
 
                                                     <button
@@ -360,6 +361,7 @@
                                                         type="hidden"
                                                         name="status"
                                                         value="cancelled"
+                                                        class="h-12"
                                                     >
 
                                                     <button
@@ -393,6 +395,7 @@
                                                         type="hidden"
                                                         name="status"
                                                         value="checked_in"
+                                                        class="h-12"
                                                     >
 
                                                     <button
@@ -420,6 +423,7 @@
                                                         type="hidden"
                                                         name="status"
                                                         value="cancelled"
+                                                        class="h-12"
                                                     >
 
                                                     <button
@@ -453,6 +457,7 @@
                                                         type="hidden"
                                                         name="status"
                                                         value="completed"
+                                                        class="h-12"
                                                     >
 
                                                     <button

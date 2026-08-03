@@ -594,7 +594,7 @@
 
                             <textarea id="description" name="description" rows="7" maxlength="3000"
                                 placeholder="Nhập nội dung giới thiệu về Homestay..."
-                                class="h-12 w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class=" w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('description')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description', $homestay->description) }}</textarea>
@@ -624,7 +624,7 @@
 
                             <textarea id="policy" name="policy" rows="6" maxlength="3000"
                                 placeholder="Ví dụ: Không hút thuốc, không mang vật nuôi, giữ yên lặng sau 22 giờ..."
-                                class="h-12 w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                class=" w-full resize-y rounded-xl border px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                 {{ $errors->has('policy')
                                     ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                     : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('policy', $homestay->policy) }}</textarea>

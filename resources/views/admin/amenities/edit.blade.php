@@ -59,7 +59,7 @@
                             </span>
                         </label>
 
-                        <input id="name" type="text" name="name" value="{{ old('name', $amenity->name) }}"
+                        <input  id="name" type="text" name="name" value="{{ old('name', $amenity->name) }} class=h-12"
                             maxlength="255" placeholder="Ví dụ: Ghế tình yêu" autocomplete="off" autofocus
                             class="h-12 w-full rounded-xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
                             {{ $errors->has('name')

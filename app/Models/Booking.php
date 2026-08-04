@@ -97,9 +97,20 @@ class Booking extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Toàn bộ các lần thanh toán của đơn đặt phòng.
+     */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Lần thanh toán mới nhất của đơn đặt phòng.
+     */
     public function payment(): HasOne
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class)->latestOfMany();
     }
 
     /*

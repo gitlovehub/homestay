@@ -186,6 +186,12 @@
                             $homestay = $room?->homestay;
                             $canReview = $booking->status === 'completed' && !$review && $homestay;
                             $canRebook = $room && $room->status === 'available' && $homestay && $homestay->status;
+                            $canPay = $booking->status !== 'cancelled' && in_array($booking->payment_status, ['unpaid', 'pending', 'failed'], true);
+                            $paymentButtonLabel = match ($booking->payment_status) {
+                                'pending' => 'Tiếp tục thanh toán',
+                                'failed' => 'Thanh toán lại',
+                                default => 'Thanh toán VNPAY',
+                            };
                             $statusClass =
                                 $statusClasses[$booking->status] ?? 'border-slate-200 bg-slate-100 text-slate-700';
                             $statusLabel = $statusLabels[$booking->status] ?? $booking->status;
@@ -306,6 +312,15 @@
                                                 class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:bg-blue-50 hover:text-blue-600">
                                                 Xem chi tiết
                                             </a>
+
+                                            @if ($canPay)
+                                                <a
+                                                    href="{{ route('bookings.payment.show', $booking) }}"
+                                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                                >
+                                                    {{ $paymentButtonLabel }}
+                                                </a>
+                                            @endif
 
                                             @if ($canRebook)
                                                 <a href="{{ route('bookings.create', $room) }}"

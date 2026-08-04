@@ -28,6 +28,24 @@
             'refunded' => 'Đã hoàn tiền',
             'failed' => 'Thanh toán thất bại',
         ];
+
+        $paymentClasses = [
+            'unpaid' => 'border-slate-200 bg-slate-100 text-slate-700',
+            'pending' => 'border-amber-200 bg-amber-50 text-amber-700',
+            'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'refunded' => 'border-blue-200 bg-blue-50 text-blue-700',
+            'failed' => 'border-red-200 bg-red-50 text-red-700',
+        ];
+
+        $canPay = $booking->status !== 'cancelled'
+            && $booking->payment_status !== 'paid';
+
+        $paymentButtonLabel = match ($booking->payment_status) {
+            'pending' => 'Tiếp tục thanh toán',
+            'failed' => 'Thanh toán lại qua VNPAY',
+            default => 'Thanh toán qua VNPAY',
+        };
+
     @endphp
 
     <main>
@@ -58,6 +76,12 @@
             @if (session('success'))
                 <div class="mb-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-medium text-emerald-700">
                     {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-8 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -396,32 +420,76 @@
 
                         </div>
 
-                        <div class="mt-6 rounded-2xl bg-slate-50 p-4">
+                        <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
 
-                            <div class="flex items-center justify-between gap-4 text-sm">
+                            <div class="flex items-center justify-between gap-4">
 
-                                <span class="text-slate-500">
-                                    Thanh toán
-                                </span>
+                                <div>
+                                    <p class="text-sm text-slate-500">
+                                        Trạng thái thanh toán
+                                    </p>
 
-                                <span class="font-semibold text-slate-800">
-                                    {{ $paymentLabels[$booking->payment_status] ?? $booking->payment_status }}
+                                    <p class="mt-1 text-xs text-slate-400">
+                                        Cập nhật tự động sau khi VNPAY xác minh.
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="inline-flex shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold
+                                        {{ $paymentClasses[$booking->payment_status]
+                                            ?? 'border-slate-200 bg-slate-100 text-slate-700' }}"
+                                >
+                                    {{ $paymentLabels[$booking->payment_status]
+                                        ?? $booking->payment_status }}
                                 </span>
 
                             </div>
 
                         </div>
 
+                        @if ($canPay)
+                            <a
+                                href="{{ route('bookings.payment.show', $booking) }}"
+                                class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                            >
+                                {{ $paymentButtonLabel }}
+                            </a>
+                        @elseif ($booking->payment_status === 'paid')
+                            <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center">
+
+                                <p class="font-bold text-emerald-700">
+                                    ✓ Đơn đã được thanh toán
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-emerald-600">
+                                    Bạn không cần thực hiện thêm giao dịch cho đơn này.
+                                </p>
+
+                            </div>
+                        @elseif ($booking->status === 'cancelled')
+                            <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-center">
+
+                                <p class="font-bold text-red-700">
+                                    Đơn đã bị hủy
+                                </p>
+
+                                <p class="mt-1 text-xs leading-5 text-red-600">
+                                    Không thể thanh toán cho đơn đặt phòng đã hủy.
+                                </p>
+
+                            </div>
+                        @endif
+
                         <a
                             href="{{ route('bookings.history') }}"
-                            class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
+                            class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
                         >
                             Xem lịch sử đặt phòng
                         </a>
 
                         <a
                             href="{{ route('homestays.show', $booking->room->homestay->slug) }}"
-                            class="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                            class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:text-blue-600"
                         >
                             Quay lại Homestay
                         </a>

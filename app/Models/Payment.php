@@ -13,10 +13,15 @@ class Payment extends Model
     protected $fillable = [
         'booking_id',
         'transaction_code',
+        'gateway_transaction_code',
         'payment_method',
+        'bank_code',
         'amount',
-        'paid_at',
         'status',
+        'response_code',
+        'transaction_status',
+        'paid_at',
+        'expired_at',
         'response_data',
     ];
 
@@ -25,6 +30,7 @@ class Payment extends Model
         return [
             'amount' => 'integer',
             'paid_at' => 'datetime',
+            'expired_at' => 'datetime',
             'response_data' => 'array',
         ];
     }

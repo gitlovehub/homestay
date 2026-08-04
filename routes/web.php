@@ -17,6 +17,7 @@ use App\Http\Controllers\Frontend\CategoryController as FrontendCategoryControll
 use App\Http\Controllers\Frontend\HomestayController as FrontendHomestayController;
 use App\Http\Controllers\Frontend\BookingController as FrontendBookingController;
 use App\Http\Controllers\Frontend\ReviewController as FrontendReviewController;
+use App\Http\Controllers\Frontend\PaymentController as FrontendPaymentController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTE CÔNG KHAI (Public Routes)
@@ -54,6 +55,18 @@ Route::get(
     [FrontendHomestayController::class, 'index']
 )->name('homestays.index');
 
+// CALLBACK THANH TOÁN VNPAY
+// VNPAY phải truy cập được hai route này mà không cần đăng nhập.
+Route::get(
+    '/payments/vnpay/return',
+    [FrontendPaymentController::class, 'handleReturn']
+)->name('payments.vnpay.return');
+
+Route::get(
+    '/payments/vnpay/ipn',
+    [FrontendPaymentController::class, 'handleIpn']
+)->name('payments.vnpay.ipn');
+
 // ROUTE CẦN ĐĂNG NHẬP (Authenticated Routes)
 Route::middleware('auth')->group(function () {
 
@@ -79,10 +92,27 @@ Route::middleware('auth')->group(function () {
             [FrontendBookingController::class, 'store']
         )->name('store');
 
+        /*
+         * Trang thanh toán phải đặt trước route /{booking}
+         * để tránh xung đột với route động.
+         */
+        Route::get(
+            '/{booking}/payment',
+            [FrontendPaymentController::class, 'show']
+        )->whereNumber('booking')
+            ->name('payment.show');
+
+        Route::post(
+            '/{booking}/payments/vnpay',
+            [FrontendPaymentController::class, 'createVnpay']
+        )->whereNumber('booking')
+            ->name('payments.vnpay.create');
+
         Route::get(
             '/{booking}',
             [FrontendBookingController::class, 'show']
-        )->name('show');
+        )->whereNumber('booking')
+            ->name('show');
     });
 
     // Reviews (Client)

@@ -280,39 +280,6 @@
 
                         <div class="mt-6 grid gap-4">
 
-                            {{-- Chọn phương thức tại VNPAY --}}
-                            <label class="group relative cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="bank_code"
-                                    value=""
-                                    class="peer sr-only"
-                                    @checked($selectedBankCode === '')
-                                >
-
-                                <span
-                                    class="flex items-start gap-4 rounded-2xl border-2 border-slate-200 p-5 transition
-                                        group-hover:border-blue-300 group-hover:bg-blue-50/40
-                                        peer-checked:border-blue-600 peer-checked:bg-blue-50"
-                                >
-                                    <span
-                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-2xl"
-                                    >
-                                        🏦
-                                    </span>
-
-                                    <span class="min-w-0 flex-1">
-                                        <span class="font-bold text-slate-900">
-                                            Chọn phương thức tại VNPAY
-                                        </span>
-
-                                        <span class="mt-1 block text-sm leading-6 text-slate-500">
-                                            VNPAY sẽ hiển thị các ngân hàng và phương thức được hỗ trợ cho tài khoản sandbox.
-                                        </span>
-                                    </span>
-                                </span>
-                            </label>
-
                             {{-- VNPAY QR --}}
                             <label class="group relative cursor-pointer">
                                 <input

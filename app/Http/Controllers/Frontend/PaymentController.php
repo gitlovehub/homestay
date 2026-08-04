@@ -296,6 +296,83 @@ class PaymentController extends Controller
                 $payload
             );
 
+        /*
+         * Cơ chế dự phòng:
+         * Nếu Return URL có chữ ký hợp lệ, đúng mã giao dịch,
+         * đúng số tiền và VNPAY báo thành công thì cập nhật giao dịch.
+         *
+         * IPN vẫn được giữ làm luồng xác nhận server-to-server.
+         */
+        if (
+            $signatureValid
+            && $payment
+            && $amountValid
+            && $vnpayReportedSuccess
+            && $payment->status === 'pending'
+        ) {
+            DB::transaction(
+                function () use (
+                    $payment,
+                    $payload,
+                    $vnpayService
+                ): void {
+                    $lockedPayment = Payment::query()
+                        ->with('booking')
+                        ->lockForUpdate()
+                        ->find($payment->id);
+
+                    if (
+                        !$lockedPayment
+                        || $lockedPayment->status !== 'pending'
+                    ) {
+                        return;
+                    }
+
+                    $lockedPayment->update([
+                        'gateway_transaction_code' =>
+                            $payload['vnp_TransactionNo']
+                            ?? null,
+
+                        'bank_code' =>
+                            $payload['vnp_BankCode']
+                            ?? $lockedPayment->bank_code,
+
+                        'response_code' =>
+                            (string) (
+                                $payload['vnp_ResponseCode']
+                                ?? ''
+                            ),
+
+                        'transaction_status' =>
+                            (string) (
+                                $payload['vnp_TransactionStatus']
+                                ?? ''
+                            ),
+
+                        'status' => 'paid',
+
+                        'paid_at' =>
+                            $this->parseVnpayPayDate(
+                                $payload['vnp_PayDate']
+                                ?? null
+                            ),
+
+                        'response_data' =>
+                            $vnpayService->responseData(
+                                $payload
+                            ),
+                    ]);
+
+                    $lockedPayment->booking->update([
+                        'payment_status' => 'paid',
+                    ]);
+                }
+            );
+
+            $payment->refresh();
+            $payment->load('booking.room.homestay');
+        }
+
         $resultStatus = match (true) {
             !$signatureValid =>
                 'invalid_signature',
@@ -562,11 +639,18 @@ class PaymentController extends Controller
         }
 
         if (
-            $booking->payment_status
-            === 'paid'
+            !in_array(
+                $booking->payment_status,
+                [
+                    'unpaid',
+                    'pending',
+                    'failed',
+                ],
+                true
+            )
         ) {
             throw new RuntimeException(
-                'Đơn đặt phòng này đã được thanh toán.'
+                'Trạng thái hiện tại của đơn không cho phép thanh toán.'
             );
         }
 

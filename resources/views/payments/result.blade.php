@@ -33,7 +33,7 @@
         'invalid_signature' => [
             'eyebrow' => 'Không thể xác minh',
             'title' => 'Chữ ký giao dịch không hợp lệ',
-            'description' => 'Dữ liệu trả về không vượt qua bước xác minh chữ ký.<br>Trạng thái thanh toán không được cập nhật.',
+            'description' => 'Dữ liệu trả về không vượt qua bước xác minh chữ ký. Trạng thái thanh toán không được cập nhật.',
             'icon' => '×',
             'icon_class' => 'bg-red-100 text-red-700 ring-red-50',
             'badge_class' => 'border-red-200 bg-red-50 text-red-700',
@@ -72,11 +72,29 @@
         && (int) $booking->user_id === (int) auth()->id();
 
     $canRetryPayment = $canAccessBooking
+        && in_array(
+            $resultStatus,
+            [
+                'failed',
+                'invalid_signature',
+                'invalid_amount',
+            ],
+            true
+        )
         && $booking->status !== 'cancelled'
-        && $booking->payment_status !== 'paid';
+        && in_array(
+            $booking->payment_status,
+            [
+                'unpaid',
+                'failed',
+            ],
+            true
+        );
 
     $responseCodeLabels = [
-        '00' => 'Giao dịch thành công',
+        '00' => $resultStatus === 'success'
+            ? 'Giao dịch đã được xác nhận'
+            : 'VNPAY báo giao dịch thành công',
         '07' => 'Giao dịch nghi ngờ',
         '09' => 'Thẻ hoặc tài khoản chưa đăng ký Internet Banking',
         '10' => 'Xác thực thông tin không đúng quá số lần',

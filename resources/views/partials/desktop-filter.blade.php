@@ -46,7 +46,7 @@
         <label for="search" class="text-sm font-semibold text-slate-700">Tên Homestay</label>
         <input type="text" id="{{ $prefix }}-search" name="search" value="{{ request('search') }}"
             placeholder="Nhập tên..."
-            class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            class="mt-1 h-11 w-full rounded-xl border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
     </div>
 
     {{-- Thành phố --}}
@@ -61,7 +61,7 @@
         <select
             id="{{ $prefix }}-location"
             name="location"
-            class="mt-1 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            class="mt-1 h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         >
             <option value="">
                 Tất cả
@@ -199,7 +199,7 @@
                 </label>
 
                 <div
-                    class="mt-1 flex overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100">
+                    class="mt-1 flex h-11 overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100">
 
                     <button type="button" @click="changeMin(-step)"
                         class="flex w-10 shrink-0 cursor-pointer items-center justify-center border-r border-slate-200 text-lg font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-blue-600"
@@ -213,7 +213,7 @@
                             :value="minDisplay" @input="updateMin($event)"
                             @keydown.arrow-up.prevent="changeMin(step)"
                             @keydown.arrow-down.prevent="changeMin(-step)" placeholder="0"
-                            class="w-full border-0 bg-transparent px-3 py-3 pr-8 text-sm font-semibold text-slate-800 outline-none placeholder:font-normal placeholder:text-slate-400 focus:ring-0">
+                            class="h-full w-full border-0 bg-transparent px-3 pr-8 text-sm font-semibold text-slate-800 outline-none placeholder:font-normal placeholder:text-slate-400 focus:ring-0">
 
                         <span
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-xs font-semibold text-slate-400">
@@ -242,7 +242,7 @@
                 </label>
 
                 <div
-                    class="mt-1 flex overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100">
+                    class="mt-1 flex h-11 overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100">
 
                     <button type="button" @click="changeMax(-step)"
                         class="flex w-10 shrink-0 cursor-pointer items-center justify-center border-r border-slate-200 text-lg font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-blue-600"
@@ -257,7 +257,7 @@
                             @keydown.arrow-up.prevent="changeMax(step)"
                             @keydown.arrow-down.prevent="changeMax(-step)"
                             placeholder="0"
-                            class="w-full border-0 bg-transparent px-3 py-3 pr-8 text-sm font-semibold text-slate-800 outline-none placeholder:text-xs placeholder:font-normal placeholder:text-slate-400 focus:ring-0">
+                            class="h-full w-full border-0 bg-transparent px-3 pr-8 text-sm font-semibold text-slate-800 outline-none placeholder:text-xs placeholder:font-normal placeholder:text-slate-400 focus:ring-0">
 
                         <span
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-xs font-semibold text-slate-400">
@@ -348,7 +348,7 @@
         </label>
 
         <div
-            class="mt-1 flex overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100"
+            class="mt-1 flex h-11 overflow-hidden rounded-xl border border-slate-300 bg-white transition focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100"
         >
             {{-- Nút giảm --}}
             <button
@@ -372,7 +372,7 @@
                     @keydown.arrow-up.prevent="increaseGuests()"
                     @keydown.arrow-down.prevent="decreaseGuests()"
                     placeholder="1"
-                    class="w-full appearance-none border-0 bg-transparent px-3 py-3 pr-14 text-sm font-semibold text-slate-800 outline-none placeholder:font-normal placeholder:text-slate-400 focus:ring-0"
+                    class="h-full w-full appearance-none border-0 bg-transparent px-3 pr-14 text-sm font-semibold text-slate-800 outline-none placeholder:font-normal placeholder:text-slate-400 focus:ring-0"
                 >
 
                 <span
@@ -404,7 +404,7 @@
     <div>
         <label for="{{ $prefix }}-room-type" class="text-sm font-semibold text-slate-700">Loại phòng</label>
         <select id="{{ $prefix }}-room-type" name="room_type"
-            class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            class="mt-1 h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
             <option value="">Tất cả</option>
             @foreach ($roomTypes as $roomType)
                 <option value="{{ $roomType }}" @selected(request('room_type') === $roomType)>
@@ -415,9 +415,9 @@
     </div>
 
     <div>
-        <label for=for="{{ $prefix }}-rating" class="text-sm font-semibold text-slate-700">Đánh giá</label>
-        <select id=for="{{ $prefix }}-rating" name="rating"
-            class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+        <label for="{{ $prefix }}-rating" class="text-sm font-semibold text-slate-700">Đánh giá</label>
+        <select id="{{ $prefix }}-rating" name="rating"
+            class="mt-1 h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
             <option value="">Tất cả</option>
             @for ($star = 5; $star >= 1; $star--)
                 <option value="{{ $star }}" @selected((int) request('rating') === $star)>
@@ -450,11 +450,11 @@
 
     <div class="space-y-2 border-t border-slate-200 pt-4">
         <button type="submit"
-            class="w-full cursor-pointer rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+            class="h-11 w-full cursor-pointer rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700">
             Áp dụng bộ lọc
         </button>
         <a href="{{ $resetUrl }}"
-            class="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+            class="flex h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
             Xóa tất cả
         </a>
     </div>

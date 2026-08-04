@@ -444,8 +444,8 @@ Alpine.data('dateRangePicker', (config = {}) => ({
 
 Alpine.start();
 
-import './components/navbar';
-import './admin-action-menu';
+import './navbar';
+import './admin';
 
 import Chart from 'chart.js/auto';
 

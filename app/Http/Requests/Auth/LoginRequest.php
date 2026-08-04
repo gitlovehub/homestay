@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => 'Email, mật khẩu không chính xác hoặc tài khoản đã bị khóa.',
+                'email' => 'Email hoặc mật khẩu không chính xác.',
             ]);
         }
 

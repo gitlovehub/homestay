@@ -69,7 +69,7 @@
 
             <div class="relative">
                 <div class="overflow-hidden rounded-[2rem] bg-white p-3 shadow-2xl shadow-slate-900/15">
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+                    <img src="https://plus.unsplash.com/premium_photo-1663061414669-bb34bcd3ff2f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D"
                         alt="Homestay nổi bật" class="h-[480px] w-full rounded-[1.5rem] object-cover">
                 </div>
 
@@ -138,7 +138,7 @@
 
                     {{-- Nút mở dropdown --}}
                     <button type="button" @click="open = !open" :aria-expanded="open"
-                        class="group flex w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                        class="group flex h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-slate-300 bg-white px-4 py-3 text-left outline-none transition hover:border-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
                         <span class="flex min-w-0 items-center gap-3">
                             {{-- Icon vị trí --}}
                             <svg class="h-5 w-5 shrink-0 text-blue-600" fill="none" stroke="currentColor"

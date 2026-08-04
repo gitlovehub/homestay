@@ -28,7 +28,7 @@
             <div class="grid gap-8 lg:grid-cols-5 lg:gap-10">
 
                 {{-- Cột trái: Thông tin + Bản đồ --}}
-                <div class="order-2 lg:order-1 flex flex-col gap-6 lg:col-span-2">
+                <div class="order-2 flex flex-col gap-6 lg:order-1 lg:col-span-2">
 
                     {{-- Bản đồ --}}
                     <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg">
@@ -78,7 +78,7 @@
                             Thông tin hỗ trợ
                         </p>
                         <h2 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-                            Chúng tôi luôn sẵn sàng hỗ trợ bạn
+                            Chúng tôi luôn sẵn sàng hỗ trợ bạn
                         </h2>
                         <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
                             Bạn có thể liên hệ với HomeStayGo qua email, hotline hoặc gửi yêu cầu
@@ -94,7 +94,6 @@
                         </h3>
 
                         <div class="mt-6 space-y-5">
-                            {{-- Email --}}
                             <div class="flex items-start gap-4">
                                 <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-blue-400">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +112,6 @@
                                 </div>
                             </div>
 
-                            {{-- Hotline --}}
                             <div class="flex items-start gap-4">
                                 <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-blue-400">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +128,6 @@
                                 </div>
                             </div>
 
-                            {{-- Địa chỉ --}}
                             <div class="flex items-start gap-4">
                                 <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-blue-400">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,9 +181,8 @@
                             nhận và phản hồi yêu cầu của bạn trong thời gian sớm nhất.
                         </p>
 
-                        {{-- Thông báo thành công --}}
                         @if (session('success'))
-                            <div class="mt-6 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3.5 text-green-700 sm:px-5 sm:py-4">
+                            <div class="mt-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3.5 text-emerald-700 sm:px-5 sm:py-4">
                                 <svg class="mt-0.5 h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="m4.5 12.75 6 6 9-13.5" />
@@ -213,13 +209,14 @@
                                     <input
                                         id="name"
                                         type="text"
-                                        value="{{ auth()->user()->name ?? '' }}"
+                                        name="name"
+                                        value="{{ old('name', auth()->user()->name ?? '') }}"
                                         placeholder="Nhập họ và tên"
                                         maxlength="100"
                                         autocomplete="name"
-                                        class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                        class="h-11 w-full rounded-xl border bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                             {{ $errors->has('name')
-                                                ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                                 : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                     >
                                     @error('name')
@@ -234,13 +231,14 @@
                                     <input
                                         id="email"
                                         type="email"
-                                        value="{{ auth()->user()->email ?? '' }}"
+                                        name="email"
+                                        value="{{ old('email', auth()->user()->email ?? '') }}"
                                         placeholder="example@gmail.com"
                                         maxlength="255"
                                         autocomplete="email"
-                                        class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                        class="h-11 w-full rounded-xl border bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                             {{ $errors->has('email')
-                                                ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                                ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                                 : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                     >
                                     @error('email')
@@ -258,13 +256,14 @@
                                 <input
                                     id="phone"
                                     type="tel"
+                                    name="phone"
                                     value="{{ old('phone', auth()->user()->phone ?? '') }}"
                                     placeholder="Ví dụ: 0912345678"
                                     maxlength="20"
                                     autocomplete="tel"
-                                    class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                    class="h-11 w-full rounded-xl border bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
                                         {{ $errors->has('phone')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                            ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                 >
                                 @error('phone')
@@ -280,9 +279,9 @@
                                 <select
                                     id="subject"
                                     name="subject"
-                                    class="w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition
+                                    class="h-11 w-full cursor-pointer rounded-xl border bg-white px-4 text-sm text-slate-900 outline-none transition
                                         {{ $errors->has('subject')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                            ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                 >
                                     <option value="">-- Chọn chủ đề cần hỗ trợ --</option>
@@ -328,7 +327,7 @@
                                     placeholder="Hãy mô tả rõ vấn đề bạn đang gặp phải. Bạn có thể cung cấp mã đặt phòng nếu có..."
                                     class="w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400
                                         {{ $errors->has('message')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                            ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                                             : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                                 >{{ old('message') }}</textarea>
 
@@ -362,7 +361,7 @@
                                 <button
                                     id="contact-submit-button"
                                     type="submit"
-                                    class="inline-flex cursor-pointer w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+                                    class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
                                 >
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"

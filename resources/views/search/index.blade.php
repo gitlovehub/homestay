@@ -304,7 +304,7 @@
                             <button
                                 type="button"
                                 @click="toggleDatePicker('checkIn')"
-                                class="flex h-12 w-full cursor-pointer items-center
+                                class="flex h-11 w-full cursor-pointer items-center
                                     justify-between rounded-xl border bg-white px-4
                                     text-left outline-none transition"
                                 :class="checkInError
@@ -494,7 +494,7 @@
                                 type="button"
                                 :disabled="!checkIn"
                                 @click="toggleDatePicker('checkOut')"
-                                class="flex h-12 w-full items-center justify-between
+                                class="flex h-11 w-full items-center justify-between
                                     rounded-xl border bg-white px-4 text-left
                                     outline-none transition
                                     enabled:cursor-pointer disabled:cursor-not-allowed"
@@ -675,7 +675,7 @@
                         </button>
 
                         <button type="submit"
-                            class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100">
+                            class="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100">
                             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                               <circle cx="11" cy="11" r="8"/>
                               <path d="m21 21-4.35-4.35"/>
@@ -970,7 +970,7 @@
                                             @endif
 
                                             {{-- Giá và nút chi tiết --}}
-                                            <div class="mt-auto flex items-end justify-between gap-3 border-t border-slate-100 pt-4">
+                                            <div class="mt-auto flex items-end justify-between gap-3 pt-4">
 
                                                 <div class="min-w-0">
                                                     <p class="text-[11px] text-slate-400">

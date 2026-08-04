@@ -1,104 +1,79 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Quên mật khẩu - HomeStayGo')
 
-    <title>Quên mật khẩu | HomeStay</title>
+@section('content')
+<section class="relative overflow-hidden bg-slate-50 py-14 sm:py-20">
+    <div class="absolute -left-28 top-16 h-72 w-72 rounded-full bg-blue-200/40 blur-3xl"></div>
+    <div class="absolute -right-28 bottom-0 h-80 w-80 rounded-full bg-indigo-200/40 blur-3xl"></div>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+    <div class="relative mx-auto flex max-w-6xl justify-center px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-lg">
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/10 sm:p-9">
+                <div class="text-center">
+                    <a href="{{ route('home') }}" class="inline-flex items-center gap-2">
+                        <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-xl font-bold text-white">
+                            H
+                        </span>
+                        <span class="text-2xl font-bold text-slate-950">
+                            HomeStay<span class="text-blue-600">Go</span>
+                        </span>
+                    </a>
 
-<body class="min-h-screen bg-slate-50">
-
-    @include('partials.navbar')
-
-    <main class="flex min-h-[calc(100vh-80px)] items-center justify-center px-4 py-12">
-
-        <div class="w-full max-w-md">
-
-            <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60">
-
-                <div class="mb-8 text-center">
-
-                    <div
-                        class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white">
-                        H
-                    </div>
-
-                    <h1 class="text-3xl font-bold text-slate-900">
+                    <h2 class="mt-7 text-3xl font-bold tracking-tight text-slate-950">
                         Quên mật khẩu?
-                    </h1>
-
-                    <p class="mt-3 text-sm leading-6 text-slate-500">
-                        Nhập địa chỉ email đã đăng ký. Chúng tôi sẽ gửi cho bạn liên kết để tạo mật khẩu mới.
+                    </h2>
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Nhập địa chỉ email đã đăng ký. Chúng tôi sẽ gửi liên kết để tạo mật khẩu mới.
                     </p>
-
                 </div>
 
                 @if (session('status'))
-                    <div
-                        class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                    <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
-
+                <form method="POST" action="{{ route('password.email') }}" class="mt-8 space-y-5">
                     @csrf
 
                     <div>
                         <label for="email" class="mb-2 block text-sm font-semibold text-slate-700">
                             Địa chỉ email
                         </label>
-
                         <input
                             id="email"
                             name="email"
                             type="email"
                             value="{{ old('email') }}"
-                            required
                             autofocus
                             autocomplete="email"
                             placeholder="example@gmail.com"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            class="h-11 w-full rounded-xl border px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                {{ $errors->has('email')
+                                    ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
+                                    : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
                         >
-
                         @error('email')
-                            <p class="mt-2 text-sm font-medium text-red-600">
-                                {{ $message }}
-                            </p>
+                            <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                        class="w-full cursor-pointer rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                    >
                         Gửi liên kết đặt lại mật khẩu
                     </button>
-
                 </form>
 
-                <div class="mt-6 text-center">
-
-                    <a
-                        href="{{ route('login') }}"
-                        class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700">
-
-                        <span>←</span>
-                        Quay lại đăng nhập
-
+                <div class="mt-7 border-t border-slate-200 pt-6 text-center">
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-500 hover:text-blue-600">
+                        ← Quay lại đăng nhập
                     </a>
-
                 </div>
-
             </div>
-
         </div>
-
-    </main>
-
-</body>
-
-</html>
+    </div>
+</section>
+@endsection

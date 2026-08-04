@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(
-            'partials.navbar',
+            'partials.header',
             function ($view) {
                 $navCategories = Category::query()
                     ->orderBy('name')

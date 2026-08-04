@@ -399,7 +399,6 @@
                                                         <div class="text-4xl">
                                                             🏡
                                                         </div>
-
                                                         <p class="mt-2 text-xs text-slate-400">
                                                             Chưa có hình
                                                         </p>
@@ -409,7 +408,7 @@
 
                                             {{-- Danh mục --}}
                                             <span
-                                                class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-2.5 py-1
+                                                class="absolute left-2.5 top-2.5 rounded-full bg-white/95 px-3 py-1.5
                                                     text-[11px] font-semibold text-blue-700 shadow-sm backdrop-blur">
                                                 {{ $homestay->category?->name ?? 'Homestay' }}
                                             </span>
@@ -418,7 +417,7 @@
                                             @if ($reviewCount > 0)
                                                 <span
                                                     class="absolute right-2.5 top-2.5 inline-flex items-center gap-0.5
-                                                        rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold
+                                                        rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold
                                                         text-slate-800 shadow-sm backdrop-blur">
 
                                                     <x-icon-star class="h-3 w-3 text-amber-400" />
@@ -446,14 +445,14 @@
                                             <div class="mt-2 flex flex-wrap gap-1.5">
 
                                                 <span
-                                                    class="rounded-full border border-blue-200 bg-blue-50 px-3 py-0.5
+                                                    class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1
                                                         text-[10px] font-semibold text-blue-700">
                                                     {{ $bookingCount }} lượt đặt
                                                 </span>
 
                                                 <span
                                                     class="inline-flex items-center gap-0.5 rounded-full border border-amber-200
-                                                        bg-amber-50 px-3 py-0.5 text-[10px] font-semibold text-amber-700">
+                                                        bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700">
 
                                                     <x-icon-star class="h-2.5 w-2.5 text-amber-400" />
 
@@ -477,7 +476,7 @@
 
                                                     @foreach ($homestay->amenities->take(2) as $amenity)
                                                         <span
-                                                            class="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px]
+                                                            class="rounded-md bg-slate-100 px-2 py-1 text-[11px]
                                                                 font-semibold text-slate-600">
                                                             {{ $amenity->icon ?: '✨' }} {{ $amenity->name }}
                                                         </span>
@@ -495,7 +494,7 @@
                                             @endif
 
                                             {{-- Giá và nút chi tiết --}}
-                                            <div class="mt-auto flex items-end justify-between gap-2 border-t border-slate-100 pt-3">
+                                            <div class="mt-auto flex items-end justify-between gap-3 pt-4">
 
                                                 <div>
                                                     <p class="text-[10px] text-slate-400">
@@ -511,11 +510,10 @@
                                                     </span>
                                                 </div>
 
-                                                {{-- Toàn bộ card đã là thẻ a nên nút này phải dùng span --}}
                                                 <span
-                                                    class="shrink-0 rounded-xl bg-blue-600 px-6 py-1.5 text-xs
+                                                    class="shrink-0 rounded-xl bg-blue-600 px-4 py-2.5 text-xs
                                                         font-semibold text-white transition group-hover:bg-blue-700">
-                                                    Chi tiết
+                                                    Xem chi tiết
                                                 </span>
 
                                             </div>

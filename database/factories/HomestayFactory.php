@@ -26,21 +26,21 @@ class HomestayFactory extends Factory
         ]);
 
         $name = fake()->randomElement([
-            'Green Hill Villa',
-            'Cloud House',
-            'Sunshine Homestay',
-            'Dream Valley',
-            'Misty Forest',
-            'Lavender House',
-            'Rose Garden',
-            'Blue Ocean Villa',
-            'Moonlight Homestay',
-            'Happy Farm House',
-            'Lake View Homestay',
-            'Sky House',
-            'Mountain Home',
-            'Forest Retreat',
-            'Peaceful Garden',
+            'Biệt Thự Đồi Xanh',
+            'Ngôi Nhà Trên Mây',
+            'Homestay Ánh Dương',
+            'Thung Lũng Mộng Mơ',
+            'Khu Rừng Sương Mù',
+            'Ngôi Nhà Hoa Oải Hương',
+            'Vườn Hoa Hồng',
+            'Biệt Thự Biển Xanh',
+            'Homestay Ánh Trăng',
+            'Ngôi Nhà Nông Trại',
+            'Homestay Hướng Hồ',
+            'Ngôi Nhà Bầu Trời',
+            'Ngôi Nhà Trên Núi',
+            'Khu Nghỉ Dưỡng Trong Rừng',
+            'Khu Vườn Bình Yên',
         ]) . ' ' . fake()->unique()->numberBetween(1, 9999);
 
         return [

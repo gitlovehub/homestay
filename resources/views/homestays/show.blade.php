@@ -228,19 +228,13 @@
 
                                             @guest
                                                 <a href="{{ route('reviews.create', ['homestay' => $homestay->slug]) }}"
-                                                    class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                                                    class="mt-5 inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
                                                     Viết đánh giá
                                                 </a>
                                             @else
                                                 @if ($reviewBooking ?? null)
                                                     <button type="button" id="open-review-modal"
                                                         class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
-                                                        Viết đánh giá
-                                                    </button>
-                                                @else
-                                                    <button type="button"
-                                                        onclick="alert('Bạn cần hoàn thành chuyến lưu trú trước khi đánh giá Homestay này.')"
-                                                        class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
                                                         Viết đánh giá
                                                     </button>
                                                 @endif
@@ -359,14 +353,10 @@
                                                                 </div>
                                                             </div>
 
-                                                            @if ($review->title)
-                                                                <h3 class="mt-4 text-base font-semibold text-slate-900">
-                                                                    {{ $review->title }}</h3>
-                                                            @endif
-
                                                             <p
                                                                 class="mt-2 text-sm leading-7 text-slate-600 wrap-break-word">
-                                                                {{ $review->content }}</p>
+                                                                {{ $review->content }}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </article>
@@ -394,12 +384,6 @@
                                             @if ($reviewBooking ?? null)
                                                 <button type="button" id="open-review-modal"
                                                     class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
-                                                    Viết đánh giá
-                                                </button>
-                                            @else
-                                                <button type="button"
-                                                    onclick="alert('Bạn cần hoàn thành chuyến lưu trú trước khi đánh giá Homestay này.')"
-                                                    class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
                                                     Viết đánh giá
                                                 </button>
                                             @endif

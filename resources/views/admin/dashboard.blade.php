@@ -287,7 +287,7 @@
                                 </th>
 
                                 <th
-                                    class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
                                     Nhận phòng
                                 </th>
 
@@ -326,7 +326,7 @@
                                 @endphp
 
                                 <tr class="transition-colors hover:bg-slate-50/80">
-                                    <td class="whitespace-nowrap px-6 py-4">
+                                    <td class="whitespace-nowrap ps-6 pe-5 py-4">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-600 text-sm font-bold text-white shadow-sm">
@@ -340,21 +340,21 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <p class="max-w-45 truncate text-sm font-medium text-slate-900">
+                                    <td class="px-5 py-4">
+                                        <p class="max-w-37 truncate text-sm font-medium text-slate-900">
                                             {{ $booking->room?->homestay?->name ?? 'Không xác định' }}
                                         </p>
                                         <p class="max-w-45 truncate text-xs text-slate-400">
                                             {{ $booking->room?->name ?? 'Không xác định' }}
                                         </p>
                                     </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-600">
-                                        {{ $booking->check_in?->format('d/m/Y') ?? '—' }}
+                                    <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600 text-center">
+                                        {{ $booking->check_in?->format('d/m') ?? '—' }}
                                     </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-bold text-slate-900">
+                                    <td class="whitespace-nowrap px-5 py-4 text-right text-sm font-bold text-slate-900">
                                         {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}₫
                                     </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-center">
+                                    <td class="whitespace-nowrap ps-5 pe-6 py-4 text-center">
                                         <span
                                             class="inline-flex rounded-full px-3 py-1 text-xs font-semibold
                                             {{ $bookingStatusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600' }}">

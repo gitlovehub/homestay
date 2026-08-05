@@ -340,13 +340,9 @@
                                     {{-- Content --}}
                                     <td class="px-6 py-5">
 
-                                        <div class="max-w-sm">
+                                        <div class="max-w-55">
 
-                                            <p class="truncate font-semibold text-slate-900">
-                                                {{ $review->title ?: 'Không có tiêu đề' }}
-                                            </p>
-
-                                            <p class="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">
+                                            <p class="truncate text-wrap font-semibold text-slate-700">
                                                 {{ $review->content ?: 'Khách hàng không nhập nội dung đánh giá.' }}
                                             </p>
 

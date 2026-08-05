@@ -27,6 +27,14 @@
                 'refunded' => 'Đã hoàn tiền',
                 'failed' => 'Thanh toán thất bại',
             ];
+
+            $paymentStatus = [
+                'unpaid' => 'text-slate-500',
+                'pending' => 'text-amber-600',
+                'paid' => 'text-emerald-600',
+                'refunded' => 'text-blue-600',
+                'failed' => 'text-red-600',
+            ];
         @endphp
 
         <x-alert />
@@ -240,7 +248,7 @@
                                         {{ number_format($booking->total_price, 0, ',', '.') }}đ
                                     </p>
 
-                                    <p class="mt-1 text-xs text-slate-400">
+                                    <p class="mt-1 text-xs font-semibold {{ $paymentStatus[$booking->payment_status] ?? 'text-slate-500' }}">
                                         {{ $paymentLabels[$booking->payment_status] ?? 'Không xác định' }}
                                     </p>
 

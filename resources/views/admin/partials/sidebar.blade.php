@@ -9,7 +9,7 @@
 
     $adminMenus = [
         [
-            'label' => 'Tổng quan',
+            'label' => 'Thống kê',
             'route' => 'admin.dashboard',
             'active' => 'admin.dashboard',
             'icon' => 'dashboard',
@@ -19,6 +19,12 @@
             'route' => 'admin.users.index',
             'active' => 'admin.users.*',
             'icon' => 'users',
+        ],
+        [
+            'label' => 'Danh mục',
+            'route' => 'admin.categories.index',
+            'active' => 'admin.categories.*',
+            'icon' => 'categories',
         ],
         [
             'label' => 'Homestay',
@@ -37,12 +43,6 @@
             'route' => 'admin.bookings.index',
             'active' => 'admin.bookings.*',
             'icon' => 'bookings',
-        ],
-        [
-            'label' => 'Danh mục',
-            'route' => 'admin.categories.index',
-            'active' => 'admin.categories.*',
-            'icon' => 'categories',
         ],
         [
             'label' => 'Tiện ích',

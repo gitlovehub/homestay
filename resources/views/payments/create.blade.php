@@ -55,64 +55,62 @@
         <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
 
             {{-- Tiến trình --}}
-            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-
-                <div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3">
-
-                    <div class="flex min-w-0 items-center gap-3">
-                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                <div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-1.5 sm:gap-3">
+                    <!-- Bước 1 -->
+                    <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+                        <span
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 sm:h-10 sm:w-10 sm:text-sm">
                             ✓
                         </span>
-
                         <div class="min-w-0">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 sm:text-xs">
                                 Bước 1
                             </p>
-
-                            <p class="truncate text-sm font-bold text-slate-800">
+                            <p class="truncate text-xs font-bold text-slate-800 sm:text-sm">
                                 Xác nhận đơn
                             </p>
                         </div>
                     </div>
 
-                    <div class="h-px w-6 bg-emerald-300 sm:w-14"></div>
+                    <!-- Connector -->
+                    <div class="h-px w-4 bg-emerald-300 sm:w-14"></div>
 
-                    <div class="flex min-w-0 items-center justify-center gap-3">
-                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-200">
+                    <!-- Bước 2 -->
+                    <div class="flex min-w-0 items-center justify-center gap-2 sm:gap-3">
+                        <span
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white shadow-lg shadow-blue-200 sm:h-10 sm:w-10 sm:text-sm">
                             2
                         </span>
-
-                        <div class="hidden min-w-0 sm:block">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-blue-600 sm:text-xs">
                                 Bước 2
                             </p>
-
-                            <p class="truncate text-sm font-bold text-slate-900">
+                            <p class="truncate text-xs font-bold text-slate-900 sm:text-sm">
                                 Thanh toán
                             </p>
                         </div>
                     </div>
 
-                    <div class="h-px w-6 bg-slate-200 sm:w-14"></div>
+                    <!-- Connector -->
+                    <div class="h-px w-4 bg-slate-200 sm:w-14"></div>
 
-                    <div class="flex min-w-0 items-center justify-end gap-3">
-                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-400">
+                    <!-- Bước 3 -->
+                    <div class="flex min-w-0 items-center justify-end gap-2 sm:gap-3">
+                        <span
+                            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-400 sm:h-10 sm:w-10 sm:text-sm">
                             3
                         </span>
-
-                        <div class="hidden min-w-0 sm:block">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 sm:text-xs">
                                 Bước 3
                             </p>
-
-                            <p class="truncate text-sm font-bold text-slate-500">
+                            <p class="truncate text-xs font-bold text-slate-500 sm:text-sm">
                                 Hoàn tất
                             </p>
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
             <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_390px]">

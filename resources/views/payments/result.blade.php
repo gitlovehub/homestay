@@ -126,7 +126,7 @@
             <div class="w-full">
 
                 {{-- Tiến trình --}}
-                <div class="mx-auto mb-8 max-w-3xl overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="mx-auto mb-8 overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
 
                     <div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3">
 

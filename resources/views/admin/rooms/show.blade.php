@@ -245,7 +245,7 @@
 
                 <a href="{{ route('admin.rooms.edit', $room) }}"
                     class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-                    Lưu thay đổi
+                    Chỉnh sửa
                 </a>
 
             </div>

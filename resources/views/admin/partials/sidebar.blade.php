@@ -15,7 +15,7 @@
             'icon' => 'dashboard',
         ],
         [
-            'label' => 'Người dùng',
+            'label' => 'Tài khoản',
             'route' => 'admin.users.index',
             'active' => 'admin.users.*',
             'icon' => 'users',

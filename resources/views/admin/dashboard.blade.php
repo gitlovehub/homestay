@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Tổng quan quản trị | HomeStayGo')
+@section('title', 'Thống kê | HomeStayGo')
 
-@section('page-title', 'Tổng quan hệ thống')
+@section('page-title', 'Tổng quan dữ liệu')
 
 @section('content')
     <div class="mx-auto max-w-screen-2xl space-y-8">

@@ -45,6 +45,12 @@
             'icon' => 'bookings',
         ],
         [
+            'label' => 'Thanh toán',
+            'route' => 'admin.payments.index',
+            'active' => 'admin.payments.*',
+            'icon' => 'payments',
+        ],
+        [
             'label' => 'Tiện ích',
             'route' => 'admin.amenities.index',
             'active' => 'admin.amenities.*',
@@ -150,7 +156,7 @@
                                  {{ $isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-blue-600' }}">
                         @switch($menu['icon'])
                             @case('dashboard')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 12a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
@@ -158,15 +164,22 @@
                             @break
 
                             @case('users')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zm13 10v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
                                 </svg>
                             @break
 
+                            @case('categories')
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+                                </svg>
+                            @break
+
                             @case('homestays')
-                                <svg viewBox="0 0 24 24" class="h-[20px] w-[20px]" fill="none" stroke="currentColor"
+                                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 21h18" />
                                     <path d="M5 21V7l8-4v18" />
@@ -179,7 +192,7 @@
                             @break
 
                             @case('rooms')
-                                <svg viewBox="0 0 24 24" class="h-[20px] w-[20px]" fill="none" stroke="currentColor"
+                                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M2 4v16" />
                                     <path d="M2 8h18a2 2 0 0 1 2 2v10" />
@@ -189,22 +202,22 @@
                             @break
 
                             @case('bookings')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             @break
 
-                            @case('categories')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+                            @case('payments')
+                                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M12 2v20"/>
+                                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                                 </svg>
                             @break
 
                             @case('amenities')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -212,7 +225,7 @@
                             @break
 
                             @case('reviews')
-                                <svg class="h-[20px] w-[20px]" fill="none" stroke="currentColor" stroke-width="2"
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -270,7 +283,7 @@
                 class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
                 :class="adminSidebarCollapsed ? 'justify-center px-0' : ''"
                 :title="adminSidebarCollapsed ? 'Quay về website' : ''">
-                <svg class="h-[18px] w-[18px] shrink-0 text-slate-400 group-hover:text-blue-600" fill="none"
+                <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-blue-600" fill="none"
                     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -283,7 +296,7 @@
                     class="group cursor-pointer flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-red-50 hover:text-red-600"
                     :class="adminSidebarCollapsed ? 'justify-center px-0' : ''"
                     :title="adminSidebarCollapsed ? 'Đăng xuất' : ''">
-                    <svg class="h-[18px] w-[18px] shrink-0 text-slate-400 group-hover:text-red-500" fill="none"
+                    <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-red-500" fill="none"
                         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

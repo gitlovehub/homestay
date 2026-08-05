@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomestayController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\BookingController;
@@ -143,7 +144,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // --- Dashboard ---
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // --- Quản lý tài khoản ---
+    // --- Quản lý User ---
     Route::get(
         '/users',
         [UserController::class, 'index']
@@ -200,7 +201,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         [ReviewController::class, 'show']
     )->name('reviews.show');
 
-    // --- Quản lý liên hệ ---
+    // --- Quản lý Payment ---
+    Route::prefix('payments')->name('payments.')
+    ->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('index');
+
+        Route::get('/{payment}', [PaymentController::class, 'show'])
+            ->whereNumber('payment')
+            ->name('show');
+    });
+
+    // --- Quản lý Contact ---
     Route::get(
         '/contact-messages',
         [ContactMessageController::class, 'index']

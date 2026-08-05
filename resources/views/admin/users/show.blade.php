@@ -546,7 +546,7 @@
                                         {{-- Mã Booking --}}
                                         <td class="whitespace-nowrap px-5 py-4 align-middle">
                                             <a href="{{ route('admin.bookings.show', $booking) }}"
-                                                class="font-bold text-blue-600 transition hover:text-blue-700 hover:underline">
+                                                class="block w-30 truncate font-bold text-blue-600 transition hover:text-blue-700 hover:underline">
                                                 {{ $booking->booking_code }}
                                             </a>
 

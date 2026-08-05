@@ -349,7 +349,7 @@
                                         </p>
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600 text-center">
-                                        {{ $booking->check_in?->format('d/m') ?? '—' }}
+                                        {{ $booking->check_in?->format('d/m/Y') ?? '—' }}
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-right text-sm font-bold text-slate-900">
                                         {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}₫

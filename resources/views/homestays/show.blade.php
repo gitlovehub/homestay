@@ -505,10 +505,12 @@
                                         <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
                                             @if ($homestay->description)
                                                 <p class="leading-8 text-slate-600">
-                                                    {{ $homestay->description }}</p>
+                                                    {{ $homestay->description }}
+                                                </p>
                                             @else
                                                 <p class="leading-7 text-slate-500">Homestay này chưa cập nhật nội dung
-                                                    giới thiệu.</p>
+                                                    giới thiệu.
+                                                </p>
                                             @endif
                                         </div>
 

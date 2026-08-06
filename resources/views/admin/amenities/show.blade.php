@@ -28,12 +28,20 @@
 
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-            <p class="text-sm font-semibold md:text-lg text-slate-500">
-                Xem thông tin chi tiết của tiện ích trong hệ thống.
-            </p>
+            <div>
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+                    Xem thông tin chi tiết của tiện ích trong hệ thống.
+                </h2>
+
+                <a href="{{ route('admin.amenities.index') }}"
+                    class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
+                    ←
+                    Trở về danh sách tiện ích
+                </a>
+            </div>
 
             <a href="{{ route('admin.amenities.edit', $amenity) }}"
-                class="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-600">
+                class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 text-sm font-semibold text-white transition hover:bg-amber-600 sm:w-auto">
                 <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -47,7 +55,7 @@
         <div class="space-y-6">
 
             {{-- Thông tin tổng quan --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
                 <div class="p-6 sm:p-8">
 
@@ -57,7 +65,7 @@
 
                             {{-- Icon --}}
                             <div
-                                class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-4xl text-blue-600">
+                                class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-4xl text-blue-600 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-400">
 
                                 @if (!empty($amenity->icon))
                                     <span>
@@ -71,17 +79,17 @@
 
                             <div class="min-w-0">
 
-                                <p class="text-sm font-medium text-slate-500">
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     Tiện ích
                                 </p>
 
-                                <h2 class="mt-1 break-words text-2xl font-bold text-slate-900">
+                                <h2 class="mt-1 break-words text-2xl font-bold text-slate-900 dark:text-slate-100">
                                     {{ $amenity->name }}
                                 </h2>
 
-                                <p class="mt-2 text-sm text-slate-500">
+                                <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
                                     Mã tiện ích:
-                                    <span class="font-semibold text-slate-700">
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">
                                         #{{ $amenity->id }}
                                     </span>
                                 </p>
@@ -95,13 +103,13 @@
 
                             @if ($amenity->status)
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700">
+                                    class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300">
                                     <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                                     Hoạt động
                                 </span>
                             @else
                                 <span
-                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-700">
+                                    class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-1.5 text-sm font-semibold text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
                                     <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                     Tạm khóa
                                 </span>
@@ -116,15 +124,15 @@
             </section>
 
             {{-- Thông tin chi tiết --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
-                <div class="border-b border-slate-200 px-6 py-5 sm:px-8">
+                <div class="border-b border-slate-200 px-6 py-5 dark:border-slate-700 sm:px-8">
 
-                    <h2 class="text-xl font-bold text-slate-900">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
                         Thông tin tiện ích
                     </h2>
 
-                    <p class="mt-1 text-sm text-slate-500">
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         Thông tin được lưu trong hệ thống.
                     </p>
 
@@ -133,69 +141,69 @@
                 <div class="grid gap-6 p-6 sm:grid-cols-2 sm:p-8">
 
                     {{-- Tên tiện ích --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Tên tiện ích
                         </p>
 
-                        <p class="mt-2 break-words font-semibold text-slate-900">
+                        <p class="mt-2 break-words font-semibold text-slate-900 dark:text-slate-100">
                             {{ $amenity->name }}
                         </p>
 
                     </div>
 
                     {{-- Slug --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Slug
                         </p>
 
-                        <p class="mt-2 break-all font-semibold text-blue-700">
+                        <p class="mt-2 break-all font-semibold text-blue-700 dark:text-blue-400">
                             {{ $amenity->slug }}
                         </p>
 
                     </div>
 
                     {{-- Homestay sử dụng --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Homestay sử dụng
                         </p>
 
-                        <p class="mt-2 text-2xl font-bold text-violet-600">
+                        <p class="mt-2 text-2xl font-bold text-violet-600 dark:text-violet-400">
                             {{ number_format($amenity->homestays_count, 0, ',', '.') }}
                         </p>
 
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                             Số Homestay đang được gắn với tiện ích này.
                         </p>
 
                     </div>
 
                     {{-- Trạng thái --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Trạng thái
                         </p>
 
                         @if ($amenity->status)
-                            <p class="mt-2 text-2xl font-semibold text-emerald-600">
+                            <p class="mt-2 text-2xl font-semibold text-emerald-600 dark:text-emerald-400">
                                 Hoạt động
                             </p>
 
-                            <p class="mt-1 text-xs text-slate-500">
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                 Tiện ích được phép hiển thị và sử dụng.
                             </p>
                         @else
-                            <p class="mt-2 text-2xl font-semibold text-red-600">
+                            <p class="mt-2 text-2xl font-semibold text-red-600 dark:text-red-400">
                                 Tạm khóa
                             </p>
 
-                            <p class="mt-1 text-xs text-slate-500">
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                 Tiện ích chưa được phép hiển thị hoặc sử dụng.
                             </p>
                         @endif
@@ -203,34 +211,34 @@
                     </div>
 
                     {{-- Ngày tạo --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Ngày tạo
                         </p>
 
-                        <p class="mt-2 font-semibold text-slate-900">
+                        <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">
                             {{ $amenity->created_at->format('d/m/Y') }}
                         </p>
 
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                             {{ $amenity->created_at->format('H:i') }}
                         </p>
 
                     </div>
 
                     {{-- Ngày cập nhật --}}
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
 
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Cập nhật lần cuối
                         </p>
 
-                        <p class="mt-2 font-semibold text-slate-900">
+                        <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">
                             {{ $amenity->updated_at->format('d/m/Y') }}
                         </p>
 
-                        <p class="mt-1 text-xs text-slate-500">
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                             {{ $amenity->updated_at->format('H:i') }}
                         </p>
 
@@ -241,15 +249,15 @@
             </section>
 
             {{-- Mô tả --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
-                <div class="border-b border-slate-200 px-6 py-5 sm:px-8">
+                <div class="border-b border-slate-200 px-6 py-5 dark:border-slate-700 sm:px-8">
 
-                    <h2 class="text-xl font-bold text-slate-900">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">
                         Mô tả
                     </h2>
 
-                    <p class="mt-1 text-sm text-slate-500">
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         Nội dung mô tả của tiện ích.
                     </p>
 
@@ -258,19 +266,16 @@
                 <div class="p-6 sm:p-8">
 
                     @if (!empty($amenity->description))
-                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-
-                            <p class="break-words text-sm leading-7 text-slate-700">
-                                {{ $amenity->description }}</p>
-
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900/60">
+                            <p class="break-words text-sm leading-7 text-slate-700 dark:text-slate-300">
+                                {{ $amenity->description }}
+                            </p>
                         </div>
                     @else
-                        <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
-
-                            <p class="text-sm font-medium text-slate-500">
+                        <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center dark:border-slate-700 dark:bg-slate-900/60">
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                                 Tiện ích này chưa có mô tả.
                             </p>
-
                         </div>
                     @endif
 

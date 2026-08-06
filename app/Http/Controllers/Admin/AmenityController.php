@@ -16,13 +16,38 @@ class AmenityController extends Controller
      */
     public function index(Request $request)
     {
-        $amenities = Amenity::query()
+        $search = trim((string) $request->input('search'));
+        $status = $request->input('status');
+        $sort = $request->input('sort', 'newest');
+
+        $allowedStatuses = ['0', '1'];
+        $allowedSorts = [
+            'newest',
+            'oldest',
+            'name_asc',
+            'name_desc',
+            'most_used',
+            'least_used',
+        ];
+
+        if (! in_array((string) $status, $allowedStatuses, true)) {
+            $status = null;
+        }
+
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = 'newest';
+        }
+
+        $statistics = [
+            'total' => Amenity::count(),
+            'active' => Amenity::where('status', true)->count(),
+            'inactive' => Amenity::where('status', false)->count(),
+            'in_use' => Amenity::whereHas('homestays')->count(),
+        ];
+
+        $amenitiesQuery = Amenity::query()
             ->withCount('homestays')
-
-            // Tìm theo tên, slug hoặc mô tả
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $search = trim($request->input('search'));
-
+            ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($subQuery) use ($search) {
                     $subQuery
                         ->where('name', 'like', "%{$search}%")
@@ -30,38 +55,39 @@ class AmenityController extends Controller
                         ->orWhere('description', 'like', "%{$search}%");
                 });
             })
+            ->when($status !== null, function ($query) use ($status) {
+                $query->where('status', (int) $status);
+            });
 
-            // Lọc trạng thái
-            // Dùng filled() để giá trị "0" vẫn được xử lý
-            ->when($request->filled('status'), function ($query) use ($request) {
-                $query->where(
-                    'status',
-                    (int) $request->input('status')
-                );
-            })
+        match ($sort) {
+            'oldest' => $amenitiesQuery
+                ->orderBy('amenities.created_at')
+                ->orderBy('amenities.id'),
 
-            ->latest()
+            'name_asc' => $amenitiesQuery
+                ->orderBy('amenities.name')
+                ->orderBy('amenities.id'),
+
+            'name_desc' => $amenitiesQuery
+                ->orderByDesc('amenities.name')
+                ->orderByDesc('amenities.id'),
+
+            'most_used' => $amenitiesQuery
+                ->orderByDesc('homestays_count')
+                ->orderByDesc('amenities.id'),
+
+            'least_used' => $amenitiesQuery
+                ->orderBy('homestays_count')
+                ->orderBy('amenities.id'),
+
+            default => $amenitiesQuery
+                ->orderByDesc('amenities.created_at')
+                ->orderByDesc('amenities.id'),
+        };
+
+        $amenities = $amenitiesQuery
             ->paginate(10)
             ->withQueryString();
-
-        /**
-         * Thống kê tiện ích.
-         */
-        $statistics = [
-            'total' => Amenity::count(),
-
-            'active' => Amenity::query()
-                ->where('status', true)
-                ->count(),
-
-            'inactive' => Amenity::query()
-                ->where('status', false)
-                ->count(),
-
-            'in_use' => Amenity::query()
-                ->whereHas('homestays')
-                ->count(),
-        ];
 
         return view(
             'admin.amenities.index',
@@ -229,4 +255,4 @@ class AmenityController extends Controller
 
         return $query->exists();
     }
-}   
+}

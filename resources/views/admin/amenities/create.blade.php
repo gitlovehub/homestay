@@ -26,21 +26,29 @@
         ';
         @endphp
 
-        <p class="mb-4 text-sm font-semibold md:text-lg text-slate-500">
-            Nhập thông tin để tạo một tiện ích mới cho Homestay.
-        </p>
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+                Nhập thông tin để tạo một tiện ích mới cho Homestay.
+            </h2>
+
+            <a href="{{ route('admin.amenities.index') }}"
+                class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
+                ←
+                Trở về danh sách tiện ích
+            </a>
+        </div>
 
         {{-- Form thêm tiện ích --}}
 <form action="{{ route('admin.amenities.store') }}" method="POST" class="space-y-6">
     @csrf
 
     {{-- Card thông tin --}}
-    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <div class="space-y-7 p-6 sm:p-8">
 
             {{-- Tên tiện ích --}}
             <div>
-                <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
+                <label for="name" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                     Tên tiện ích
                     <span class="text-red-500">*</span>
                 </label>
@@ -53,19 +61,19 @@
                        placeholder="Ví dụ: Đỗ xe"
                        autocomplete="off"
                        autofocus
-                       class="h-11 w-full rounded-xl border px-4 text-slate-900 outline-none transition placeholder:text-slate-400
+                       class="h-11 w-full rounded-xl border px-4 text-slate-900 outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500
                            {{ $errors->has('name')
-                               ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                               : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
+                               ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:border-red-500 dark:bg-red-950/30 dark:text-slate-100 dark:focus:border-red-400 dark:focus:ring-red-900/30'
+                               : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40' }}">
 
                 @error('name')
-                    <p class="mt-2 text-sm font-medium text-red-500">{{ $message }}</p>
+                    <p class="mt-2 text-sm font-medium text-red-500 dark:text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             {{-- Icon --}}
             <div>
-                <label for="icon" class="mb-2 block text-sm font-semibold text-slate-700">
+                <label for="icon" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                     Icon
                 </label>
 
@@ -77,14 +85,14 @@
                            maxlength="255"
                            placeholder="Ví dụ: 🚗"
                            autocomplete="off"
-                           class="h-11 w-full rounded-xl border px-4 text-slate-900 outline-none transition placeholder:text-slate-400
+                           class="h-11 w-full rounded-xl border px-4 text-slate-900 outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500
                                {{ $errors->has('icon')
-                                   ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                   : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">
+                                   ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:border-red-500 dark:bg-red-950/30 dark:text-slate-100 dark:focus:border-red-400 dark:focus:ring-red-900/30'
+                                   : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40' }}">
 
                     {{-- Xem trước icon --}}
                     <div id="icon-preview"
-                         class="flex h-11 min-w-20 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-2xl text-blue-600"
+                         class="flex h-11 min-w-20 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-2xl text-blue-600 dark:border-slate-600 dark:bg-slate-900 dark:text-blue-400"
                          aria-label="Xem trước icon">
                         @if (old('icon'))
                             <span>{{ old('icon') }}</span>
@@ -94,23 +102,23 @@
                     </div>
                 </div>
 
-                <p class="mt-2 text-sm leading-6 text-slate-500">
+                <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
                     Bạn có thể nhập một emoji phù hợp với tiện ích.
                     Nếu để trống, hệ thống sẽ hiển thị icon mặc định.
                 </p>
 
                 @error('icon')
-                    <p class="mt-2 text-sm font-medium text-red-500">{{ $message }}</p>
+                    <p class="mt-2 text-sm font-medium text-red-500 dark:text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             {{-- Mô tả --}}
             <div>
                 <div class="mb-2 flex items-center justify-between gap-4">
-                    <label for="description" class="block text-sm font-semibold text-slate-700">
+                    <label for="description" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
                         Mô tả
                     </label>
-                    <span id="description-counter" class="text-xs font-medium text-slate-400">
+                    <span id="description-counter" class="text-xs font-medium text-slate-400 dark:text-slate-500">
                         0 / 1000 ký tự
                     </span>
                 </div>
@@ -120,82 +128,119 @@
                           rows="5"
                           maxlength="1000"
                           placeholder="Nhập mô tả ngắn về tiện ích..."
-                          class="w-full resize-y rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400
+                          class="w-full resize-y rounded-2xl border px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500
                               {{ $errors->has('description')
-                                  ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                  : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}">{{ old('description') }}</textarea>
+                                  ? 'border-red-400 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:border-red-500 dark:bg-red-950/30 dark:text-slate-100 dark:focus:border-red-400 dark:focus:ring-red-900/30'
+                                  : 'border-slate-300 bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40' }}">{{ old('description') }}</textarea>
 
                 @error('description')
-                    <p class="mt-2 text-sm font-medium text-red-500">{{ $message }}</p>
+                    <p class="mt-2 text-sm font-medium text-red-500 dark:text-red-400">{{ $message }}</p>
                 @enderror
             </div>
 
             {{-- Trạng thái --}}
-            <fieldset>
-                <legend class="mb-3 text-sm font-semibold text-slate-700">
-                    Trạng thái
-                    <span class="text-red-500">*</span>
-                </legend>
+            <section>
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">
+                        Trạng thái tiện ích
+                    </h2>
+
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                        Chọn trạng thái hoạt động hiện tại của tiện ích.
+                    </p>
+                </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">
 
                     {{-- Hoạt động --}}
-                    <label for="status-active" class="relative block cursor-pointer">
-                        <input id="status-active"
-                               type="radio"
-                               name="status"
-                               value="1"
-                               class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                               {{ old('status', '1') == '1' ? 'checked' : '' }}>
+                    <label class="cursor-pointer">
+                        <input type="radio"
+                            name="status"
+                            value="1"
+                            class="peer sr-only"
+                            @checked(old('status', '1') == '1')>
 
-                        <div class="min-h-[92px] rounded-2xl border border-slate-300 bg-white py-5 pl-14 pr-5 transition
-                                    hover:border-emerald-400 hover:bg-emerald-50/50
-                                    peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:ring-2 peer-checked:ring-emerald-200">
-                            <p class="font-semibold text-slate-900">Hoạt động</p>
-                            <p class="mt-1 text-sm leading-6 text-slate-500">
-                                Tiện ích được phép hiển thị và sử dụng.
-                            </p>
+                        <div
+                            class="flex items-start gap-4 rounded-2xl border-2 border-slate-200 bg-white p-5 transition
+                                hover:border-emerald-300
+                                peer-checked:border-emerald-500
+                                peer-checked:bg-emerald-50
+                                peer-checked:[&_.radio-circle]:border-emerald-500
+                                peer-checked:[&_.radio-dot]:opacity-100
+                                dark:border-slate-700
+                                dark:bg-slate-800
+                                dark:hover:border-emerald-600
+                                dark:peer-checked:border-emerald-500
+                                dark:peer-checked:bg-emerald-950/40">
+
+                            <div
+                                class="radio-circle mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 transition dark:border-slate-500">
+                                <div
+                                    class="radio-dot h-2.5 w-2.5 rounded-full bg-emerald-500 opacity-0 transition">
+                                </div>
+                            </div>
+
+                            <span class="font-bold text-slate-900 dark:text-slate-100">
+                                Hoạt động
+                            </span>
                         </div>
                     </label>
 
                     {{-- Tạm khóa --}}
-                    <label for="status-inactive" class="relative block cursor-pointer">
-                        <input id="status-inactive"
-                               type="radio"
-                               name="status"
-                               value="0"
-                               class="peer absolute left-5 top-7 h-5 w-5 cursor-pointer border-slate-300 text-red-600 focus:ring-red-500"
-                               {{ old('status') == '0' ? 'checked' : '' }}>
+                    <label class="cursor-pointer">
+                        <input type="radio"
+                            name="status"
+                            value="0"
+                            class="peer sr-only"
+                            @checked(old('status') == '0')>
 
-                        <div class="min-h-[92px] rounded-2xl border border-slate-300 bg-white py-5 pl-14 pr-5 transition
-                                    hover:border-red-400 hover:bg-red-50/50
-                                    peer-checked:border-red-500 peer-checked:bg-red-50 peer-checked:ring-2 peer-checked:ring-red-200">
-                            <p class="font-semibold text-slate-900">Tạm khóa</p>
-                            <p class="mt-1 text-sm leading-6 text-slate-500">
-                                Tiện ích chưa được phép hiển thị hoặc sử dụng.
-                            </p>
+                        <div
+                            class="flex items-start gap-4 rounded-2xl border-2 border-slate-200 bg-white p-5 transition
+                                hover:border-red-300
+                                peer-checked:border-red-500
+                                peer-checked:bg-red-50
+                                peer-checked:[&_.radio-circle]:border-red-500
+                                peer-checked:[&_.radio-dot]:opacity-100
+                                dark:border-slate-700
+                                dark:bg-slate-800
+                                dark:hover:border-red-600
+                                dark:peer-checked:border-red-500
+                                dark:peer-checked:bg-red-950/40">
+
+                            <div
+                                class="radio-circle mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 transition dark:border-slate-500">
+                                <div
+                                    class="radio-dot h-2.5 w-2.5 rounded-full bg-red-500 opacity-0 transition">
+                                </div>
+                            </div>
+
+                            <span class="font-bold text-slate-900 dark:text-slate-100">
+                                Tạm khóa
+                            </span>
                         </div>
                     </label>
 
                 </div>
 
                 @error('status')
-                    <p class="mt-2 text-sm font-medium text-red-500">{{ $message }}</p>
+                    <p class="mt-2 text-sm font-medium text-red-600 dark:text-red-400">
+                        {{ $message }}
+                    </p>
                 @enderror
-            </fieldset>
+            </section>
 
         </div>
     </section>
 
     {{-- Nút hành động --}}
-    <div class="flex flex-col-reverse gap-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-end">
+    <div class="flex flex-col-reverse gap-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:flex-row sm:items-center sm:justify-end">
         <a href="{{ route('admin.amenities.index') }}"
-           class="inline-flex cursor-pointer items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200">
+            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-700 sm:w-auto">
             Hủy
         </a>
 
         <button type="submit"
-                class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 active:scale-[0.99]">
+            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40 sm:w-auto">
             Thêm tiện ích
         </button>
     </div>
@@ -237,22 +282,26 @@
 
                 if (characterCount >= maximumDescriptionLength) {
                     descriptionCounter.classList.remove(
-                        'text-slate-400'
+                        'text-slate-400',
+                        'dark:text-slate-500'
                     );
 
                     descriptionCounter.classList.add(
-                        'text-red-500'
+                        'text-red-500',
+                        'dark:text-red-400'
                     );
 
                     return;
                 }
 
                 descriptionCounter.classList.remove(
-                    'text-red-500'
+                    'text-red-500',
+                    'dark:text-red-400'
                 );
 
                 descriptionCounter.classList.add(
-                    'text-slate-400'
+                    'text-slate-400',
+                    'dark:text-slate-500'
                 );
             }
 

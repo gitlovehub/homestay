@@ -72,10 +72,10 @@
     ];
 @endphp
 
-<div class="relative flex h-full w-full flex-col border-r border-slate-200 bg-white text-slate-700">
+<div class="relative flex h-full w-full flex-col border-r border-slate-200 bg-white text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
 
     {{-- Logo và nút co giãn --}}
-    <div class="relative flex h-16 shrink-0 items-center border-b border-slate-100"
+    <div class="relative flex h-16 shrink-0 items-center border-b border-slate-100 dark:border-slate-800"
         :class="adminSidebarCollapsed
             ?
             'justify-center px-3' :
@@ -97,11 +97,11 @@
             <div x-show="!adminSidebarCollapsed" x-cloak x-transition:enter="transition duration-200 ease-out"
                 x-transition:enter-start="-translate-x-2 opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
                 class="flex min-w-0 flex-col whitespace-nowrap leading-none">
-                <span class="text-[15px] font-semibold tracking-tight text-slate-900">
+                <span class="text-[15px] font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                     HomeStayGo
                 </span>
 
-                <span class="mt-0.5 text-[11px] font-medium text-slate-400">
+                <span class="mt-0.5 text-[11px] font-medium text-slate-400 dark:text-slate-500">
                     Admin
                 </span>
             </div>
@@ -109,7 +109,7 @@
 
         {{-- Co giãn Sidebar desktop --}}
         <button type="button" @click="toggleAdminSidebar()"
-            class="absolute -right-3 top-1/2 z-20 hidden h-7 w-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-md transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 lg:flex"
+            class="absolute -right-3 top-1/2 z-20 hidden h-7 w-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-md transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-500 dark:hover:border-blue-800 dark:hover:bg-blue-950/40 dark:hover:text-blue-400 lg:flex"
             :title="adminSidebarCollapsed
                 ?
                 'Mở rộng Sidebar' :
@@ -127,7 +127,7 @@
 
         {{-- Đóng Sidebar mobile --}}
         <button type="button" @click="adminSidebarOpen = false"
-            class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500 lg:hidden"
+            class="ml-auto flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500 dark:text-slate-500 dark:hover:bg-red-950/40 dark:hover:text-red-400 lg:hidden"
             aria-label="Đóng menu">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -147,13 +147,17 @@
 
                 <a href="{{ $menuUrl }}" @click="adminSidebarOpen = false"
                     class="group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium transition-all duration-150
-                          {{ $isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700' }}"
+                          {{ $isActive
+                              ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300'
+                              : 'text-slate-600 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-400 dark:hover:bg-blue-950/40 dark:hover:text-blue-300' }}"
                     :class="adminSidebarCollapsed ? 'justify-center px-0' : ''"
                     :title="adminSidebarCollapsed ? '{{ $menu['label'] }}' : ''">
 
                     <span
                         class="flex h-5 w-5 shrink-0 items-center justify-center transition
-                                 {{ $isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-blue-600' }}">
+                                 {{ $isActive
+                                     ? 'text-blue-600 dark:text-blue-400'
+                                     : 'text-slate-400 group-hover:text-blue-600 dark:text-slate-500 dark:group-hover:text-blue-400' }}">
                         @switch($menu['icon'])
                             @case('dashboard')
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
@@ -259,13 +263,13 @@
                         {{-- Chấm đỏ khi Sidebar thu gọn --}}
                         <span
                             x-show="adminSidebarCollapsed"
-                            class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"
+                            class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-950"
                         ></span>
                     @endif
 
                     @if (!$routeExists)
                         <span x-show="!adminSidebarCollapsed"
-                            class="ml-auto rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-400">
+                            class="ml-auto rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-400 dark:bg-slate-800 dark:text-slate-500">
                             Soon
                         </span>
                     @endif
@@ -275,15 +279,15 @@
     </nav>
 
     {{-- Bottom section --}}
-    <div class="shrink-0 border-t border-slate-100 px-2.5 py-3">
+    <div class="shrink-0 border-t border-slate-100 px-2.5 py-3 dark:border-slate-800">
 
         {{-- Actions --}}
         <div class="space-y-0.5">
             <a href="{{ route('home') }}"
-                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
+                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-700 dark:text-slate-400 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
                 :class="adminSidebarCollapsed ? 'justify-center px-0' : ''"
                 :title="adminSidebarCollapsed ? 'Quay về website' : ''">
-                <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-blue-600" fill="none"
+                <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-blue-600 dark:text-slate-500 dark:group-hover:text-blue-400" fill="none"
                     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -293,10 +297,10 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit"
-                    class="group cursor-pointer flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-red-50 hover:text-red-600"
+                    class="group flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-slate-600 transition hover:bg-red-50 hover:text-red-600 dark:text-slate-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
                     :class="adminSidebarCollapsed ? 'justify-center px-0' : ''"
                     :title="adminSidebarCollapsed ? 'Đăng xuất' : ''">
-                    <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-red-500" fill="none"
+                    <svg class="h-5 w-5 shrink-0 text-slate-400 group-hover:text-red-500 dark:text-slate-500 dark:group-hover:text-red-400" fill="none"
                         stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

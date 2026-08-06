@@ -28,26 +28,26 @@
         @if ($showInfo)
             <p
                 @class([
-                    'text-sm text-slate-500',
+                    'text-sm text-slate-500 dark:text-slate-400',
                     'text-center' => !$isRow,
                     'text-center sm:text-left' => $isRow,
                 ])
             >
                 Hiển thị
 
-                <span class="font-semibold text-slate-800">
+                <span class="font-semibold text-slate-800 dark:text-slate-100">
                     {{ $paginator->firstItem() }}
                 </span>
 
                 đến
 
-                <span class="font-semibold text-slate-800">
+                <span class="font-semibold text-slate-800 dark:text-slate-100">
                     {{ $paginator->lastItem() }}
                 </span>
 
                 trong tổng số
 
-                <span class="font-bold text-blue-600">
+                <span class="font-bold text-blue-600 dark:text-blue-400">
                     {{ $paginator->total() }}
                 </span>
 
@@ -67,7 +67,8 @@
             <div
                 class="flex max-w-full items-center gap-1 overflow-x-auto
                        rounded-2xl border border-slate-200 bg-white
-                       p-1.5 shadow-sm"
+                       p-1.5 shadow-sm
+                       dark:border-slate-700 dark:bg-slate-800"
             >
                 {{-- Nút trang trước --}}
                 @if ($paginator->onFirstPage())
@@ -76,7 +77,8 @@
                         aria-label="Không có trang trước"
                         class="inline-flex h-10 cursor-not-allowed items-center
                                justify-center rounded-xl px-3
-                               text-sm font-semibold text-slate-300"
+                               text-sm font-semibold text-slate-300
+                               dark:text-slate-600"
                     >
                         <svg
                             class="h-4 w-4"
@@ -102,7 +104,9 @@
                         class="inline-flex h-10 items-center justify-center
                                rounded-xl px-3 text-sm font-semibold
                                text-slate-600 transition duration-200
-                               hover:bg-blue-50 hover:text-blue-600"
+                               hover:bg-blue-50 hover:text-blue-600
+                               dark:text-slate-300 dark:hover:bg-blue-950/40
+                               dark:hover:text-blue-400"
                     >
                         <svg
                             class="h-4 w-4"
@@ -127,7 +131,8 @@
                     @if (is_string($element))
                         <span
                             class="inline-flex h-10 min-w-[40px] items-center
-                                   justify-center px-2 text-sm text-slate-400"
+                                   justify-center px-2 text-sm text-slate-400
+                                   dark:text-slate-500"
                         >
                             {{ $element }}
                         </span>
@@ -143,7 +148,7 @@
                                     class="inline-flex h-10 min-w-[40px] items-center
                                            justify-center rounded-xl bg-blue-600
                                            px-3 text-sm font-bold text-white
-                                           shadow-sm"
+                                           shadow-sm dark:bg-blue-500"
                                 >
                                     {{ $page }}
                                 </span>
@@ -156,7 +161,9 @@
                                            justify-center rounded-xl px-3
                                            text-sm font-semibold text-slate-600
                                            transition duration-200
-                                           hover:bg-blue-50 hover:text-blue-600"
+                                           hover:bg-blue-50 hover:text-blue-600
+                                           dark:text-slate-300 dark:hover:bg-blue-950/40
+                                           dark:hover:text-blue-400"
                                 >
                                     {{ $page }}
                                 </a>
@@ -175,7 +182,9 @@
                         class="inline-flex h-10 items-center justify-center
                                rounded-xl px-3 text-sm font-semibold
                                text-slate-600 transition duration-200
-                               hover:bg-blue-50 hover:text-blue-600"
+                               hover:bg-blue-50 hover:text-blue-600
+                               dark:text-slate-300 dark:hover:bg-blue-950/40
+                               dark:hover:text-blue-400"
                     >
                         <svg
                             class="h-4 w-4"
@@ -198,7 +207,8 @@
                         aria-label="Không có trang tiếp theo"
                         class="inline-flex h-10 cursor-not-allowed items-center
                                justify-center rounded-xl px-3
-                               text-sm font-semibold text-slate-300"
+                               text-sm font-semibold text-slate-300
+                               dark:text-slate-600"
                     >
                         <svg
                             class="h-4 w-4"
@@ -223,7 +233,7 @@
                 x-cloak
                 x-show="loading"
                 x-transition.opacity
-                class="flex items-center gap-2 text-sm font-medium text-blue-600"
+                class="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400"
             >
                 <svg
                     class="h-4 w-4 animate-spin"

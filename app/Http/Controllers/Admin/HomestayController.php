@@ -20,24 +20,118 @@ class HomestayController extends Controller
      */
     public function index(Request $request)
     {
-        $homestays = Homestay::query()
+        $search = trim((string) $request->input('search'));
+        $status = $request->input('status');
+        $city = trim((string) $request->input('city'));
+        $sort = $request->input('sort');
+
+        $allowedStatuses = ['active', 'inactive'];
+        $allowedSorts = ['price_desc', 'price_asc', 'name_asc', 'name_desc', 'oldest'];
+
+        if (! in_array($status, $allowedStatuses, true)) {
+            $status = null;
+        }
+
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = null;
+        }
+
+        $statistics = [
+            'total' => Homestay::count(),
+            'active' => Homestay::where('status', true)->count(),
+            'inactive' => Homestay::where('status', false)->count(),
+            'cities' => Homestay::query()
+                ->whereNotNull('city')
+                ->where('city', '!=', '')
+                ->distinct()
+                ->count('city'),
+        ];
+
+        $cities = Homestay::query()
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        $homestaysQuery = Homestay::query()
             ->with([
                 'category',
                 'owner',
             ])
-            ->when($request->search, function ($query, $search) {
+            ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($subQuery) use ($search) {
                     $subQuery
                         ->where('name', 'like', "%{$search}%")
                         ->orWhere('address', 'like', "%{$search}%")
-                        ->orWhere('city', 'like', "%{$search}%");
+                        ->orWhere('city', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                            $categoryQuery->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('owner', function ($ownerQuery) use ($search) {
+                            $ownerQuery
+                                ->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
                 });
             })
-            ->latest()
+            ->when($status === 'active', function ($query) {
+                $query->where('status', true);
+            })
+            ->when($status === 'inactive', function ($query) {
+                $query->where('status', false);
+            })
+            ->when($city !== '', function ($query) use ($city) {
+                $query->where('city', $city);
+            });
+
+        switch ($sort) {
+            case 'price_desc':
+                $homestaysQuery
+                    ->orderByDesc('homestays.base_price')
+                    ->orderByDesc('homestays.id');
+                break;
+
+            case 'price_asc':
+                $homestaysQuery
+                    ->orderBy('homestays.base_price')
+                    ->orderByDesc('homestays.id');
+                break;
+
+            case 'name_asc':
+                $homestaysQuery
+                    ->orderBy('homestays.name')
+                    ->orderBy('homestays.id');
+                break;
+
+            case 'name_desc':
+                $homestaysQuery
+                    ->orderByDesc('homestays.name')
+                    ->orderByDesc('homestays.id');
+                break;
+
+            case 'oldest':
+                $homestaysQuery
+                    ->orderBy('homestays.created_at')
+                    ->orderBy('homestays.id');
+                break;
+
+            default:
+                $homestaysQuery
+                    ->orderByDesc('homestays.created_at')
+                    ->orderByDesc('homestays.id');
+                break;
+        }
+
+        $homestays = $homestaysQuery
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.homestays.index', compact('homestays'));
+        return view(
+            'admin.homestays.index',
+            compact('homestays', 'statistics', 'cities')
+        );
     }
 
     public function create()

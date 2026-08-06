@@ -15,48 +15,128 @@ class BookingController extends Controller
      */
     public function index(Request $request): View
     {
+        $allowedStatuses = [
+            'pending',
+            'confirmed',
+            'checked_in',
+            'completed',
+            'cancelled',
+        ];
+
+        $allowedPaymentStatuses = [
+            'unpaid',
+            'pending',
+            'paid',
+            'refunded',
+            'failed',
+        ];
+
+        $allowedSorts = [
+            'latest',
+            'oldest',
+            'total_desc',
+            'total_asc',
+            'check_in_asc',
+            'check_in_desc',
+        ];
+
+        $status = in_array($request->input('status'), $allowedStatuses, true)
+            ? $request->input('status')
+            : null;
+
+        $paymentStatus = in_array(
+            $request->input('payment_status'),
+            $allowedPaymentStatuses,
+            true
+        )
+            ? $request->input('payment_status')
+            : null;
+
+        $sort = in_array($request->input('sort'), $allowedSorts, true)
+            ? $request->input('sort')
+            : 'latest';
+
         $query = Booking::query()
             ->with([
                 'user',
                 'room.homestay',
             ]);
 
-        // Tìm theo mã đơn, tên khách, email hoặc số điện thoại
         if ($request->filled('search')) {
             $search = trim($request->input('search'));
 
-            $query->where(function ($q) use ($search) {
-                $q->where('booking_code', 'like', "%{$search}%")
+            $query->where(function ($bookingQuery) use ($search) {
+                $bookingQuery
+                    ->where('booking_code', 'like', "%{$search}%")
                     ->orWhere('customer_name', 'like', "%{$search}%")
                     ->orWhere('customer_email', 'like', "%{$search}%")
-                    ->orWhere('customer_phone', 'like', "%{$search}%");
+                    ->orWhere('customer_phone', 'like', "%{$search}%")
+                    ->orWhereHas('room', function ($roomQuery) use ($search) {
+                        $roomQuery->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('room.homestay', function ($homestayQuery) use ($search) {
+                        $homestayQuery->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
-        // Lọc theo trạng thái Booking
-        if ($request->filled('status')) {
-            $query->where(
-                'status',
-                $request->input('status')
-            );
+        if ($status !== null) {
+            $query->where('status', $status);
         }
 
-        // Lọc theo trạng thái thanh toán
-        if ($request->filled('payment_status')) {
-            $query->where(
-                'payment_status',
-                $request->input('payment_status')
-            );
+        if ($paymentStatus !== null) {
+            $query->where('payment_status', $paymentStatus);
         }
+
+        match ($sort) {
+            'oldest' => $query
+                ->orderBy('created_at')
+                ->orderBy('id'),
+
+            'total_desc' => $query
+                ->orderByDesc('total_price')
+                ->orderByDesc('id'),
+
+            'total_asc' => $query
+                ->orderBy('total_price')
+                ->orderBy('id'),
+
+            'check_in_asc' => $query
+                ->orderBy('check_in')
+                ->orderBy('id'),
+
+            'check_in_desc' => $query
+                ->orderByDesc('check_in')
+                ->orderByDesc('id'),
+
+            default => $query
+                ->orderByDesc('created_at')
+                ->orderByDesc('id'),
+        };
 
         $bookings = $query
-            ->latest()
             ->paginate(10)
             ->withQueryString();
 
+        $statistics = [
+            'total' => Booking::query()->count(),
+
+            'pending' => Booking::query()
+                ->where('status', 'pending')
+                ->count(),
+
+            'in_progress' => Booking::query()
+                ->whereIn('status', ['confirmed', 'checked_in'])
+                ->count(),
+
+            'completed' => Booking::query()
+                ->where('status', 'completed')
+                ->count(),
+        ];
+
         return view(
             'admin.bookings.index',
-            compact('bookings')
+            compact('bookings', 'statistics')
         );
     }
 

@@ -11,17 +11,9 @@
 
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-            <div>
-                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                    Quản lý các tiện ích được sử dụng trong hệ thống Homestay.
-                </h2>
-
-                <a href="{{ route('admin.amenities.index') }}"
-                    class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
-                    ←
-                    Trở về danh sách tiện ích
-                </a>
-            </div>
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+                Quản lý các tiện ích được sử dụng trong hệ thống Homestay.
+            </h2>
 
             <a href="{{ route('admin.amenities.create') }}"
                 class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto">

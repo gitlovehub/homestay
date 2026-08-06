@@ -216,29 +216,27 @@
                                         <div
                                             class="flex flex-col items-center justify-center border-b border-slate-200 p-8 text-center lg:border-b-0 lg:border-r">
                                             <p class="text-6xl font-bold tracking-tight text-slate-900">
-                                                {{ number_format($averageRating, 1) }}</p>
+                                                {{ number_format($averageRating, 1) }}
+                                            </p>
+
                                             <div class="mt-3 flex items-center justify-center gap-1">
                                                 @for ($star = 1; $star <= 5; $star++)
                                                     <x-icon-star
                                                         class="h-6 w-6 {{ $star <= round($averageRating) ? 'text-amber-400' : 'text-slate-200' }}" />
                                                 @endfor
                                             </div>
-                                            <p class="mt-3 text-sm font-semibold text-slate-700">{{ $reviewTotal }} lượt
-                                                đánh giá</p>
 
-                                            @guest
-                                                <a href="{{ route('reviews.create', ['homestay' => $homestay->slug]) }}"
-                                                    class="mt-5 inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
+                                            <p class="mt-3 text-sm font-semibold text-slate-700">
+                                                {{ $reviewTotal }}
+                                                lượt đánh giá
+                                            </p>
+
+                                            @if ($reviewBooking ?? null)
+                                                <button type="button" id="open-review-modal"
+                                                    class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
                                                     Viết đánh giá
-                                                </a>
-                                            @else
-                                                @if ($reviewBooking ?? null)
-                                                    <button type="button" id="open-review-modal"
-                                                        class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
-                                                        Viết đánh giá
-                                                    </button>
-                                                @endif
-                                            @endguest
+                                                </button>
+                                            @endif
                                         </div>
 
                                         <div class="p-6 sm:p-8">
@@ -254,10 +252,12 @@
                                                         </div>
                                                         <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
                                                             <div class="h-full rounded-full bg-amber-400 transition-all"
-                                                                style="width: {{ $ratingData['percentage'] }}%"></div>
+                                                                style="width: {{ $ratingData['percentage'] }}%">
+                                                            </div>
                                                         </div>
-                                                        <span
-                                                            class="text-right text-sm font-medium text-slate-500">{{ $ratingData['count'] }}</span>
+                                                        <span class="text-right text-sm font-medium text-slate-500">
+                                                            {{ $ratingData['count'] }}
+                                                        </span>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -375,19 +375,13 @@
                                             Hãy trải nghiệm và trở thành người đầu tiên để lại đánh giá cho Homestay này
                                             nhé!
                                         </p>
-                                        @guest
-                                            <a href="{{ route('reviews.create', ['homestay' => $homestay->slug]) }}"
-                                                class="mt-5 inline-flex items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
+
+                                        @if ($reviewBooking ?? null)
+                                            <button type="button" id="open-review-modal"
+                                                class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
                                                 Viết đánh giá
-                                            </a>
-                                        @else
-                                            @if ($reviewBooking ?? null)
-                                                <button type="button" id="open-review-modal"
-                                                    class="mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 focus:outline-none focus:ring-4 focus:ring-amber-200">
-                                                    Viết đánh giá
-                                                </button>
-                                            @endif
-                                        @endguest
+                                            </button>
+                                        @endif
                                     </div>
                                 @endif
                             </section>
@@ -510,7 +504,7 @@
 
                                         <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
                                             @if ($homestay->description)
-                                                <p class="whitespace-pre-line leading-8 text-slate-600">
+                                                <p class="leading-8 text-slate-600">
                                                     {{ $homestay->description }}</p>
                                             @else
                                                 <p class="leading-7 text-slate-500">Homestay này chưa cập nhật nội dung

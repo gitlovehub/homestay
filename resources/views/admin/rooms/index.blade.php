@@ -367,8 +367,6 @@
                                                 Sửa
                                             </a>
 
-                                            <div class="border-t border-slate-100 dark:border-slate-700"></div>
-
                                             {{-- Xóa phòng --}}
                                             <form
                                                 action="{{ route('admin.rooms.destroy', $room) }}"

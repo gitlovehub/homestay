@@ -243,21 +243,6 @@
 
             </section>
 
-            {{-- Footer --}}
-            <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-
-                <a href="{{ route('admin.rooms.index') }}"
-                    class="inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 sm:w-auto">
-                    Quay lại danh sách
-                </a>
-
-                <a href="{{ route('admin.rooms.edit', $room) }}"
-                    class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto">
-                    Chỉnh sửa
-                </a>
-
-            </div>
-
         </div>
 
     </div>

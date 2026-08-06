@@ -14,11 +14,31 @@ class RoomController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = trim((string) $request->input('search', ''));
+        $status = $request->input('status');
+        $sort = $request->input('sort');
 
-        $rooms = Room::query()
+        $allowedStatuses = ['available', 'maintenance', 'inactive'];
+        $allowedSorts = ['price_desc', 'price_asc'];
+
+        if (! in_array($status, $allowedStatuses, true)) {
+            $status = null;
+        }
+
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = null;
+        }
+
+        $statistics = [
+            'total' => Room::count(),
+            'available' => Room::where('status', 'available')->count(),
+            'maintenance' => Room::where('status', 'maintenance')->count(),
+            'inactive' => Room::where('status', 'inactive')->count(),
+        ];
+
+        $roomsQuery = Room::query()
             ->with('homestay')
-            ->when($search, function ($query, $search) {
+            ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($roomQuery) use ($search) {
                     $roomQuery
                         ->where('name', 'like', "%{$search}%")
@@ -29,11 +49,35 @@ class RoomController extends Controller
                         });
                 });
             })
-            ->latest()
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            });
+
+        switch ($sort) {
+            case 'price_desc':
+                $roomsQuery
+                    ->orderByDesc('rooms.price_per_night')
+                    ->orderByDesc('rooms.id');
+                break;
+
+            case 'price_asc':
+                $roomsQuery
+                    ->orderBy('rooms.price_per_night')
+                    ->orderByDesc('rooms.id');
+                break;
+
+            default:
+                $roomsQuery
+                    ->orderByDesc('rooms.created_at')
+                    ->orderByDesc('rooms.id');
+                break;
+        }
+
+        $rooms = $roomsQuery
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.rooms.index', compact('rooms'));
+        return view('admin.rooms.index', compact('rooms', 'statistics'));
     }
 
     public function create()

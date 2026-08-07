@@ -9,10 +9,11 @@ use App\Models\Review;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         /*
         |--------------------------------------------------------------------------
@@ -179,7 +180,8 @@ class DashboardController extends Controller
                 'user',
                 'room.homestay',
             ])
-            ->latest()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->take(5)
             ->get();
 
@@ -187,7 +189,8 @@ class DashboardController extends Controller
                 'user',
                 'homestay',
             ])
-            ->latest()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->take(5)
             ->get();
 

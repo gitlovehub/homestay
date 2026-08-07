@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Thống kê | HomeStayGo')
+@section('title', 'Thống kê | HomeStayGo')
 
 @section('page-title', 'Tổng quan dữ liệu')
 
@@ -12,18 +12,18 @@
             <div>
                 <div class="mb-1 flex items-center gap-2">
                     <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                    <span class="text-sm font-medium text-slate-500">Hệ thống đang hoạt động</span>
+                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Hệ thống đang hoạt động</span>
                 </div>
-                <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
                     Xin chào, {{ auth()->user()?->name ?? 'Quản trị viên' }} 👋
                 </h1>
-                <p class="mt-2 max-w-2xl text-slate-500">
-                    Chào mừng quay trở lại hệ thống quản lý <span class="font-medium text-slate-700">HomeStayGo</span>.
+                <p class="mt-2 max-w-2xl text-slate-500 dark:text-slate-400">
+                    Chào mừng quay trở lại hệ thống quản lý <span class="font-medium text-slate-700 dark:text-slate-300">HomeStayGo</span>.
                     Dưới đây là tổng quan hoạt động hiện tại của bạn.
                 </p>
             </div>
 
-            <div class="flex items-center gap-4 rounded-2xl border border-slate-200/80 bg-white px-5 py-3.5 shadow-sm">
+            <div class="flex items-center gap-4 rounded-2xl border border-slate-200/80 bg-white px-5 py-3.5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
                 <div
                     class="flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-md shadow-blue-500/20">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,8 +32,8 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-xs font-medium uppercase tracking-wider text-slate-400">Hôm nay</p>
-                    <p class="mt-0.5 text-base font-semibold text-slate-900">{{ now()->format('d/m/Y') }}</p>
+                    <p class="text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-500">Hôm nay</p>
+                    <p class="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">{{ now()->format('d/m/Y') }}</p>
                 </div>
             </div>
         </div>
@@ -43,14 +43,14 @@
 
             {{-- Người dùng --}}
             <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/5">
+                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/5 dark:border-slate-700 dark:bg-slate-800">
                 <div
-                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-50 opacity-60 transition group-hover:scale-110">
+                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-blue-50 opacity-60 dark:bg-blue-950/30 transition group-hover:scale-110 dark:bg-blue-950/40">
                 </div>
                 <div class="relative flex items-start justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">Người dùng</p>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Người dùng</p>
+                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                             {{ number_format($totalUsers ?? 0) }}
                         </p>
                     </div>
@@ -63,8 +63,8 @@
                     </div>
                 </div>
                 <div class="relative mt-5 flex items-center justify-between text-sm">
-                    <span class="text-slate-500">{{ number_format($activeUsers ?? 0) }} đang hoạt động</span>
-                    <span class="inline-flex items-center gap-1 font-semibold text-blue-600">
+                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($activeUsers ?? 0) }} đang hoạt động</span>
+                    <span class="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400">
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -76,14 +76,14 @@
 
             {{-- Homestay --}}
             <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/5">
+                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/5 dark:border-slate-700 dark:bg-slate-800">
                 <div
-                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-50 opacity-60 transition group-hover:scale-110">
+                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-50 opacity-60 dark:bg-emerald-950/30 transition group-hover:scale-110 dark:bg-emerald-950/40">
                 </div>
                 <div class="relative flex items-start justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">Homestay</p>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Homestay</p>
+                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                             {{ number_format($totalHomestays ?? 0) }}
                         </p>
                     </div>
@@ -96,8 +96,8 @@
                     </div>
                 </div>
                 <div class="relative mt-5 flex items-center justify-between text-sm">
-                    <span class="text-slate-500">{{ number_format($activeHomestays ?? 0) }} đang hoạt động</span>
-                    <span class="inline-flex items-center gap-1 font-semibold text-emerald-600">
+                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($activeHomestays ?? 0) }} đang hoạt động</span>
+                    <span class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -109,14 +109,14 @@
 
             {{-- Đơn đặt phòng --}}
             <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-violet-500/5">
+                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-violet-500/5 dark:border-slate-700 dark:bg-slate-800">
                 <div
-                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-violet-50 opacity-60 transition group-hover:scale-110">
+                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-violet-50 opacity-60 dark:bg-violet-950/30 transition group-hover:scale-110 dark:bg-violet-950/40">
                 </div>
                 <div class="relative flex items-start justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">Đơn đặt phòng</p>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Đơn đặt phòng</p>
+                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                             {{ number_format($totalBookings ?? 0) }}
                         </p>
                     </div>
@@ -129,8 +129,8 @@
                     </div>
                 </div>
                 <div class="relative mt-5 flex items-center justify-between text-sm">
-                    <span class="text-slate-500">{{ number_format($pendingBookings ?? 0) }} đang chờ</span>
-                    <span class="inline-flex items-center gap-1 font-semibold text-violet-600">
+                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($pendingBookings ?? 0) }} đang chờ</span>
+                    <span class="inline-flex items-center gap-1 font-semibold text-violet-600 dark:text-violet-400">
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -142,14 +142,14 @@
 
             {{-- Đánh giá --}}
             <div
-                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/5">
+                class="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/5 dark:border-slate-700 dark:bg-slate-800">
                 <div
-                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-amber-50 opacity-60 transition group-hover:scale-110">
+                    class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-amber-50 opacity-60 dark:bg-amber-950/30 transition group-hover:scale-110 dark:bg-amber-950/40">
                 </div>
                 <div class="relative flex items-start justify-between">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">Đánh giá</p>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Đánh giá</p>
+                        <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
                             {{ number_format($totalReviews ?? 0) }}
                         </p>
                     </div>
@@ -162,8 +162,8 @@
                     </div>
                 </div>
                 <div class="relative mt-5 flex items-center justify-between text-sm">
-                    <span class="text-slate-500">{{ number_format($averageRating ?? 0, 1) }}/5 điểm TB</span>
-                    <span class="font-semibold text-amber-600">
+                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($averageRating ?? 0, 1) }}/5 điểm TB</span>
+                    <span class="font-semibold text-amber-600 dark:text-amber-400">
                         {{ number_format($pendingReviews ?? 0) }} chờ duyệt
                     </span>
                 </div>
@@ -174,36 +174,36 @@
         <div class="grid gap-6 xl:grid-cols-3">
 
             {{-- Booking Overview Chart --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm xl:col-span-2">
+            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm xl:col-span-2 dark:border-slate-700 dark:bg-slate-800">
                 <div
-                    class="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+                    class="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Hoạt động đặt phòng</h2>
-                        <p class="mt-1 text-sm text-slate-500">Số lượng đơn & doanh thu 7 ngày gần nhất</p>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Hoạt động đặt phòng</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Số lượng đơn & doanh thu 7 ngày gần nhất</p>
                     </div>
                     <div class="flex items-center gap-5 text-sm">
                         <div class="flex items-center gap-2">
                             <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-                            <span class="text-slate-600">Đơn đặt phòng</span>
+                            <span class="text-slate-600 dark:text-slate-300">Đơn đặt phòng</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                            <span class="text-slate-600">Doanh thu</span>
+                            <span class="text-slate-600 dark:text-slate-300">Doanh thu</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-6">
                     <div class="mb-6 grid gap-4 sm:grid-cols-2">
-                        <div class="rounded-2xl bg-linear-to-br from-slate-50 to-slate-100/80 p-5">
-                            <p class="text-sm font-medium text-slate-500">Tổng doanh thu hoàn thành</p>
-                            <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <div class="rounded-2xl bg-linear-to-br from-slate-50 to-slate-100/80 p-5 dark:from-slate-700/70 dark:to-slate-700/40">
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Tổng doanh thu hoàn thành</p>
+                            <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                                 {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}₫
                             </p>
                         </div>
-                        <div class="rounded-2xl bg-linear-to-br from-slate-50 to-slate-100/80 p-5">
-                            <p class="text-sm font-medium text-slate-500">Đơn đặt phòng tháng này</p>
-                            <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <div class="rounded-2xl bg-linear-to-br from-slate-50 to-slate-100/80 p-5 dark:from-slate-700/70 dark:to-slate-700/40">
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Đơn đặt phòng tháng này</p>
+                            <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                                 {{ number_format($newBookingsThisMonth ?? 0) }}
                             </p>
                         </div>
@@ -218,10 +218,10 @@
             </section>
 
             {{-- Booking Status --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
-                <div class="border-b border-slate-100 px-6 py-5">
-                    <h2 class="text-lg font-bold text-slate-900">Trạng thái đặt phòng</h2>
-                    <p class="mt-1 text-sm text-slate-500">Tỷ lệ các trạng thái hiện tại</p>
+            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                <div class="border-b border-slate-100 px-6 py-5 dark:border-slate-700">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Trạng thái đặt phòng</h2>
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tỷ lệ các trạng thái hiện tại</p>
                 </div>
 
                 <div class="p-6">
@@ -244,9 +244,9 @@
                             <div class="flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-2.5">
                                     <span class="h-2.5 w-2.5 rounded-full {{ $item['color'] }}"></span>
-                                    <span class="text-sm text-slate-600">{{ $item['label'] }}</span>
+                                    <span class="text-sm text-slate-600 dark:text-slate-300">{{ $item['label'] }}</span>
                                 </div>
-                                <span class="text-sm font-bold text-slate-900">
+                                <span class="text-sm font-bold text-slate-900 dark:text-slate-100">
                                     {{ number_format($bookingStatusCounts[$item['key']] ?? 0) }}
                                 </span>
                             </div>
@@ -260,14 +260,14 @@
         <div class="grid gap-6 xl:grid-cols-3">
 
             {{-- Latest Bookings --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm xl:col-span-2">
-                <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-5">
+            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm xl:col-span-2 dark:border-slate-700 dark:bg-slate-800">
+                <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-5 dark:border-slate-700">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Đơn đặt phòng mới nhất</h2>
-                        <p class="mt-1 text-sm text-slate-500">5 đơn được tạo gần đây</p>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Đơn đặt phòng mới nhất</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">5 đơn được tạo gần đây</p>
                     </div>
                     <a href="{{ route('admin.bookings.index') }}"
-                        class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:text-blue-700 hover:translate-x-1">
+                        class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:translate-x-1 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Xem tất cả →
                     </a>
                 </div>
@@ -275,35 +275,35 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead>
-                            <tr class="border-b border-slate-100 bg-slate-50/70">
+                            <tr class="border-b border-slate-100 bg-slate-50/70 dark:border-slate-700 dark:bg-slate-900/40">
                                 <th
-                                    class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Khách hàng
                                 </th>
 
                                 <th
-                                    class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Homestay
                                 </th>
 
                                 <th
-                                    class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Nhận phòng
                                 </th>
 
                                 <th
-                                    class="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Tổng tiền
                                 </th>
 
                                 <th
-                                    class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    class="px-6 py-3.5 text-center text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                                     Trạng thái
                                 </th>
 
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                             @forelse ($latestBookings ?? collect() as $booking)
                                 @php
                                     $bookingStatusLabels = [
@@ -314,18 +314,18 @@
                                         'cancelled' => 'Đã hủy',
                                     ];
                                     $bookingStatusStyles = [
-                                        'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200/60',
-                                        'confirmed' => 'bg-blue-50 text-blue-700 ring-1 ring-blue-200/60',
-                                        'checked_in' => 'bg-violet-50 text-violet-700 ring-1 ring-violet-200/60',
-                                        'completed' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/60',
-                                        'cancelled' => 'bg-red-50 text-red-700 ring-1 ring-red-200/60',
+                                        'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800/60',
+                                        'confirmed' => 'bg-blue-50 text-blue-700 ring-1 ring-blue-200/60 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-800/60',
+                                        'checked_in' => 'bg-violet-50 text-violet-700 ring-1 ring-violet-200/60 dark:bg-violet-950/40 dark:text-violet-300 dark:ring-violet-800/60',
+                                        'completed' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-800/60',
+                                        'cancelled' => 'bg-red-50 text-red-700 ring-1 ring-red-200/60 dark:bg-red-950/40 dark:text-red-300 dark:ring-red-800/60',
                                     ];
                                     $customerName =
                                         $booking->customer_name ?? ($booking->user?->name ?? 'Không xác định');
                                     $avatarText = mb_strtoupper(mb_substr(trim($customerName), 0, 1));
                                 @endphp
 
-                                <tr class="transition-colors hover:bg-slate-50/80">
+                                <tr class="transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-700/40">
                                     <td class="whitespace-nowrap ps-6 pe-5 py-4">
                                         <div class="flex items-center gap-3">
                                             <div
@@ -333,31 +333,31 @@
                                                 {{ $avatarText }}
                                             </div>
                                             <div class="min-w-0">
-                                                <p class="max-w-28 truncate font-semibold text-slate-900">
+                                                <p class="max-w-28 truncate font-semibold text-slate-900 dark:text-slate-100">
                                                     {{ $customerName }}</p>
-                                                <p class="max-w-28 truncate text-xs text-slate-400">
+                                                <p class="max-w-28 truncate text-xs text-slate-400 dark:text-slate-500">
                                                     {{ $booking->booking_code }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-5 py-4">
-                                        <p class="max-w-37 truncate text-sm font-medium text-slate-900">
+                                        <p class="max-w-37 truncate text-sm font-medium text-slate-900 dark:text-slate-100">
                                             {{ $booking->room?->homestay?->name ?? 'Không xác định' }}
                                         </p>
-                                        <p class="max-w-45 truncate text-xs text-slate-400">
+                                        <p class="max-w-45 truncate text-xs text-slate-400 dark:text-slate-500">
                                             {{ $booking->room?->name ?? 'Không xác định' }}
                                         </p>
                                     </td>
-                                    <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600 text-center">
+                                    <td class="whitespace-nowrap px-5 py-4 text-sm text-slate-600 text-center dark:text-slate-300">
                                         {{ $booking->check_in?->format('d/m/Y') ?? '—' }}
                                     </td>
-                                    <td class="whitespace-nowrap px-5 py-4 text-right text-sm font-bold text-slate-900">
+                                    <td class="whitespace-nowrap px-5 py-4 text-right text-sm font-bold text-slate-900 dark:text-slate-100">
                                         {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}₫
                                     </td>
                                     <td class="whitespace-nowrap ps-5 pe-6 py-4 text-center">
                                         <span
                                             class="inline-flex rounded-full px-3 py-1 text-xs font-semibold
-                                            {{ $bookingStatusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                            {{ $bookingStatusStyles[$booking->status] ?? 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
                                             {{ $bookingStatusLabels[$booking->status] ?? 'Không xác định' }}
                                         </span>
                                     </td>
@@ -366,14 +366,14 @@
                                 <tr>
                                     <td colspan="5" class="px-6 py-16 text-center">
                                         <div
-                                            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500">
                                             <svg class="h-7 w-7" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
                                         </div>
-                                        <p class="mt-3 text-sm text-slate-500">Chưa có đơn đặt phòng nào.</p>
+                                        <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Chưa có đơn đặt phòng nào.</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -383,19 +383,19 @@
             </section>
 
             {{-- Latest Reviews --}}
-            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm">
-                <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-5">
+            <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                <div class="flex items-center justify-between gap-4 border-b border-slate-100 px-6 py-5 dark:border-slate-700">
                     <div>
-                        <h2 class="text-lg font-bold text-slate-900">Đánh giá mới nhất</h2>
-                        <p class="mt-1 text-sm text-slate-500">Hoạt động gần đây</p>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Đánh giá mới nhất</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Hoạt động gần đây</p>
                     </div>
                     <a href="{{ route('admin.reviews.index') }}"
-                        class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:text-blue-700 hover:translate-x-1">
+                        class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition hover:translate-x-1 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Xem tất cả →
                     </a>
                 </div>
 
-                <div class="divide-y divide-slate-100">
+                <div class="divide-y divide-slate-100 dark:divide-slate-700">
                     @forelse ($latestReviews ?? collect() as $review)
                         @php
                             $reviewUserName = $review->user?->name ?? 'Không xác định';
@@ -406,13 +406,13 @@
                                 'hidden' => 'Đã ẩn',
                             ];
                             $reviewStatusStyles = [
-                                'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200/50',
-                                'approved' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/50',
-                                'hidden' => 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/50',
+                                'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200/50 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-800/60',
+                                'approved' => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200/50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-800/60',
+                                'hidden' => 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/50 dark:bg-slate-700 dark:text-slate-300 dark:ring-slate-600/60',
                             ];
                         @endphp
 
-                        <article class="px-6 py-5 transition-colors hover:bg-slate-50/60">
+                        <article class="px-6 py-5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-700/40">
                             <div class="flex items-start gap-3.5">
                                 <div
                                     class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-violet-500 to-violet-600 text-sm font-bold text-white shadow-sm">
@@ -422,14 +422,14 @@
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-start justify-between gap-3">
                                         <div class="min-w-0">
-                                            <p class="truncate font-semibold text-slate-900">{{ $reviewUserName }}</p>
-                                            <p class="truncate text-xs text-slate-400">
+                                            <p class="truncate font-semibold text-slate-900 dark:text-slate-100">{{ $reviewUserName }}</p>
+                                            <p class="truncate text-xs text-slate-400 dark:text-slate-500">
                                                 {{ $review->homestay?->name ?? 'Homestay không xác định' }}
                                             </p>
                                         </div>
                                         <span
                                             class="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold
-                                            {{ $reviewStatusStyles[$review->status] ?? 'bg-slate-100 text-slate-600' }}">
+                                            {{ $reviewStatusStyles[$review->status] ?? 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300' }}">
                                             {{ $reviewStatusLabels[$review->status] ?? 'Không xác định' }}
                                         </span>
                                     </div>
@@ -440,17 +440,17 @@
                                                 @if ($star <= (int) $review->rating)
                                                     <x-icon-star class="h-4 w-4 text-amber-400" />
                                                 @else
-                                                    <x-icon-star class="h-4 w-4 text-slate-400" />
+                                                    <x-icon-star class="h-4 w-4 text-slate-400 dark:text-slate-500" />
                                                 @endif
                                             </span>
                                         @endfor
                                     </div>
 
-                                    <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                                    <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                                         {{ $review->content ?: $review->title ?: 'Không có nội dung đánh giá.' }}
                                     </p>
 
-                                    <p class="mt-2.5 text-xs text-slate-400">
+                                    <p class="mt-2.5 text-xs text-slate-400 dark:text-slate-500">
                                         {{ $review->created_at?->diffForHumans() ?? 'Không xác định' }}
                                     </p>
                                 </div>
@@ -459,13 +459,13 @@
                     @empty
                         <div class="px-6 py-16 text-center">
                             <div
-                                class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                                class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500">
                                 <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                 </svg>
                             </div>
-                            <p class="mt-3 text-sm text-slate-500">Chưa có đánh giá nào.</p>
+                            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">Chưa có đánh giá nào.</p>
                         </div>
                     @endforelse
                 </div>

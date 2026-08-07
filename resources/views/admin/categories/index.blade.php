@@ -101,7 +101,7 @@
                             class="h-11 w-full rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
                     </div>
 
-                    <div class="lg:col-span-2">
+                    <div class="lg:col-span-3">
                         <label for="status" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Trạng thái
                         </label>
@@ -113,7 +113,7 @@
                         </select>
                     </div>
 
-                    <div class="lg:col-span-3">
+                    <div class="lg:col-span-2">
                         <label for="sort" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Sắp xếp
                         </label>
@@ -129,17 +129,38 @@
                     </div>
 
                     <div class="flex items-end gap-3 lg:col-span-2">
+                        {{-- Reset --}}
+                        @if (request()->hasAny(['search', 'status', 'sort']))
+                            <a href="{{ route('admin.categories.index') }}"
+                                title="Xóa bộ lọc"
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </a>
+                        @else
+                            <button type="button"
+                                disabled
+                                title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        @endif
+
                         <button type="submit"
-                            class="inline-flex h-11 flex-1 items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
+                            class="inline-flex cursor-pointer h-11 flex-1 items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
                             Lọc
                         </button>
-
-                        <a href="{{ route('admin.categories.index') }}" title="Đặt lại bộ lọc"
-                            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-white text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:bg-blue-950/40 dark:hover:text-blue-400">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M5.6 15A7 7 0 0 0 18 17M18.4 9A7 7 0 0 0 6 7" />
-                            </svg>
-                        </a>
                     </div>
                 </form>
             </div>

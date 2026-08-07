@@ -220,19 +220,26 @@
                     <div class="flex items-end lg:col-span-1">
                         @if (request()->hasAny(['search', 'status', 'city', 'sort']))
                             <a href="{{ route('admin.homestays.index') }}"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                                title="Đặt lại bộ lọc">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                title="Xóa bộ lọc"
+                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
-                            <button type="button" disabled
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-600"
-                                title="Chưa có bộ lọc cần đặt lại">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            <button type="button"
+                                disabled
+                                title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>

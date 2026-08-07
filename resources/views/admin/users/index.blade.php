@@ -262,43 +262,39 @@
                         </select>
                     </div>
 
-                    {{-- Đặt lại --}}
+                    {{-- Reset --}}
                     <div class="flex items-end lg:col-span-1">
                         @if ($hasFilters)
-                            <a href="{{ route('admin.users.index') }}" title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
-                                    <path d="M3 12a9 9 0 1 0 3-6.7"></path>
-                                    <path d="M3 4v6h6"></path>
-                                </svg>
+                            <a href="{{ route('admin.users.index') }}"
+                                title="Xóa bộ lọc"
+                                class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
-                                <span class="ml-2 lg:hidden">
-                                    Đặt lại
-                                </span>
+                                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                </svg>
                             </a>
                         @else
-                            <button type="button" disabled title="Chưa có bộ lọc"
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
-                                    <path d="M3 12a9 9 0 1 0 3-6.7"></path>
-                                    <path d="M3 4v6h6"></path>
-                                </svg>
+                            <button type="button"
+                                disabled
+                                title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
 
-                                <span class="ml-2 lg:hidden">
-                                    Đặt lại
-                                </span>
+                                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                </svg>
                             </button>
                         @endif
                     </div>
 
-                    {{-- Nút lọc --}}
+                    {{-- Lọc --}}
                     <div class="flex items-end lg:col-span-1">
                         <button type="submit"
                             class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+
+                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 5h16"></path>
                                 <path d="M7 12h10"></path>
                                 <path d="M10 19h4"></path>
@@ -465,13 +461,13 @@
                                         @if ($user->status === 'active')
                                             <span
                                                 class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-                                                <span class="h-2 w-2 rounded-full bg-emerald-50 dark:bg-emerald-950/400"></span>
+                                                <span class="h-2 w-2 rounded-full bg-emerald-600"></span>
                                                 Hoạt động
                                             </span>
                                         @else
                                             <span
                                                 class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 text-xs font-semibold text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
-                                                <span class="h-2 w-2 rounded-full bg-red-50 dark:bg-red-950/400"></span>
+                                                <span class="h-2 w-2 rounded-full bg-red-600"></span>
                                                 Tạm khóa
                                             </span>
                                         @endif

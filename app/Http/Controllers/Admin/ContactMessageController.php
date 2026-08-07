@@ -22,6 +22,17 @@ class ContactMessageController extends Controller
     {
         $search = trim($request->string('search')->toString());
         $status = $request->string('status')->toString();
+        $sort = $request->string('sort')->toString();
+
+        $allowedSorts = [
+            'oldest',
+            'unread_first',
+            'replied_first',
+        ];
+
+        if (! in_array($sort, $allowedSorts, true)) {
+            $sort = '';
+        }
 
         $messages = ContactMessage::query()
             ->with([
@@ -48,17 +59,44 @@ class ContactMessageController extends Controller
                 }
             )
 
-            // Thư chưa đọc đưa lên đầu
-            ->orderByRaw("
-                CASE
-                    WHEN status = 'unread' THEN 0
-                    WHEN status = 'read' THEN 1
-                    WHEN status = 'replied' THEN 2
-                    ELSE 3
-                END
-            ")
+            ->when(
+                $sort === 'unread_first',
+                function ($query) {
+                    $query->orderByRaw("
+                        CASE
+                            WHEN status = 'unread' THEN 0
+                            WHEN status = 'read' THEN 1
+                            WHEN status = 'replied' THEN 2
+                            ELSE 3
+                        END
+                    ");
+                }
+            )
+            ->when(
+                $sort === 'replied_first',
+                function ($query) {
+                    $query->orderByRaw("
+                        CASE
+                            WHEN status = 'replied' THEN 0
+                            WHEN status = 'read' THEN 1
+                            WHEN status = 'unread' THEN 2
+                            ELSE 3
+                        END
+                    ");
+                }
+            );
 
-            ->latest('created_at')
+        if ($sort === 'oldest') {
+            $messages
+                ->orderBy('created_at')
+                ->orderBy('id');
+        } else {
+            $messages
+                ->orderByDesc('created_at')
+                ->orderByDesc('id');
+        }
+
+        $messages = $messages
             ->paginate(10)
             ->withQueryString();
 
@@ -109,7 +147,8 @@ class ContactMessageController extends Controller
             'replies' => function ($query) {
                 $query
                     ->with('admin:id,name,email')
-                    ->oldest('sent_at');
+                    ->orderBy('sent_at')
+                    ->orderBy('id');
             },
         ]);
 

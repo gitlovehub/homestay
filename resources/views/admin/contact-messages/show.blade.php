@@ -9,26 +9,26 @@
         $statusConfig = [
             'unread' => [
                 'label' => 'Chưa đọc',
-                'badge' => 'border-red-200 bg-red-50 text-red-700',
+                'badge' => 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300',
                 'dot' => 'bg-red-500',
             ],
 
             'read' => [
                 'label' => 'Đã đọc',
-                'badge' => 'border-blue-200 bg-blue-50 text-blue-700',
+                'badge' => 'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300',
                 'dot' => 'bg-blue-500',
             ],
 
             'replied' => [
                 'label' => 'Đã phản hồi',
-                'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300',
                 'dot' => 'bg-emerald-500',
             ],
         ];
 
         $currentStatus = $statusConfig[$contactMessage->status] ?? [
             'label' => 'Không xác định',
-            'badge' => 'border-slate-200 bg-slate-50 text-slate-700',
+            'badge' => 'border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300',
             'dot' => 'bg-slate-400',
         ];
 
@@ -53,14 +53,26 @@
 
         <x-alert />
 
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+                Yêu cầu hỗ trợ #{{ $contactMessage->id }}
+            </h2>
+
+            <a href="{{ route('admin.contact-messages.index') }}"
+                class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
+                ←
+                Trở về danh sách liên hệ
+            </a>
+        </div>
+
         {{-- Phần tiêu đề --}}
-        <section class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-5 sm:px-6">
+        <section class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+            <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-5 sm:px-6 dark:border-slate-700 dark:bg-slate-900/40">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
                     <div class="min-w-0">
                         <div class="flex flex-wrap items-center gap-3">
-                            <h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+                            <h2 class="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">
                                 Yêu cầu hỗ trợ #{{ $contactMessage->id }}
                             </h2>
 
@@ -75,86 +87,64 @@
                             </span>
                         </div>
 
-                        <p class="mt-2 text-sm text-slate-500">
+                        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
                             Được gửi lúc
                             {{ $contactMessage->created_at->format('H:i, d/m/Y') }}
                         </p>
-                    </div>
-
-                    <a
-                        href="{{ route('admin.contact-messages.index') }}"
-                        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
-                    >
-                        <svg
-                            class="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="m15 18-6-6 6-6"
-                            />
-                        </svg>
-
-                        Danh sách liên hệ
-                    </a>
-                </div>
+                    </div>                </div>
             </div>
 
             {{-- Thông tin tổng quan --}}
-            <div class="grid divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
+            <div class="grid divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4 dark:divide-slate-700">
 
                 <div class="px-5 py-4 sm:px-6">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Người gửi
                     </p>
 
-                    <p class="mt-2 truncate font-bold text-slate-900">
+                    <p class="mt-2 truncate font-bold text-slate-900 dark:text-slate-100">
                         {{ $contactMessage->name }}
                     </p>
 
-                    <p class="mt-1 truncate text-sm text-slate-500">
+                    <p class="mt-1 truncate text-sm text-slate-500 dark:text-slate-400">
                         {{ $contactMessage->email }}
                     </p>
                 </div>
 
                 <div class="px-5 py-4 sm:px-6">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Chủ đề
                     </p>
 
-                    <p class="mt-2 line-clamp-2 font-bold text-slate-900">
+                    <p class="mt-2 line-clamp-2 font-bold text-slate-900 dark:text-slate-100">
                         {{ $contactMessage->subject }}
                     </p>
                 </div>
 
                 <div class="px-5 py-4 sm:px-6">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Thời gian gửi
                     </p>
 
-                    <p class="mt-2 font-bold text-slate-900">
+                    <p class="mt-2 font-bold text-slate-900 dark:text-slate-100">
                         {{ $contactMessage->created_at->format('d/m/Y') }}
                     </p>
 
-                    <p class="mt-1 text-sm text-slate-500">
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         {{ $contactMessage->created_at->format('H:i') }}
                     </p>
                 </div>
 
                 <div class="px-5 py-4 sm:px-6">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Số phản hồi
                     </p>
 
-                    <p class="mt-2 text-xl font-bold text-blue-600">
+                    <p class="mt-2 text-xl font-bold text-blue-600 dark:text-blue-400">
                         {{ $contactMessage->replies->count() }}
                     </p>
 
-                    <p class="mt-1 text-sm text-slate-500">
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         phản hồi đã gửi
                     </p>
                 </div>
@@ -168,11 +158,11 @@
             <div class="space-y-6 xl:col-span-8">
 
                 {{-- Nội dung yêu cầu --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6 dark:border-slate-700 dark:bg-slate-900/40">
 
                         <span
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600"
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400"
                         >
                             <svg
                                 class="h-5 w-5"
@@ -190,11 +180,11 @@
                         </span>
 
                         <div>
-                            <h3 class="font-bold text-slate-900">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">
                                 Nội dung yêu cầu hỗ trợ
                             </h3>
 
-                            <p class="mt-0.5 text-sm text-slate-500">
+                            <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
                                 Nội dung do người dùng gửi đến HomeStayGo.
                             </p>
                         </div>
@@ -203,22 +193,22 @@
                     <div class="space-y-5 p-5 sm:p-6">
 
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Chủ đề cần hỗ trợ
                             </p>
 
-                            <p class="mt-2 text-lg font-bold text-slate-900">
+                            <p class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100">
                                 {{ $contactMessage->subject }}
                             </p>
                         </div>
 
-                        <div class="border-t border-slate-200 pt-5">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="border-t border-slate-200 pt-5 dark:border-slate-700">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Nội dung liên hệ
                             </p>
 
                             <div
-                                class="mt-3 whitespace-pre-line break-words rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm leading-7 text-slate-700 sm:text-base"
+                                class="mt-3 whitespace-pre-line break-words rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm leading-7 text-slate-700 sm:text-base dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
                             >{{ $contactMessage->message }}</div>
                         </div>
 
@@ -226,11 +216,11 @@
                 </section>
 
                 {{-- Thông tin người gửi --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6 dark:border-slate-700 dark:bg-slate-900/40">
 
                         <span
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600"
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/50 dark:text-violet-400"
                         >
                             <svg
                                 class="h-5 w-5"
@@ -249,11 +239,11 @@
                         </span>
 
                         <div>
-                            <h3 class="font-bold text-slate-900">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">
                                 Thông tin người gửi
                             </h3>
 
-                            <p class="mt-0.5 text-sm text-slate-500">
+                            <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
                                 Thông tin tài khoản gửi yêu cầu.
                             </p>
                         </div>
@@ -261,38 +251,38 @@
 
                     <div class="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
 
-                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-700/40">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Họ và tên
                             </p>
 
-                            <p class="mt-2 font-semibold text-slate-900">
+                            <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">
                                 {{ $contactMessage->name }}
                             </p>
                         </div>
 
-                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-700/40">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Email nhận phản hồi
                             </p>
 
-                            <p class="mt-2 break-all font-semibold text-blue-600">
+                            <p class="mt-2 break-all font-semibold text-blue-600 dark:text-blue-400">
                                 {{ $contactMessage->email }}
                             </p>
                         </div>
 
-                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-700/40">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Số điện thoại
                             </p>
 
-                            <p class="mt-2 font-semibold text-slate-900">
+                            <p class="mt-2 font-semibold text-slate-900 dark:text-slate-100">
                                 {{ $contactMessage->phone ?: 'Không cung cấp' }}
                             </p>
                         </div>
 
-                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-700 dark:bg-slate-700/40">
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                 Trạng thái
                             </p>
 
@@ -300,14 +290,14 @@
                                 <div class="mt-2">
                                     @if ($contactMessage->user->status === 'active')
                                         <span
-                                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"
+                                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300"
                                         >
                                             <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                                             Đang hoạt động
                                         </span>
                                     @else
                                         <span
-                                            class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700"
+                                            class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
                                         >
                                             <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
                                             Không hoạt động
@@ -316,7 +306,7 @@
                                 </div>
                             @else
                                 <span
-                                    class="mt-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600"
+                                    class="mt-2 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
                                 >
                                     <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
                                     Tài khoản không còn tồn tại
@@ -328,11 +318,11 @@
                 </section>
 
                 {{-- Lịch sử phản hồi --}}
-                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6">
+                <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                    <div class="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:px-6 dark:border-slate-700 dark:bg-slate-900/40">
 
                         <span
-                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600"
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"
                         >
                             <svg
                                 class="h-5 w-5"
@@ -350,11 +340,11 @@
                         </span>
 
                         <div>
-                            <h3 class="font-bold text-slate-900">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">
                                 Lịch sử phản hồi
                             </h3>
 
-                            <p class="mt-0.5 text-sm text-slate-500">
+                            <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
                                 Các phản hồi đã gửi đến người dùng.
                             </p>
                         </div>
@@ -363,36 +353,36 @@
                     <div class="p-5 sm:p-6">
                         @forelse ($contactMessage->replies as $reply)
                             <div
-                                class="border-b border-slate-200 py-5 first:pt-0 last:border-b-0 last:pb-0"
+                                class="border-b border-slate-200 py-5 first:pt-0 last:border-b-0 last:pb-0 dark:border-slate-700"
                             >
                                 <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
 
                                     <div>
-                                        <p class="font-bold text-slate-900">
+                                        <p class="font-bold text-slate-900 dark:text-slate-100">
                                             {{ $reply->subject }}
                                         </p>
 
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                             Phản hồi bởi
                                             {{ $reply->admin?->name ?? 'Admin không còn tồn tại' }}
                                         </p>
                                     </div>
 
-                                    <p class="shrink-0 text-xs font-medium text-slate-400">
+                                    <p class="shrink-0 text-xs font-medium text-slate-400 dark:text-slate-500">
                                         {{ $reply->sent_at?->format('H:i d/m/Y') }}
                                     </p>
                                 </div>
 
                                 <div
-                                    class="mt-4 whitespace-pre-line break-words rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 text-sm leading-7 text-slate-700"
+                                    class="mt-4 whitespace-pre-line break-words rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 text-sm leading-7 text-slate-700 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-slate-300"
                                 >{{ $reply->message }}</div>
                             </div>
                         @empty
                             <div
-                                class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-10 text-center"
+                                class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-10 text-center dark:border-slate-600 dark:bg-slate-700/40 dark:bg-slate-900/40"
                             >
                                 <div
-                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400"
+                                    class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
                                 >
                                     <svg
                                         class="h-6 w-6"
@@ -409,11 +399,11 @@
                                     </svg>
                                 </div>
 
-                                <p class="mt-4 font-semibold text-slate-700">
+                                <p class="mt-4 font-semibold text-slate-700 dark:text-slate-300">
                                     Chưa có phản hồi
                                 </p>
 
-                                <p class="mt-1 text-sm text-slate-500">
+                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                     Yêu cầu này chưa được quản trị viên phản hồi.
                                 </p>
                             </div>
@@ -428,13 +418,13 @@
                 <div class="space-y-6 xl:sticky xl:top-24">
 
                     {{-- Form phản hồi --}}
-                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
-                            <h3 class="font-bold text-slate-900">
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4 dark:border-slate-700 dark:bg-slate-900/40">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">
                                 Phản hồi người dùng
                             </h3>
 
-                            <p class="mt-1 text-sm text-slate-500">
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                 Email sẽ được gửi đến địa chỉ của người dùng.
                             </p>
                         </div>
@@ -451,7 +441,7 @@
                             <div>
                                 <label
                                     for="reply_email"
-                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                    class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                                 >
                                     Người nhận
                                 </label>
@@ -461,7 +451,7 @@
                                     type="email"
                                     value="{{ $contactMessage->email }}"
                                     readonly
-                                    class="w-full cursor-not-allowed rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600"
+                                    class="h-11 w-full cursor-not-allowed rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-400 dark:text-slate-300"
                                 >
                             </div>
 
@@ -469,7 +459,7 @@
                             <div>
                                 <label
                                     for="reply_subject"
-                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                    class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                                 >
                                     Tiêu đề phản hồi
                                     <span class="text-red-500">*</span>
@@ -485,14 +475,14 @@
                                         'Phản hồi: ' . $contactMessage->subject
                                     ) }}"
                                     placeholder="Nhập tiêu đề phản hồi"
-                                    class="w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400
+                                    class="h-11 w-full rounded-xl border bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500
                                         {{ $errors->has('reply_subject')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
+                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:border-red-700 dark:focus:border-red-500 dark:focus:ring-red-950/40'
+                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:focus:border-blue-400 dark:focus:ring-blue-900/40' }}"
                                 >
 
                                 @error('reply_subject')
-                                    <p class="mt-1.5 text-sm font-medium text-red-600">
+                                    <p class="mt-1.5 text-sm font-medium text-red-600 dark:text-red-400">
                                         {{ $message }}
                                     </p>
                                 @enderror
@@ -503,7 +493,7 @@
                                 <div class="mb-2 flex items-center justify-between gap-3">
                                     <label
                                         for="reply_message"
-                                        class="block text-sm font-semibold text-slate-700"
+                                        class="block text-sm font-semibold text-slate-700 dark:text-slate-300"
                                     >
                                         Nội dung phản hồi
                                         <span class="text-red-500">*</span>
@@ -511,7 +501,7 @@
 
                                     <span
                                         id="reply-message-count"
-                                        class="text-xs font-medium text-slate-400"
+                                        class="text-xs font-medium text-slate-400 dark:text-slate-500"
                                     >
                                         {{ mb_strlen(old('reply_message', '')) }}/5000
                                     </span>
@@ -523,24 +513,24 @@
                                     rows="8"
                                     maxlength="5000"
                                     placeholder="Nhập nội dung phản hồi cho người dùng..."
-                                    class="w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400
+                                    class="w-full resize-none rounded-xl border bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500
                                         {{ $errors->has('reply_message')
-                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100'
-                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' }}"
+                                            ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-100 dark:border-red-700 dark:focus:border-red-500 dark:focus:ring-red-950/40'
+                                            : 'border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:focus:border-blue-400 dark:focus:ring-blue-900/40' }}"
                                 >{{ old('reply_message') }}</textarea>
 
                                 @error('reply_message')
-                                    <p class="mt-1.5 text-sm font-medium text-red-600">
+                                    <p class="mt-1.5 text-sm font-medium text-red-600 dark:text-red-400">
                                         {{ $message }}
                                     </p>
                                 @enderror
                             </div>
 
                             {{-- Cảnh báo --}}
-                            <div class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+                            <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/40">
                                 <div class="flex items-start gap-3">
                                     <svg
-                                        class="mt-0.5 h-5 w-5 shrink-0 text-blue-600"
+                                        class="mt-0.5 h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -553,7 +543,7 @@
                                         />
                                     </svg>
 
-                                    <p class="text-sm leading-6 text-blue-700">
+                                    <p class="text-sm leading-6 text-blue-700 dark:text-blue-300">
                                         Sau khi gửi thành công, phản hồi sẽ được lưu vào lịch sử
                                         và trạng thái yêu cầu chuyển sang “Đã phản hồi”.
                                     </p>
@@ -564,7 +554,7 @@
                             <button
                                 id="contact-reply-button"
                                 type="submit"
-                                class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70"
+                                class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40 disabled:cursor-not-allowed disabled:opacity-70"
                             >
                                 <svg
                                     class="h-5 w-5"
@@ -588,9 +578,9 @@
                     </section>
 
                     {{-- Trạng thái xử lý --}}
-                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
-                            <h3 class="font-bold text-slate-900">
+                    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4 dark:border-slate-700 dark:bg-slate-900/40">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100">
                                 Trạng thái xử lý
                             </h3>
                         </div>
@@ -609,21 +599,21 @@
                             <div class="mt-5 space-y-4">
 
                                 <div>
-                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                         Thời gian gửi
                                     </p>
 
-                                    <p class="mt-1 font-semibold text-slate-900">
+                                    <p class="mt-1 font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $contactMessage->created_at->format('H:i d/m/Y') }}
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                         Thời gian đọc
                                     </p>
 
-                                    <p class="mt-1 font-semibold text-slate-900">
+                                    <p class="mt-1 font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $contactMessage->read_at
                                             ? $contactMessage->read_at->format('H:i d/m/Y')
                                             : 'Chưa đọc' }}
@@ -631,11 +621,11 @@
                                 </div>
 
                                 <div>
-                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                         Phản hồi gần nhất
                                     </p>
 
-                                    <p class="mt-1 font-semibold text-slate-900">
+                                    <p class="mt-1 font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $contactMessage->replied_at
                                             ? $contactMessage->replied_at->format('H:i d/m/Y')
                                             : 'Chưa phản hồi' }}

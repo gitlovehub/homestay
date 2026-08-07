@@ -9,19 +9,19 @@
         $statusConfig = [
             'unread' => [
                 'label' => 'Chưa đọc',
-                'badge' => 'border-red-200 bg-red-50 text-red-700',
+                'badge' => 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300',
                 'dot' => 'bg-red-500',
             ],
 
             'read' => [
                 'label' => 'Đã đọc',
-                'badge' => 'border-blue-200 bg-blue-50 text-blue-700',
+                'badge' => 'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300',
                 'dot' => 'bg-blue-500',
             ],
 
             'replied' => [
                 'label' => 'Đã phản hồi',
-                'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+                'badge' => 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300',
                 'dot' => 'bg-emerald-500',
             ],
         ];
@@ -31,19 +31,21 @@
 
         <x-alert />
 
-        <p class="mb-8 text-sm font-semibold text-slate-500 md:text-lg">
-            Tiếp nhận và quản lý các yêu cầu hỗ trợ do người dùng gửi đến HomeStayGo.
-        </p>
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+                Tiếp nhận và quản lý các yêu cầu hỗ trợ do người dùng gửi đến HomeStayGo.
+            </h2>
+        </div>
 
         {{-- Thống kê --}}
         <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
             {{-- Tổng thư --}}
             <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -67,11 +69,11 @@
                 </div>
 
                 <div>
-                    <p class="text-sm font-medium text-slate-500">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                         Tổng yêu cầu
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-slate-900">
+                    <p class="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {{ number_format($statistics['total'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -79,10 +81,10 @@
 
             {{-- Chưa đọc --}}
             <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -100,11 +102,11 @@
                 </div>
 
                 <div>
-                    <p class="text-sm font-medium text-slate-500">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                         Chưa đọc
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-red-600">
+                    <p class="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">
                         {{ number_format($statistics['unread'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -112,10 +114,10 @@
 
             {{-- Đã đọc --}}
             <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -134,11 +136,11 @@
                 </div>
 
                 <div>
-                    <p class="text-sm font-medium text-slate-500">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                         Đã đọc
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-amber-600">
+                    <p class="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">
                         {{ number_format($statistics['read'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -146,10 +148,10 @@
 
             {{-- Đã phản hồi --}}
             <div
-                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -167,11 +169,11 @@
                 </div>
 
                 <div>
-                    <p class="text-sm font-medium text-slate-500">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                         Đã phản hồi
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-emerald-600">
+                    <p class="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                         {{ number_format($statistics['replied'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -181,28 +183,28 @@
 
         {{-- Danh sách --}}
         <section
-            class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+            class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800"
         >
 
             {{-- Bộ lọc --}}
-            <div class="border-b border-slate-200 bg-slate-50/70 p-5">
+            <div class="border-b border-slate-200 bg-slate-50/70 p-5 dark:border-slate-700 dark:bg-slate-900/40">
                 <form
                     method="GET"
                     action="{{ route('admin.contact-messages.index') }}"
                     class="grid gap-4 lg:grid-cols-12"
                 >
                     {{-- Tìm kiếm --}}
-                    <div class="lg:col-span-7">
+                    <div class="lg:col-span-6">
                         <label
                             for="search"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
+                            class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                         >
                             Tìm kiếm
                         </label>
 
                         <div class="relative">
                             <span
-                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"
+                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 dark:text-slate-500"
                             >
                                 <svg
                                     class="h-5 w-5"
@@ -225,7 +227,7 @@
                                 type="search"
                                 value="{{ request('search') }}"
                                 placeholder="Tên, email, số điện thoại, chủ đề..."
-                                class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                class="h-11 w-full rounded-xl border border-slate-300 bg-white pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-900/40"
                                 onsearch="this.form.submit()"
                                 oninput="if (this.value === '') this.form.submit()"
                             >
@@ -233,10 +235,10 @@
                     </div>
 
                     {{-- Trạng thái --}}
-                    <div class="lg:col-span-3">
+                    <div class="lg:col-span-2">
                         <label
                             for="status"
-                            class="mb-2 block text-sm font-semibold text-slate-700"
+                            class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                         >
                             Trạng thái
                         </label>
@@ -244,7 +246,7 @@
                         <select
                             id="status"
                             name="status"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40"
                         >
                             <option value="">
                                 Tất cả trạng thái
@@ -273,13 +275,28 @@
                         </select>
                     </div>
 
+                    {{-- Sắp xếp --}}
+                    <div class="lg:col-span-2">
+                        <label for="sort" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Sắp xếp
+                        </label>
+
+                        <select id="sort" name="sort"
+                            class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
+                            <option value="">Mới nhất</option>
+                            <option value="oldest" @selected(request('sort') === 'oldest')>Cũ nhất</option>
+                            <option value="unread_first" @selected(request('sort') === 'unread_first')>Chưa đọc trước</option>
+                            <option value="replied_first" @selected(request('sort') === 'replied_first')>Đã phản hồi trước</option>
+                        </select>
+                    </div>
+
                     {{-- Xóa bộ lọc --}}
                     <div class="flex items-end lg:col-span-1">
-                        @if (request()->hasAny(['search', 'status']))
+                        @if (request()->hasAny(['search', 'status', 'sort']))
                             <a
                                 href="{{ route('admin.contact-messages.index') }}"
                                 title="Xóa bộ lọc"
-                                class="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50"
+                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40"
                             >
                                 <svg
                                     class="h-4 w-4"
@@ -299,7 +316,7 @@
                             <button
                                 type="button"
                                 disabled
-                                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-400"
+                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500"
                             >
                                 <svg
                                     class="h-4 w-4"
@@ -322,7 +339,7 @@
                     <div class="flex items-end lg:col-span-1">
                         <button
                             type="submit"
-                            class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40"
                         >
                             Lọc
                         </button>
@@ -336,7 +353,7 @@
 
                         <thead>
                             <tr
-                                class="border-b border-slate-200 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-500"
+                                class="border-b border-slate-200 bg-slate-50/70 text-xs font-bold uppercase tracking-wider text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400"
                             >
                                 <th class="px-6 py-4">
                                     Người gửi
@@ -360,12 +377,12 @@
                             </tr>
                         </thead>
 
-                        <tbody class="divide-y divide-slate-200 text-sm">
+                        <tbody class="divide-y divide-slate-200 text-sm dark:divide-slate-700">
                             @foreach ($messages as $contactMessage)
                                 @php
                                     $currentStatus = $statusConfig[$contactMessage->status] ?? [
                                         'label' => 'Không xác định',
-                                        'badge' => 'border-slate-200 bg-slate-50 text-slate-700',
+                                        'badge' => 'border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300',
                                         'dot' => 'bg-slate-400',
                                     ];
 
@@ -387,9 +404,9 @@
                                 @endphp
 
                                 <tr
-                                    class="transition hover:bg-slate-50/80
+                                    class="transition hover:bg-slate-50/80 dark:hover:bg-slate-700/40
                                         {{ $contactMessage->status === 'unread'
-                                            ? 'bg-blue-50/30'
+                                            ? 'bg-blue-50/30 dark:bg-blue-950/10'
                                             : '' }}"
                                 >
                                     {{-- Người gửi --}}
@@ -407,7 +424,7 @@
                                             <div class="min-w-0">
                                                 <div class="flex items-center gap-2">
                                                     <p
-                                                        class="max-w-[180px] truncate font-semibold text-slate-900"
+                                                        class="max-w-[180px] truncate font-semibold text-slate-900 dark:text-slate-100"
                                                     >
                                                         {{ $contactMessage->name }}
                                                     </p>
@@ -421,7 +438,7 @@
                                                 </div>
 
                                                 <p
-                                                    class="mt-0.5 max-w-[200px] truncate text-xs text-slate-500"
+                                                    class="mt-0.5 max-w-[200px] truncate text-xs text-slate-500 dark:text-slate-400"
                                                 >
                                                     {{ $contactMessage->email }}
                                                 </p>
@@ -443,13 +460,13 @@
 
                                             <details class="mt-2">
                                                 <summary
-                                                    class="inline-flex cursor-pointer list-none items-center text-xs font-semibold text-blue-600 transition hover:text-blue-700"
+                                                    class="inline-flex cursor-pointer list-none items-center text-xs font-semibold text-blue-600 transition hover:text-blue-700 dark:hover:text-blue-300 dark:text-blue-400"
                                                 >
                                                     Xem nhanh nội dung
                                                 </summary>
 
                                                 <div
-                                                    class="mt-3 max-w-lg rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700"
+                                                    class="mt-3 max-w-lg rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:bg-slate-900/40"
                                                 >
                                                     {{ $contactMessage->message }}
                                                 </div>
@@ -462,12 +479,12 @@
                                         @if ($contactMessage->phone)
                                             <a
                                                 href="tel:{{ $contactMessage->phone }}"
-                                                class="font-semibold text-blue-600 transition hover:text-blue-700 hover:underline"
+                                                class="font-semibold text-blue-600 transition hover:text-blue-700 hover:underline dark:hover:text-blue-300 dark:text-blue-400"
                                             >
                                                 {{ $contactMessage->phone }}
                                             </a>
                                         @else
-                                            <span class="text-slate-400">
+                                            <span class="text-slate-400 dark:text-slate-500">
                                                 Không cung cấp
                                             </span>
                                         @endif
@@ -488,15 +505,15 @@
 
                                     {{-- Thời gian --}}
                                     <td class="whitespace-nowrap px-6 py-5">
-                                        <p class="font-semibold text-slate-800">
+                                        <p class="font-semibold text-slate-800 dark:text-slate-200">
                                             {{ $contactMessage->created_at->format('d/m/Y') }}
                                         </p>
 
-                                        <p class="mt-1 text-xs text-slate-500">
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                             {{ $contactMessage->created_at->format('H:i') }}
                                         </p>
 
-                                        <p class="mt-1 text-xs text-slate-400">
+                                        <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
                                             {{ $contactMessage->created_at->diffForHumans() }}
                                         </p>
                                     </td>
@@ -505,7 +522,7 @@
                                     <td class="whitespace-nowrap px-6 py-5 text-right">
                                         <a
                                             href="{{ route('admin.contact-messages.show', $contactMessage) }}"
-                                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100"
+                                            class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:border-blue-700 dark:hover:bg-blue-950/60"
                                         >
                                             <svg
                                                 class="h-4 w-4"
@@ -538,13 +555,16 @@
                 </div>
 
                 {{-- Phân trang --}}
-                <div class="border-t border-slate-200 px-6 py-4">
-                    {{ $messages->links() }}
+                <div class="border-t border-slate-200 px-6 py-4 dark:border-slate-700">
+                    {{ $messages->onEachSide(1)->links('components.pagination', [
+                        'layout' => 'row',
+                        'showInfo' => true,
+                    ]) }}
                 </div>
             @else
                 <div class="px-6 py-20 text-center">
                     <div
-                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400"
+                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
                     >
                         <svg
                             class="h-8 w-8"
@@ -567,19 +587,19 @@
                         </svg>
                     </div>
 
-                    <h2 class="mt-5 text-lg font-bold text-slate-900">
+                    <h2 class="mt-5 text-lg font-bold text-slate-900 dark:text-slate-100">
                         Chưa có yêu cầu liên hệ phù hợp
                     </h2>
 
-                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
                         Không tìm thấy thư phù hợp với nội dung tìm kiếm hoặc
                         trạng thái đang được lựa chọn.
                     </p>
 
-                    @if (request()->hasAny(['search', 'status']))
+                    @if (request()->hasAny(['search', 'status', 'sort']))
                         <a
                             href="{{ route('admin.contact-messages.index') }}"
-                            class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                            class="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40"
                         >
                             Xóa bộ lọc
                         </a>

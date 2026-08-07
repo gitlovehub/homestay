@@ -50,8 +50,27 @@ class ReviewController extends Controller
                 $query->where('rating', $request->rating);
             });
 
-        $reviews = (clone $reviewsQuery)
-            ->latest()
+        $sort = (string) $request->input('sort', 'latest');
+
+        $sortedReviewsQuery = match ($sort) {
+            'oldest' => (clone $reviewsQuery)
+                ->orderBy('created_at')
+                ->orderBy('id'),
+
+            'rating_desc' => (clone $reviewsQuery)
+                ->orderByDesc('rating')
+                ->orderByDesc('id'),
+
+            'rating_asc' => (clone $reviewsQuery)
+                ->orderBy('rating')
+                ->orderBy('id'),
+
+            default => (clone $reviewsQuery)
+                ->orderByDesc('created_at')
+                ->orderByDesc('id'),
+        };
+
+        $reviews = $sortedReviewsQuery
             ->paginate(10)
             ->withQueryString();
 

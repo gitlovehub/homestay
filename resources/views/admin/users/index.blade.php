@@ -7,28 +7,31 @@
 @section('content')
     @php
         $hasFilters =
-            request()->filled('search') || request()->filled('booking_activity') || request()->filled('status');
+            request()->filled('search')
+            || request()->filled('booking_activity')
+            || request()->filled('status')
+            || request()->filled('sort');
     @endphp
 
     <div class="mx-auto max-w-screen-2xl">
         <x-alert />
 
         {{-- Giới thiệu --}}
-        <section class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-800">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900 sm:text-2xl">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
                         Danh sách tài khoản
                     </h2>
 
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
                         Theo dõi thông tin, hoạt động đặt phòng và quản lý trạng thái
                         tài khoản trong hệ thống HomeStayGo.
                     </p>
                 </div>
 
                 <div
-                    class="inline-flex w-fit items-center gap-2 rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700">
+                    class="inline-flex w-fit items-center gap-2 rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.8" class="h-5 w-5">
                         <circle cx="9" cy="8" r="4"></circle>
@@ -49,20 +52,20 @@
         <section class="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {{-- Tổng tài khoản --}}
             <article
-                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Tổng tài khoản
                         </p>
 
-                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {{ number_format($statistics['total'] ?? 0, 0, ',', '.') }}
                         </p>
                     </div>
 
                     <span
-                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100">
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-100 dark:group-hover:bg-blue-950/60 dark:bg-blue-950/40 dark:text-blue-400">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.8" class="h-6 w-6">
                             <circle cx="9" cy="8" r="4"></circle>
@@ -73,27 +76,27 @@
                     </span>
                 </div>
 
-                <p class="mt-4 text-xs leading-5 text-slate-400">
+                <p class="mt-4 text-xs leading-5 text-slate-400 dark:text-slate-500">
                     Toàn bộ tài khoản đang có trong hệ thống.
                 </p>
             </article>
 
             {{-- Tài khoản mới --}}
             <article
-                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Mới trong tháng
                         </p>
 
-                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {{ number_format($statistics['new_this_month'] ?? 0, 0, ',', '.') }}
                         </p>
                     </div>
 
                     <span
-                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:bg-amber-100">
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 transition group-hover:bg-amber-100 dark:group-hover:bg-amber-950/60 dark:bg-amber-950/40 dark:text-amber-400">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.8" class="h-6 w-6">
                             <circle cx="9" cy="8" r="4"></circle>
@@ -104,27 +107,27 @@
                     </span>
                 </div>
 
-                <p class="mt-4 text-xs leading-5 text-slate-400">
+                <p class="mt-4 text-xs leading-5 text-slate-400 dark:text-slate-500">
                     Số tài khoản đăng ký trong tháng hiện tại.
                 </p>
             </article>
 
             {{-- Hoạt động --}}
             <article
-                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Đang hoạt động
                         </p>
 
-                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {{ number_format($statistics['active'] ?? 0, 0, ',', '.') }}
                         </p>
                     </div>
 
                     <span
-                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:bg-emerald-100">
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 transition group-hover:bg-emerald-100 dark:group-hover:bg-emerald-950/60 dark:bg-emerald-950/40 dark:text-emerald-400">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.8" class="h-6 w-6">
                             <circle cx="12" cy="12" r="9"></circle>
@@ -133,27 +136,27 @@
                     </span>
                 </div>
 
-                <p class="mt-4 text-xs leading-5 text-slate-400">
+                <p class="mt-4 text-xs leading-5 text-slate-400 dark:text-slate-500">
                     Tài khoản có thể sử dụng đầy đủ chức năng.
                 </p>
             </article>
 
             {{-- Tạm khóa --}}
             <article
-                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-sm font-medium text-slate-500">
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
                             Tạm khóa
                         </p>
 
-                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <p class="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {{ number_format($statistics['inactive'] ?? 0, 0, ',', '.') }}
                         </p>
                     </div>
 
                     <span
-                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 transition group-hover:bg-red-100">
+                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 transition group-hover:bg-red-100 dark:group-hover:bg-red-950/60 dark:bg-red-950/40 dark:text-red-400">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.8" class="h-6 w-6">
                             <circle cx="12" cy="12" r="9"></circle>
@@ -162,48 +165,28 @@
                     </span>
                 </div>
 
-                <p class="mt-4 text-xs leading-5 text-slate-400">
+                <p class="mt-4 text-xs leading-5 text-slate-400 dark:text-slate-500">
                     Tài khoản đang bị giới hạn một số chức năng.
                 </p>
             </article>
         </section>
 
         {{-- Danh sách tài khoản --}}
-        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
             {{-- Tiêu đề và bộ lọc --}}
-            <div class="rounded-t-2xl border-b border-slate-200 bg-slate-50/70 p-5 sm:p-6">
-                <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 class="font-bold text-slate-900">
-                            Tài khoản người dùng
-                        </h3>
-
-                        <p class="mt-1 text-sm text-slate-500">
-                            Hiển thị {{ $users->count() }} trong tổng số
-                            {{ $users->total() }} tài khoản.
-                        </p>
-                    </div>
-
-                    @if ($hasFilters)
-                        <span
-                            class="inline-flex w-fit items-center gap-2 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700">
-                            <span class="h-2 w-2 rounded-full bg-blue-500"></span>
-                            Đang áp dụng bộ lọc
-                        </span>
-                    @endif
-                </div>
+            <div class="rounded-t-2xl border-b border-slate-200 bg-slate-50/70 p-5 sm:p-6 dark:border-slate-700 dark:bg-slate-900/40">
 
                 <form method="GET" action="{{ route('admin.users.index') }}"
                     class="grid gap-4 md:grid-cols-2 lg:grid-cols-12">
                     {{-- Tìm kiếm --}}
-                    <div class="md:col-span-2 lg:col-span-5">
-                        <label for="search" class="mb-2 block text-sm font-semibold text-slate-700">
+                    <div class="md:col-span-2 lg:col-span-4">
+                        <label for="search" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Tìm kiếm tài khoản
                         </label>
 
                         <div class="relative">
                             <span
-                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 dark:text-slate-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
                                     <circle cx="11" cy="11" r="7"></circle>
@@ -213,19 +196,19 @@
 
                             <input id="search" type="search" name="search" value="{{ request('search') }}"
                                 placeholder="Nhập tên, email hoặc số điện thoại..."
-                                class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                                class="h-11 w-full rounded-xl border border-slate-300 bg-white pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-900/40"
                                 onsearch="this.form.submit()" oninput="if (this.value === '') this.form.submit()">
                         </div>
                     </div>
 
                     {{-- Hoạt động đặt phòng --}}
                     <div class="lg:col-span-2">
-                        <label for="booking_activity" class="mb-2 block text-sm font-semibold text-slate-700">
+                        <label for="booking_activity" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Hoạt động đặt phòng
                         </label>
 
                         <select id="booking_activity" name="booking_activity"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                            class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40 dark:text-slate-300">
                             <option value="">
                                 Tất cả
                             </option>
@@ -242,12 +225,12 @@
 
                     {{-- Trạng thái --}}
                     <div class="lg:col-span-2">
-                        <label for="status" class="mb-2 block text-sm font-semibold text-slate-700">
+                        <label for="status" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
                             Trạng thái
                         </label>
 
                         <select id="status" name="status"
-                            class="w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+                            class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40 dark:text-slate-300">
                             <option value="">
                                 Tất cả trạng thái
                             </option>
@@ -262,11 +245,28 @@
                         </select>
                     </div>
 
+                    {{-- Sắp xếp --}}
+                    <div class="lg:col-span-2">
+                        <label for="sort" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Sắp xếp
+                        </label>
+
+                        <select id="sort" name="sort"
+                            class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40 dark:text-slate-300">
+                            <option value="">Mới nhất</option>
+                            <option value="oldest" @selected(request('sort') === 'oldest')>Cũ nhất</option>
+                            <option value="name_asc" @selected(request('sort') === 'name_asc')>Tên A → Z</option>
+                            <option value="name_desc" @selected(request('sort') === 'name_desc')>Tên Z → A</option>
+                            <option value="bookings_desc" @selected(request('sort') === 'bookings_desc')>Nhiều Booking nhất</option>
+                            <option value="paid_desc" @selected(request('sort') === 'paid_desc')>Thanh toán cao nhất</option>
+                        </select>
+                    </div>
+
                     {{-- Đặt lại --}}
                     <div class="flex items-end lg:col-span-1">
                         @if ($hasFilters)
-                            <a href="{{ route('admin.users.index') }}" title="Đặt lại bộ lọc"
-                                class="inline-flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600">
+                            <a href="{{ route('admin.users.index') }}" title="Xóa bộ lọc"
+                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
                                     <path d="M3 12a9 9 0 1 0 3-6.7"></path>
@@ -278,8 +278,8 @@
                                 </span>
                             </a>
                         @else
-                            <button type="button" disabled title="Chưa sử dụng bộ lọc"
-                                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-400">
+                            <button type="button" disabled title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
                                     <path d="M3 12a9 9 0 1 0 3-6.7"></path>
@@ -294,9 +294,9 @@
                     </div>
 
                     {{-- Nút lọc --}}
-                    <div class="flex items-end lg:col-span-2">
+                    <div class="flex items-end lg:col-span-1">
                         <button type="submit"
-                            class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
                                 <path d="M4 5h16"></path>
@@ -304,10 +304,11 @@
                                 <path d="M10 19h4"></path>
                             </svg>
 
-                            Lọc tài khoản
+                            Lọc
                         </button>
                     </div>
                 </form>
+                
             </div>
 
             @if ($users->count())
@@ -315,8 +316,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[1180px] border-collapse text-left">
                         <thead>
-                            <tr
-                                class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-500">
+                            <tr class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase tracking-wider text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
                                 <th scope="col" class="px-5 py-4 sm:px-6">
                                     Tài khoản
                                 </th>
@@ -343,7 +343,7 @@
                             </tr>
                         </thead>
 
-                        <tbody class="divide-y divide-slate-100 bg-white text-sm">
+                        <tbody class="divide-y divide-slate-100 bg-white text-sm dark:bg-slate-800 dark:divide-slate-700">
                             @foreach ($users as $user)
                                 @php
                                     $nameParts = preg_split('/\s+/', trim($user->name ?? ''));
@@ -372,18 +372,18 @@
                                     $successfulPayments = (int) ($user->successful_payments_count ?? 0);
                                 @endphp
 
-                                <tr class="transition hover:bg-slate-50/80">
+                                <tr class="transition hover:bg-slate-50 dark:hover:bg-slate-700/50">
                                     {{-- Tài khoản --}}
                                     <td class="whitespace-nowrap px-5 py-5 align-middle sm:px-6">
                                         <div class="flex items-center gap-3">
                                             @if ($avatarUrl)
                                                 <img src="{{ $avatarUrl }}"
                                                     alt="Ảnh đại diện của {{ $user->name }}"
-                                                    class="h-11 w-11 shrink-0 rounded-full border border-slate-200 object-cover"
+                                                    class="h-11 w-11 shrink-0 rounded-full border border-slate-200 object-cover dark:border-slate-700"
                                                     loading="lazy">
                                             @else
                                                 <div
-                                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+                                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
                                                     {{ $avatarText ?: '?' }}
                                                 </div>
                                             @endif
@@ -391,20 +391,20 @@
                                             <div class="min-w-0">
                                                 <div class="flex items-center gap-2">
                                                     <a href="{{ route('admin.users.show', $user) }}"
-                                                        class="max-w-44 truncate font-semibold text-slate-900 transition hover:text-blue-600"
+                                                        class="max-w-44 truncate font-semibold text-slate-900 transition hover:text-blue-600 dark:hover:text-blue-400 dark:text-slate-100"
                                                         title="{{ $user->name }}">
                                                         {{ $user->name }}
                                                     </a>
 
                                                     @if ($isCurrentUser)
                                                         <span
-                                                            class="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-blue-600">
+                                                            class="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
                                                             Bạn
                                                         </span>
                                                     @endif
                                                 </div>
 
-                                                <p class="mt-1 max-w-48 truncate text-xs text-slate-400"
+                                                <p class="mt-1 max-w-48 truncate text-xs text-slate-400 dark:text-slate-500"
                                                     title="{{ $user->email }}">
                                                     {{ $user->email }}
                                                 </p>
@@ -415,11 +415,11 @@
                                     {{-- Liên hệ --}}
                                     <td class="px-5 py-5 align-middle sm:px-6">
                                         <div class="max-w-52">
-                                            <p class="font-medium text-slate-700">
+                                            <p class="font-medium text-slate-700 dark:text-slate-300">
                                                 {{ $user->phone ?: 'Chưa có số điện thoại' }}
                                             </p>
 
-                                            <p class="mt-1 truncate text-xs text-slate-400" title="{{ $user->address }}">
+                                            <p class="mt-1 truncate text-xs text-slate-400 dark:text-slate-500" title="{{ $user->address }}">
                                                 {{ $user->address ?: 'Chưa có địa chỉ' }}
                                             </p>
                                         </div>
@@ -429,7 +429,7 @@
                                     <td class="px-5 py-5 align-middle sm:px-6">
                                         <div class="flex flex-wrap gap-2">
                                             <span
-                                                class="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-700"
+                                                class="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"
                                                 title="Số đơn đặt phòng">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                     fill="none" stroke="currentColor" stroke-width="1.8"
@@ -446,7 +446,7 @@
                                             </span>
 
                                             <span
-                                                class="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-700"
+                                                class="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
                                                 title="Số đánh giá">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                     fill="none" stroke="currentColor" stroke-width="1.8"
@@ -464,14 +464,14 @@
                                     <td class="whitespace-nowrap px-5 py-5 align-middle sm:px-6">
                                         @if ($user->status === 'active')
                                             <span
-                                                class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                                class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+                                                <span class="h-2 w-2 rounded-full bg-emerald-50 dark:bg-emerald-950/400"></span>
                                                 Hoạt động
                                             </span>
                                         @else
                                             <span
-                                                class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700">
-                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 text-xs font-semibold text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
+                                                <span class="h-2 w-2 rounded-full bg-red-50 dark:bg-red-950/400"></span>
                                                 Tạm khóa
                                             </span>
                                         @endif
@@ -480,20 +480,20 @@
                                     {{-- Thanh toán --}}
                                     <td class="whitespace-nowrap px-5 py-5 align-middle sm:px-6">
                                         @if ($totalPaid > 0)
-                                            <p class="font-bold text-emerald-600">
+                                            <p class="font-bold text-emerald-600 dark:text-emerald-400">
                                                 {{ number_format($totalPaid, 0, ',', '.') }}đ
                                             </p>
 
-                                            <p class="mt-1 text-xs text-slate-500">
+                                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                                 {{ number_format($successfulPayments, 0, ',', '.') }}
                                                 giao dịch thành công
                                             </p>
                                         @else
-                                            <p class="font-semibold text-slate-500">
+                                            <p class="font-semibold text-slate-500 dark:text-slate-400">
                                                 0đ
                                             </p>
 
-                                            <p class="mt-1 text-xs text-slate-400">
+                                            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
                                                 Chưa có thanh toán
                                             </p>
                                         @endif
@@ -503,7 +503,7 @@
                                     <td class="whitespace-nowrap px-5 py-5 text-center align-middle sm:px-6">
                                         <details data-action-menu class="group relative inline-block text-left">
                                             <summary
-                                                class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+                                                class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:hover:border-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
                                                 title="Mở menu thao tác">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                     fill="currentColor" class="h-5 w-5">
@@ -514,12 +514,12 @@
                                             </summary>
 
                                             <div
-                                                class="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl">
+                                                class="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-800">
                                                 {{-- Xem chi tiết --}}
                                                 <a href="{{ route('admin.users.show', $user) }}"
-                                                    class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+                                                    class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:hover:bg-slate-700/70 dark:text-slate-300">
                                                     <span
-                                                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                                                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                             fill="none" stroke="currentColor" stroke-width="1.8"
                                                             class="h-4 w-4">
@@ -533,7 +533,7 @@
                                                     <span>Xem chi tiết</span>
                                                 </a>
 
-                                                <div class="border-t border-slate-100"></div>
+                                                <div class="border-t border-slate-100 dark:border-slate-700"></div>
 
                                                 @if (!$isCurrentUser)
                                                     <form method="POST"
@@ -551,10 +551,10 @@
 
                                                         <button type="submit"
                                                             class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium transition
-                                                                {{ $user->status === 'active' ? 'text-red-700 hover:bg-red-50' : 'text-emerald-700 hover:bg-emerald-50' }}">
+                                                                {{ $user->status === 'active' ? 'text-red-700 hover:bg-red-50 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-950/40' : 'text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/40' }}">
                                                             <span
                                                                 class="flex h-8 w-8 items-center justify-center rounded-lg
-                                                                    {{ $user->status === 'active' ? 'bg-red-50' : 'bg-emerald-50' }}">
+                                                                    {{ $user->status === 'active' ? 'bg-red-50 dark:bg-red-950/40' : 'bg-emerald-50 dark:bg-emerald-950/40' }}">
                                                                 @if ($user->status === 'active')
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         viewBox="0 0 24 24" fill="none"
@@ -583,9 +583,9 @@
                                                     </form>
                                                 @else
                                                     <div
-                                                        class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-600">
+                                                        class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400">
                                                         <span
-                                                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
+                                                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40">
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                                 fill="none" stroke="currentColor" stroke-width="2"
                                                                 class="h-4 w-4">
@@ -607,15 +607,18 @@
 
                 {{-- Phân trang --}}
                 @if ($users->hasPages())
-                    <div class="rounded-b-2xl border-t border-slate-200 px-5 py-5 sm:px-6">
-                        {{ $users->links() }}
+                    <div class="rounded-b-2xl border-t border-slate-200 px-5 py-5 sm:px-6 dark:border-slate-700">
+                        {{ $users->onEachSide(1)->links('components.pagination', [
+                            'layout' => 'row',
+                            'showInfo' => true,
+                        ]) }}
                     </div>
                 @endif
             @else
                 {{-- Không có dữ liệu --}}
                 <div class="rounded-b-2xl px-6 py-16 text-center">
                     <div
-                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                        class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="1.6" class="h-8 w-8">
                             <circle cx="9" cy="8" r="4"></circle>
@@ -625,7 +628,7 @@
                         </svg>
                     </div>
 
-                    <h3 class="mt-5 text-lg font-bold text-slate-900">
+                    <h3 class="mt-5 text-lg font-bold text-slate-900 dark:text-slate-100">
                         @if ($hasFilters)
                             Không tìm thấy tài khoản phù hợp
                         @else
@@ -633,7 +636,7 @@
                         @endif
                     </h3>
 
-                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
                         @if ($hasFilters)
                             Không có tài khoản nào phù hợp với nội dung tìm kiếm
                             hoặc bộ lọc hiện tại.
@@ -644,7 +647,7 @@
 
                     @if ($hasFilters)
                         <a href="{{ route('admin.users.index') }}"
-                            class="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                            class="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
                                 <path d="M3 12a9 9 0 1 0 3-6.7"></path>

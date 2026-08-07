@@ -45,6 +45,17 @@ class UserController extends Controller
                         'inactive',
                     ]),
                 ],
+
+                'sort' => [
+                    'nullable',
+                    Rule::in([
+                        'oldest',
+                        'name_asc',
+                        'name_desc',
+                        'bookings_desc',
+                        'paid_desc',
+                    ]),
+                ],
             ],
             [
                 'search.string' => 'Từ khóa tìm kiếm không hợp lệ.',
@@ -55,6 +66,9 @@ class UserController extends Controller
 
                 'status.in' =>
                     'Trạng thái tài khoản không hợp lệ.',
+
+                'sort.in' =>
+                    'Kiểu sắp xếp không hợp lệ.',
             ]
         );
 
@@ -163,8 +177,47 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $sort = $filters['sort'] ?? null;
+
+        switch ($sort) {
+            case 'oldest':
+                $usersQuery
+                    ->orderBy('created_at')
+                    ->orderBy('id');
+                break;
+
+            case 'name_asc':
+                $usersQuery
+                    ->orderBy('name')
+                    ->orderBy('id');
+                break;
+
+            case 'name_desc':
+                $usersQuery
+                    ->orderByDesc('name')
+                    ->orderByDesc('id');
+                break;
+
+            case 'bookings_desc':
+                $usersQuery
+                    ->orderByDesc('bookings_count')
+                    ->orderByDesc('id');
+                break;
+
+            case 'paid_desc':
+                $usersQuery
+                    ->orderByDesc('total_paid')
+                    ->orderByDesc('id');
+                break;
+
+            default:
+                $usersQuery
+                    ->orderByDesc('created_at')
+                    ->orderByDesc('id');
+                break;
+        }
+
         $users = $usersQuery
-            ->latest()
             ->paginate(10)
             ->withQueryString();
 
@@ -237,7 +290,8 @@ class UserController extends Controller
                 'promotion',
                 'payment',
             ])
-            ->latest()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->paginate(
                 5,
                 ['*'],
@@ -289,7 +343,8 @@ class UserController extends Controller
          */
         $latestPayment = $user
             ->payments()
-            ->latest()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->first();
 
         return view(

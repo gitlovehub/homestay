@@ -898,11 +898,11 @@
                                 </div>
 
                                 @if ($isDepositBooking)
-                                    <div class="rounded-xl bg-cyan-50 p-4 dark:bg-cyan-950/30">
-                                        <p class="text-xs font-semibold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+                                    <div class="rounded-xl bg-blue-50 p-4 dark:bg-blue-950/30">
+                                        <p class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
                                             Trả tại homestay
                                         </p>
-                                        <p class="mt-1 font-bold text-cyan-700 dark:text-cyan-300">
+                                        <p class="mt-1 font-bold text-blue-700 dark:text-blue-300">
                                             {{ number_format($remainingAtHomestay, 0, ',', '.') }}đ
                                         </p>
                                     </div>

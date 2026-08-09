@@ -162,7 +162,7 @@
                     </div>
                 </div>
                 <div class="relative mt-5 flex items-center justify-between text-sm">
-                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($averageRating ?? 0, 1) }}/5 điểm TB</span>
+                    <span class="text-slate-500 dark:text-slate-400">{{ number_format($averageRating ?? 0, 1) }}/5 điểm</span>
                     <span class="font-semibold text-amber-600 dark:text-amber-400">
                         {{ number_format($pendingReviews ?? 0) }} chờ duyệt
                     </span>

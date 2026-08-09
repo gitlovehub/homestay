@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             BookingSeeder::class,
             PaymentSeeder::class,
             ReviewSeeder::class,
+            ContactMessageSeeder::class,
             HomestayImageSeeder::class,
         ]);
     }

@@ -8,13 +8,13 @@
     <div class="mx-auto max-w-4xl">
         <div class="mb-6">
             <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                Thêm danh mục
+                Thêm mới Danh mục vào hệ thống
             </h2>
 
             <a href="{{ route('admin.categories.index') }}"
                 class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
                 ←
-                Trở về danh sách danh mục
+                Trở về danh sách Homestay
             </a>
         </div>
 

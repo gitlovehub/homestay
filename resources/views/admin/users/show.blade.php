@@ -179,7 +179,8 @@
 
         <div class="mb-6">
             <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                Chi tiết tài khoản {{ $user->name }}
+                Chi tiết tài khoản
+                <span class="font-bold text-blue-600 dark:text-blue-400">{{ $user->name }}</span>
             </h2>
 
             <a href="{{ route('admin.users.index') }}"

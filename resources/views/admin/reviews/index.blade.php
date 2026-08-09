@@ -221,56 +221,48 @@
 
                     </div>
 
-                    {{-- Nút lọc --}}
-                    <div class="flex items-end lg:col-span-1">
-                        <button type="submit"
-                            class="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 h-11 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                            Lọc
-                        </button>
-                    </div>
-
-                    {{-- Reset --}}
-                    <div class="flex items-end lg:col-span-1">
+                    <div class="flex items-end gap-3 lg:col-span-2">
 
                         @if (request()->hasAny(['search', 'status', 'rating', 'sort']))
                             <a href="{{ route('admin.reviews.index') }}"
                                 title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
-                                <svg class="h-5 w-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24">
-
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-
                                 </svg>
-
                             </a>
                         @else
                             <button type="button"
                                 disabled
                                 title="Chưa có bộ lọc"
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
 
-                                <svg class="h-5 w-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24">
-
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-
                                 </svg>
-
                             </button>
                         @endif
+                    
+                        <button type="submit"
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
+                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 5h16"></path>
+                                <path d="M7 12h10"></path>
+                                <path d="M10 19h4"></path>
+                            </svg>
+
+                            Lọc
+                        </button>
+                        
                     </div>
 
                 </form>
@@ -474,121 +466,448 @@
                                     </td>
 
                                     {{-- Actions --}}
-                                    <td class="whitespace-nowrap px-6 py-5 text-right">
+                                    <td class="whitespace-nowrap px-6 py-5 align-middle">
+                                        <div
+                                            x-data="{
+                                                id: 'review-{{ $review->id }}',
+                                                open: false,
+                                                top: 0,
+                                                left: 0,
 
-                                        <details data-action-menu class="relative inline-block text-left">
+                                                toggle() {
+                                                    if (this.open) {
+                                                        this.open = false;
+                                                        return;
+                                                    }
 
-                                            <summary
-                                                class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-300 bg-white text-lg font-bold text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700/70">
-                                                ⋮
-                                            </summary>
+                                                    const rect = this.$refs.trigger.getBoundingClientRect();
 
-                                            <div
-                                                class="absolute right-0 z-40 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-800">
+                                                    // w-56 = 224px
+                                                    const menuWidth = 224;
 
-                                                <a href="{{ route('admin.reviews.show', $review) }}"
-                                                    class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-950/50">
-                                                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                        <circle cx="12" cy="12" r="3" />
-                                                    </svg>
-                                                    Xem chi tiết
-                                                </a>
+                                                    // Luôn mở xuống dưới
+                                                    this.top = rect.bottom + 8;
 
-                                                @if ($review->status === 'pending')
-                                                    {{-- Duyệt đánh giá --}}
-                                                    <form method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                    // Canh phải menu theo nút ba chấm
+                                                    this.left = rect.right - menuWidth;
 
-                                                        <input type="hidden" name="status" value="approved">
+                                                    // Không cho tràn khỏi mép trái màn hình
+                                                    if (this.left < 8) {
+                                                        this.left = 8;
+                                                    }
 
-                                                        <button type="submit"
-                                                            onclick="return confirm('Bạn có chắc muốn duyệt đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/50">
-                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M20 6L9 17l-5-5" />
-                                                            </svg>
-                                                            Duyệt đánh giá
-                                                        </button>
-                                                    </form>
+                                                    // Chỉ cho phép một action menu mở
+                                                    window.dispatchEvent(
+                                                        new CustomEvent('action-menu-open', {
+                                                            detail: {
+                                                                id: this.id
+                                                            }
+                                                        })
+                                                    );
 
-                                                    {{-- Ẩn đánh giá --}}
-                                                    <form method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                    this.open = true;
+                                                },
 
-                                                        <input type="hidden" name="status" value="hidden">
+                                                close() {
+                                                    this.open = false;
+                                                }
+                                            }"
 
-                                                        <button type="submit"
-                                                            onclick="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950/50">
-                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round">
+                                            data-action-menu
+
+                                            class="flex justify-center"
+
+                                            @action-menu-open.window="
+                                                if ($event.detail.id != id) {
+                                                    open = false
+                                                }
+                                            "
+
+                                            @keydown.escape.window="close()"
+                                            @resize.window="close()"
+                                            @scroll.window="close()"
+                                        >
+
+                                            {{-- Nút ba chấm --}}
+                                            <button
+                                                x-ref="trigger"
+                                                type="button"
+                                                @click.stop="toggle()"
+
+                                                class="inline-flex h-10 w-10 cursor-pointer items-center justify-center
+                                                    rounded-xl text-slate-500 transition
+                                                    hover:bg-slate-100 hover:text-slate-700
+                                                    focus:outline-none focus:ring-4 focus:ring-blue-100
+                                                    dark:text-slate-400
+                                                    dark:hover:bg-slate-700
+                                                    dark:hover:text-slate-200
+                                                    dark:focus:ring-blue-900/30"
+
+                                                title="Thao tác"
+                                                aria-label="Thao tác"
+                                                :aria-expanded="open"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="currentColor"
+                                                    class="h-5 w-5"
+                                                    aria-hidden="true"
+                                                >
+                                                    <circle cx="12" cy="5" r="1.8"></circle>
+                                                    <circle cx="12" cy="12" r="1.8"></circle>
+                                                    <circle cx="12" cy="19" r="1.8"></circle>
+                                                </svg>
+                                            </button>
+
+
+                                            {{-- Menu thao tác --}}
+                                            <template x-teleport="body">
+                                                <div
+                                                    x-show="open"
+                                                    x-cloak
+
+                                                    @click.outside="close()"
+
+                                                    x-transition:enter="transition ease-out duration-150"
+                                                    x-transition:enter-start="opacity-0 scale-95"
+                                                    x-transition:enter-end="opacity-100 scale-100"
+
+                                                    x-transition:leave="transition ease-in duration-100"
+                                                    x-transition:leave-start="opacity-100 scale-100"
+                                                    x-transition:leave-end="opacity-0 scale-95"
+
+                                                    :style="`
+                                                        position: fixed;
+                                                        top: ${top}px;
+                                                        left: ${left}px;
+                                                        width: 224px;
+                                                    `"
+
+                                                    class="z-[9999] origin-top-right overflow-hidden
+                                                        rounded-2xl border border-slate-200/80 bg-white
+                                                        shadow-xl shadow-slate-200/50 ring-1 ring-black/5
+                                                        dark:border-slate-700/80
+                                                        dark:bg-slate-800
+                                                        dark:shadow-black/40"
+                                                >
+
+                                                    {{-- Xem chi tiết --}}
+                                                    <a
+                                                        href="{{ route('admin.reviews.show', $review) }}"
+
+                                                        class="group flex items-center gap-3 px-3.5 py-2.5
+                                                            text-sm font-medium text-slate-700
+                                                            transition-colors
+                                                            hover:bg-slate-50
+                                                            focus:bg-slate-50 focus:outline-none
+                                                            dark:text-slate-200
+                                                            dark:hover:bg-slate-700/60
+                                                            dark:focus:bg-slate-700/60"
+                                                    >
+                                                        <span
+                                                            class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                rounded-xl bg-slate-100 text-slate-500
+                                                                transition-colors
+                                                                group-hover:bg-slate-200/80
+                                                                group-hover:text-slate-700
+                                                                dark:bg-slate-700/70
+                                                                dark:text-slate-400
+                                                                dark:group-hover:bg-slate-600
+                                                                dark:group-hover:text-slate-200"
+                                                        >
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="1.75"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="h-4 w-4"
+                                                            >
                                                                 <path
-                                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                                <line x1="1" y1="1" x2="23"
-                                                                    y2="23" />
+                                                                    d="M2.5 12s3.5-6.5 9.5-6.5
+                                                                    9.5 6.5 9.5 6.5
+                                                                    -3.5 6.5-9.5 6.5
+                                                                    S2.5 12 2.5 12Z"
+                                                                />
+                                                                <circle cx="12" cy="12" r="2.5" />
                                                             </svg>
-                                                            Ẩn đánh giá
-                                                        </button>
-                                                    </form>
-                                                @elseif ($review->status === 'approved')
-                                                    {{-- Ẩn đánh giá --}}
-                                                    <form method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                        </span>
 
-                                                        <input type="hidden" name="status" value="hidden">
+                                                        <span>Xem chi tiết</span>
+                                                    </a>
 
-                                                        <button type="submit"
-                                                            onclick="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-700 transition hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950/50">
-                                                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor"
-                                                                stroke-width="2" stroke-linecap="round"
-                                                                stroke-linejoin="round">
-                                                                <path
-                                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                                                <line x1="1" y1="1" x2="23"
-                                                                    y2="23" />
-                                                            </svg>
-                                                            Ẩn đánh giá
-                                                        </button>
-                                                    </form>
-                                                @elseif ($review->status === 'hidden')
-                                                    {{-- Hiển thị lại --}}
-                                                    <form method="POST"
-                                                        action="{{ route('admin.reviews.update-status', $review) }}">
-                                                        @csrf
-                                                        @method('PATCH')
 
-                                                        <input type="hidden" name="status" value="approved">
+                                                    {{-- =====================================
+                                                        ĐÁNH GIÁ ĐANG CHỜ DUYỆT
+                                                    ====================================== --}}
+                                                    @if ($review->status === 'pending')
 
-                                                        <button type="submit"
-                                                            onclick="return confirm('Bạn có chắc muốn hiển thị lại đánh giá này không?')"
-                                                            class="flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-emerald-700 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/50">
-                                                            <span
-                                                                class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/40">
-                                                                ✓
-                                                            </span>
+                                                        <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
 
-                                                            Hiển thị lại
-                                                        </button>
-                                                    </form>
-                                                @endif
 
-                                            </div>
+                                                        {{-- Duyệt đánh giá --}}
+                                                        <form
+                                                            method="POST"
+                                                            action="{{ route('admin.reviews.update-status', $review) }}"
+                                                            onsubmit="return confirm('Bạn có chắc muốn duyệt đánh giá này không?')"
+                                                        >
+                                                            @csrf
+                                                            @method('PATCH')
 
-                                        </details>
+                                                            <input
+                                                                type="hidden"
+                                                                name="status"
+                                                                value="approved"
+                                                            >
 
+                                                            <button
+                                                                type="submit"
+
+                                                                class="group flex w-full cursor-pointer items-center gap-3
+                                                                    px-3.5 py-2.5 text-left text-sm font-medium
+                                                                    text-emerald-600 transition-colors
+                                                                    hover:bg-emerald-50
+                                                                    focus:bg-emerald-50 focus:outline-none
+                                                                    dark:text-emerald-400
+                                                                    dark:hover:bg-emerald-950/50
+                                                                    dark:focus:bg-emerald-950/50"
+                                                            >
+                                                                <span
+                                                                    class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                        rounded-xl bg-emerald-50 text-emerald-500
+                                                                        transition-colors
+                                                                        group-hover:bg-emerald-100
+                                                                        dark:bg-emerald-950/60
+                                                                        dark:text-emerald-400
+                                                                        dark:group-hover:bg-emerald-950/80"
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-width="1.75"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        class="h-4 w-4"
+                                                                    >
+                                                                        <path d="M20 6L9 17l-5-5" />
+                                                                    </svg>
+                                                                </span>
+
+                                                                <span>Duyệt đánh giá</span>
+                                                            </button>
+                                                        </form>
+
+
+                                                        {{-- Ẩn đánh giá --}}
+                                                        <form
+                                                            method="POST"
+                                                            action="{{ route('admin.reviews.update-status', $review) }}"
+                                                            onsubmit="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
+                                                        >
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="status"
+                                                                value="hidden"
+                                                            >
+
+                                                            <button
+                                                                type="submit"
+
+                                                                class="group flex w-full cursor-pointer items-center gap-3
+                                                                    px-3.5 py-2.5 text-left text-sm font-medium
+                                                                    text-red-600 transition-colors
+                                                                    hover:bg-red-50
+                                                                    focus:bg-red-50 focus:outline-none
+                                                                    dark:text-red-400
+                                                                    dark:hover:bg-red-950/50
+                                                                    dark:focus:bg-red-950/50"
+                                                            >
+                                                                <span
+                                                                    class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                        rounded-xl bg-red-50 text-red-500
+                                                                        transition-colors
+                                                                        group-hover:bg-red-100
+                                                                        dark:bg-red-950/60
+                                                                        dark:text-red-400
+                                                                        dark:group-hover:bg-red-950/80"
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-width="1.75"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        class="h-4 w-4"
+                                                                    >
+                                                                        <path
+                                                                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20
+                                                                            c-7 0-11-8-11-8
+                                                                            a18.45 18.45 0 0 1 5.06-5.94
+                                                                            M9.9 4.24A9.12 9.12 0 0 1 12 4
+                                                                            c7 0 11 8 11 8
+                                                                            a18.5 18.5 0 0 1-2.16 3.19
+                                                                            m-6.72-1.07
+                                                                            a3 3 0 1 1-4.24-4.24"
+                                                                        />
+                                                                        <line x1="1" y1="1" x2="23" y2="23" />
+                                                                    </svg>
+                                                                </span>
+
+                                                                <span>Ẩn đánh giá</span>
+                                                            </button>
+                                                        </form>
+
+
+                                                    {{-- =====================================
+                                                        ĐÁNH GIÁ ĐÃ DUYỆT
+                                                    ====================================== --}}
+                                                    @elseif ($review->status === 'approved')
+
+                                                        <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
+
+
+                                                        {{-- Ẩn đánh giá --}}
+                                                        <form
+                                                            method="POST"
+                                                            action="{{ route('admin.reviews.update-status', $review) }}"
+                                                            onsubmit="return confirm('Bạn có chắc muốn ẩn đánh giá này không?')"
+                                                        >
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="status"
+                                                                value="hidden"
+                                                            >
+
+                                                            <button
+                                                                type="submit"
+
+                                                                class="group flex w-full cursor-pointer items-center gap-3
+                                                                    px-3.5 py-2.5 text-left text-sm font-medium
+                                                                    text-red-600 transition-colors
+                                                                    hover:bg-red-50
+                                                                    focus:bg-red-50 focus:outline-none
+                                                                    dark:text-red-400
+                                                                    dark:hover:bg-red-950/50
+                                                                    dark:focus:bg-red-950/50"
+                                                            >
+                                                                <span
+                                                                    class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                        rounded-xl bg-red-50 text-red-500
+                                                                        transition-colors
+                                                                        group-hover:bg-red-100
+                                                                        dark:bg-red-950/60
+                                                                        dark:text-red-400
+                                                                        dark:group-hover:bg-red-950/80"
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-width="1.75"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        class="h-4 w-4"
+                                                                    >
+                                                                        <path
+                                                                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20
+                                                                            c-7 0-11-8-11-8
+                                                                            a18.45 18.45 0 0 1 5.06-5.94
+                                                                            M9.9 4.24A9.12 9.12 0 0 1 12 4
+                                                                            c7 0 11 8 11 8
+                                                                            a18.5 18.5 0 0 1-2.16 3.19
+                                                                            m-6.72-1.07
+                                                                            a3 3 0 1 1-4.24-4.24"
+                                                                        />
+                                                                        <line x1="1" y1="1" x2="23" y2="23" />
+                                                                    </svg>
+                                                                </span>
+
+                                                                <span>Ẩn đánh giá</span>
+                                                            </button>
+                                                        </form>
+
+
+                                                    {{-- =====================================
+                                                        ĐÁNH GIÁ ĐANG BỊ ẨN
+                                                    ====================================== --}}
+                                                    @elseif ($review->status === 'hidden')
+
+                                                        <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
+
+
+                                                        {{-- Hiển thị lại --}}
+                                                        <form
+                                                            method="POST"
+                                                            action="{{ route('admin.reviews.update-status', $review) }}"
+                                                            onsubmit="return confirm('Bạn có chắc muốn hiển thị lại đánh giá này không?')"
+                                                        >
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="status"
+                                                                value="approved"
+                                                            >
+
+                                                            <button
+                                                                type="submit"
+
+                                                                class="group flex w-full cursor-pointer items-center gap-3
+                                                                    px-3.5 py-2.5 text-left text-sm font-medium
+                                                                    text-emerald-600 transition-colors
+                                                                    hover:bg-emerald-50
+                                                                    focus:bg-emerald-50 focus:outline-none
+                                                                    dark:text-emerald-400
+                                                                    dark:hover:bg-emerald-950/50
+                                                                    dark:focus:bg-emerald-950/50"
+                                                            >
+                                                                <span
+                                                                    class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                        rounded-xl bg-emerald-50 text-emerald-500
+                                                                        transition-colors
+                                                                        group-hover:bg-emerald-100
+                                                                        dark:bg-emerald-950/60
+                                                                        dark:text-emerald-400
+                                                                        dark:group-hover:bg-emerald-950/80"
+                                                                >
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-width="1.75"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        class="h-4 w-4"
+                                                                    >
+                                                                        <path d="M20 6L9 17l-5-5" />
+                                                                    </svg>
+                                                                </span>
+
+                                                                <span>Hiển thị lại</span>
+                                                            </button>
+                                                        </form>
+
+                                                    @endif
+
+                                                </div>
+                                            </template>
+                                        </div>
                                     </td>
 
                                 </tr>

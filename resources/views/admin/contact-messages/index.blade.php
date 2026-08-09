@@ -45,7 +45,7 @@
                 class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -73,7 +73,7 @@
                         Tổng yêu cầu
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-100">
+                    <p class="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">
                         {{ number_format($statistics['total'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -117,7 +117,7 @@
                 class="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
                 <div
-                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+                    class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
                 >
                     <svg
                         class="h-7 w-7"
@@ -140,7 +140,7 @@
                         Đã đọc
                     </p>
 
-                    <p class="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">
+                    <p class="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">
                         {{ number_format($statistics['read'], 0, ',', '.') }}
                     </p>
                 </div>
@@ -285,62 +285,48 @@
                             class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
                             <option value="">Mới nhất</option>
                             <option value="oldest" @selected(request('sort') === 'oldest')>Cũ nhất</option>
-                            <option value="unread_first" @selected(request('sort') === 'unread_first')>Chưa đọc trước</option>
-                            <option value="replied_first" @selected(request('sort') === 'replied_first')>Đã phản hồi trước</option>
                         </select>
                     </div>
 
-                    {{-- Xóa bộ lọc --}}
-                    <div class="flex items-end lg:col-span-1">
+                    <div class="flex items-end gap-3 lg:col-span-2">
+
                         @if (request()->hasAny(['search', 'status', 'sort']))
-                            <a
-                                href="{{ route('admin.contact-messages.index') }}"
+                            <a href="{{ route('admin.contact-messages.index') }}"
                                 title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40"
-                            >
-                                <svg
-                                    class="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"
-                                    />
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
-                            <button
-                                type="button"
+                            <button type="button"
                                 disabled
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500"
-                            >
-                                <svg
-                                    class="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
+                                title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"
-                                    />
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>
                         @endif
-                    </div>
+                    
+                        <button type="submit"
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
-                    {{-- Nút lọc --}}
-                    <div class="flex items-end lg:col-span-1">
-                        <button
-                            type="submit"
-                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40"
-                        >
+                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 5h16"></path>
+                                <path d="M7 12h10"></path>
+                                <path d="M10 19h4"></path>
+                            </svg>
+
                             Lọc
                         </button>
                     </div>
@@ -449,25 +435,28 @@
                                     {{-- Chủ đề và nội dung --}}
                                     <td class="px-6 py-5">
                                         <div class="max-w-md">
-                                            <p
-                                                class="truncate font-semibold
-                                                    {{ $contactMessage->status === 'unread'
-                                                        ? 'text-blue-700'
-                                                        : 'text-slate-900' }}"
-                                            >
+                                            <p class="truncate font-semibold text-slate-900 dark:text-slate-100">
                                                 {{ $contactMessage->subject }}
                                             </p>
 
-                                            <details class="mt-2">
+                                            {{-- Quick preview --}}
+                                            <details class="mt-2 group">
                                                 <summary
-                                                    class="inline-flex cursor-pointer list-none items-center text-xs font-semibold text-blue-600 transition hover:text-blue-700 dark:hover:text-blue-300 dark:text-blue-400"
-                                                >
+                                                    class="inline-flex cursor-pointer list-none items-center gap-1.5
+                                                        text-xs font-semibold text-blue-600
+                                                        transition-colors hover:text-blue-700
+                                                        dark:text-blue-400 dark:hover:text-blue-300
+                                                        marker:content-none">
+                                                    <svg class="h-3.5 w-3.5 transition-transform group-open:rotate-90"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                                    </svg>
                                                     Xem nhanh nội dung
                                                 </summary>
 
-                                                <div
-                                                    class="mt-3 max-w-lg rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:bg-slate-900/40"
-                                                >
+                                                <div class="mt-3 max-w-lg rounded-xl border p-4 text-sm leading-relaxed
+                                                            border-slate-200 bg-slate-50 text-slate-700
+                                                            dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
                                                     {{ $contactMessage->message }}
                                                 </div>
                                             </details>
@@ -519,35 +508,41 @@
                                     </td>
 
                                     {{-- Thao tác --}}
-                                    <td class="whitespace-nowrap px-6 py-5 text-right">
+                                    <td class="whitespace-nowrap px-6 py-5 text-center align-middle">
                                         <a
                                             href="{{ route('admin.contact-messages.show', $contactMessage) }}"
-                                            class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300 dark:hover:border-blue-700 dark:hover:bg-blue-950/60"
+                                            title="Xem chi tiết"
+                                            aria-label="Xem chi tiết"
+                                            class="group inline-flex h-10 w-10 cursor-pointer items-center justify-center
+                                                rounded-xl text-slate-500 transition
+                                                hover:bg-slate-100 hover:text-slate-700
+                                                focus:outline-none focus:ring-4 focus:ring-blue-100
+                                                dark:text-slate-400
+                                                dark:hover:bg-slate-700
+                                                dark:hover:text-slate-200
+                                                dark:focus:ring-blue-900/30"
                                         >
                                             <svg
-                                                class="h-4 w-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
                                                 fill="none"
                                                 stroke="currentColor"
-                                                viewBox="0 0 24 24"
+                                                stroke-width="1.75"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="h-5 w-5"
+                                                aria-hidden="true"
                                             >
                                                 <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="1.8"
-                                                    d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"
+                                                    d="M2.5 12s3.5-6.5 9.5-6.5
+                                                    9.5 6.5 9.5 6.5
+                                                    -3.5 6.5-9.5 6.5
+                                                    S2.5 12 2.5 12Z"
                                                 />
-                                                <circle
-                                                    cx="12"
-                                                    cy="12"
-                                                    r="2.75"
-                                                    stroke-width="1.8"
-                                                />
+                                                <circle cx="12" cy="12" r="2.5" />
                                             </svg>
-
-                                            Xem chi tiết
                                         </a>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>

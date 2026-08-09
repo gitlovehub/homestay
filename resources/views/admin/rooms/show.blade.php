@@ -11,7 +11,8 @@
 
             <div>
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                    Xem toàn bộ thông tin của phòng trong hệ thống.
+                    Xem toàn bộ thông tin của phòng
+                    <span class="font-bold text-blue-700 dark:text-blue-400">{{ $room->name }}</span>
                 </h2>
 
                 <a href="{{ route('admin.rooms.index') }}"

@@ -209,6 +209,8 @@
                 @yield('content')
             </main>
 
+            @include('admin.partials.footer')
+
         </div>
     </div>
 

@@ -30,7 +30,7 @@
                 'unpaid' => 'text-slate-500 dark:text-slate-400',
                 'pending' => 'text-amber-600 dark:text-amber-400',
                 'paid' => 'text-emerald-600 dark:text-emerald-400',
-                'refunded' => 'text-blue-600 dark:text-blue-400',
+                'refunded' => 'text-violet-600 dark:text-violet-400',
                 'failed' => 'text-red-600 dark:text-red-400',
             ];
         @endphp
@@ -206,39 +206,53 @@
                             class="h-11 w-full cursor-pointer rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40">
                             <option value="latest" @selected(request('sort', 'latest') === 'latest')>Mới nhất</option>
                             <option value="oldest" @selected(request('sort') === 'oldest')>Cũ nhất</option>
-                            <option value="total_desc" @selected(request('sort') === 'total_desc')>Tổng tiền cao đến thấp</option>
-                            <option value="total_asc" @selected(request('sort') === 'total_asc')>Tổng tiền thấp đến cao</option>
                             <option value="check_in_asc" @selected(request('sort') === 'check_in_asc')>Ngày nhận gần nhất</option>
                             <option value="check_in_desc" @selected(request('sort') === 'check_in_desc')>Ngày nhận xa nhất</option>
                         </select>
                     </div>
 
-                    <div class="flex items-end lg:col-span-1">
+                    <div class="flex items-end gap-3 lg:col-span-2">
                         @if (request()->hasAny(['search', 'status', 'payment_status', 'sort']))
-                            <a href="{{ route('admin.bookings.index') }}" title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:bg-blue-950/40 dark:hover:text-blue-400">
+                            <a href="{{ route('admin.bookings.index') }}"
+                                title="Xóa bộ lọc"
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
-                            <button type="button" disabled title="Chưa có bộ lọc"
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-600">
+                            <button type="button"
+                                disabled
+                                title="Chưa có bộ lọc"
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>
                         @endif
-                    </div>
-
-                    <div class="flex items-end lg:col-span-1">
+                    
                         <button type="submit"
-                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-900/50">
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
+                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 5h16"></path>
+                                <path d="M7 12h10"></path>
+                                <path d="M10 19h4"></path>
+                            </svg>
+
                             Lọc
                         </button>
                     </div>
+
                 </form>
             </div>
 
@@ -383,227 +397,492 @@
                                     @endswitch
                                 </td>
 
-                                <td class="whitespace-nowrap px-5 py-5 text-center">
-                                    <details data-action-menu class="group relative inline-block text-left">
+                                <td class="whitespace-nowrap px-5 py-5 align-middle">
+                                    <div
+                                        x-data="{
+                                            id: 'booking-{{ $booking->id }}',
+                                            open: false,
+                                            top: 0,
+                                            left: 0,
 
-                                        {{-- Nút mở menu --}}
-                                        <summary
+                                            toggle() {
+                                                // Bấm lại menu hiện tại thì đóng
+                                                if (this.open) {
+                                                    this.open = false;
+                                                    return;
+                                                }
+
+                                                const rect = this.$refs.trigger.getBoundingClientRect();
+
+                                                // w-56 = 224px
+                                                const menuWidth = 224;
+
+                                                // Luôn mở xuống dưới
+                                                this.top = rect.bottom + 8;
+
+                                                // Canh phải menu theo nút ba chấm
+                                                this.left = rect.right - menuWidth;
+
+                                                // Không cho menu tràn khỏi mép trái màn hình
+                                                if (this.left < 8) {
+                                                    this.left = 8;
+                                                }
+
+                                                // Chỉ cho phép 1 action menu mở
+                                                window.dispatchEvent(
+                                                    new CustomEvent('action-menu-open', {
+                                                        detail: {
+                                                            id: this.id
+                                                        }
+                                                    })
+                                                );
+
+                                                this.open = true;
+                                            },
+
+                                            close() {
+                                                this.open = false;
+                                            }
+                                        }"
+
+                                        data-action-menu
+
+                                        class="flex justify-center"
+
+                                        @action-menu-open.window="
+                                            if ($event.detail.id != id) {
+                                                open = false
+                                            }
+                                        "
+
+                                        @keydown.escape.window="close()"
+                                        @resize.window="close()"
+                                        @scroll.window="close()"
+                                    >
+
+                                        {{-- Nút ba chấm --}}
+                                        <button
+                                            x-ref="trigger"
+                                            type="button"
+                                            @click.stop="toggle()"
+
+                                            class="inline-flex h-10 w-10 cursor-pointer items-center justify-center
+                                                rounded-xl text-slate-500 transition
+                                                hover:bg-slate-100 hover:text-slate-700
+                                                focus:outline-none focus:ring-4 focus:ring-blue-100
+                                                dark:text-slate-400
+                                                dark:hover:bg-slate-700
+                                                dark:hover:text-slate-200
+                                                dark:focus:ring-blue-900/30"
+
                                             title="Thao tác"
-                                            class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg
-                                                border border-slate-200 bg-white text-lg font-bold text-slate-600
-                                                transition
-                                                hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600
-                                                dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300
-                                                dark:hover:border-blue-500 dark:hover:bg-blue-950/40 dark:hover:text-blue-400">
-                                            ⋮
-                                        </summary>
+                                            aria-label="Thao tác"
+                                            :aria-expanded="open"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="currentColor"
+                                                class="h-5 w-5"
+                                                aria-hidden="true"
+                                            >
+                                                <circle cx="12" cy="5" r="1.8"></circle>
+                                                <circle cx="12" cy="12" r="1.8"></circle>
+                                                <circle cx="12" cy="19" r="1.8"></circle>
+                                            </svg>
+                                        </button>
+
 
                                         {{-- Menu thao tác --}}
-                                        <div
-                                            class="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-xl
-                                                border border-slate-200 bg-white text-left shadow-xl
-                                                dark:border-slate-700 dark:bg-slate-800">
+                                        <template x-teleport="body">
+                                            <div
+                                                x-show="open"
+                                                x-cloak
 
-                                            {{-- Xem chi tiết --}}
-                                            <a href="{{ route('admin.bookings.show', $booking) }}"
-                                                class="flex h-11 w-full items-center gap-3 bg-transparent px-4
-                                                    text-sm font-medium text-slate-700 transition
-                                                    hover:bg-slate-50 hover:text-blue-600
-                                                    dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-blue-400">
+                                                @click.outside="close()"
 
-                                                <svg viewBox="0 0 24 24"
-                                                    class="h-4 w-4 shrink-0"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round">
+                                                x-transition:enter="transition ease-out duration-150"
+                                                x-transition:enter-start="opacity-0 scale-95"
+                                                x-transition:enter-end="opacity-100 scale-100"
 
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
+                                                x-transition:leave="transition ease-in duration-100"
+                                                x-transition:leave-start="opacity-100 scale-100"
+                                                x-transition:leave-end="opacity-0 scale-95"
 
-                                                Xem
-                                            </a>
+                                                :style="`
+                                                    position: fixed;
+                                                    top: ${top}px;
+                                                    left: ${left}px;
+                                                    width: 224px;
+                                                `"
 
+                                                class="z-[9999] origin-top-right overflow-hidden
+                                                    rounded-2xl border border-slate-200/80 bg-white
+                                                    shadow-xl shadow-slate-200/50 ring-1 ring-black/5
+                                                    dark:border-slate-700/80
+                                                    dark:bg-slate-800
+                                                    dark:shadow-black/40"
+                                            >
 
-                                            {{-- Booking đang chờ xác nhận --}}
-                                            @if ($booking->status === 'pending')
+                                                {{-- Xem --}}
+                                                <a
+                                                    href="{{ route('admin.bookings.show', $booking) }}"
 
-                                                {{-- Xác nhận Booking --}}
-                                                <form method="POST"
-                                                    action="{{ route('admin.bookings.update-status', $booking) }}"
-                                                    onsubmit="return confirm('Bạn có chắc muốn xác nhận đơn {{ $booking->booking_code }} không?')">
-
-                                                    @csrf
-                                                    @method('PATCH')
-
-                                                    <input type="hidden" name="status" value="confirmed">
-
-                                                    <button type="submit"
-                                                        class="flex h-11 w-full cursor-pointer items-center gap-3 bg-transparent px-4
-                                                            text-left text-sm font-medium text-slate-700 transition
-                                                            hover:bg-slate-50 hover:text-blue-600
-                                                            dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-blue-400">
-
-                                                        <svg viewBox="0 0 24 24"
-                                                            class="h-4 w-4 shrink-0"
+                                                    class="group flex items-center gap-3 px-3.5 py-2.5
+                                                        text-sm font-medium text-slate-700
+                                                        transition-colors
+                                                        hover:bg-slate-50
+                                                        focus:bg-slate-50 focus:outline-none
+                                                        dark:text-slate-200
+                                                        dark:hover:bg-slate-700/60
+                                                        dark:focus:bg-slate-700/60"
+                                                >
+                                                    <span
+                                                        class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                            rounded-xl bg-slate-100 text-slate-500
+                                                            transition-colors
+                                                            group-hover:bg-slate-200/80
+                                                            group-hover:text-slate-700
+                                                            dark:bg-slate-700/70
+                                                            dark:text-slate-400
+                                                            dark:group-hover:bg-slate-600
+                                                            dark:group-hover:text-slate-200"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
                                                             fill="none"
                                                             stroke="currentColor"
-                                                            stroke-width="2"
+                                                            stroke-width="1.75"
                                                             stroke-linecap="round"
-                                                            stroke-linejoin="round">
-
-                                                            <path d="M20 6L9 17l-5-5" />
+                                                            stroke-linejoin="round"
+                                                            class="h-4 w-4"
+                                                        >
+                                                            <path
+                                                                d="M2.5 12s3.5-6.5 9.5-6.5
+                                                                9.5 6.5 9.5 6.5
+                                                                -3.5 6.5-9.5 6.5
+                                                                S2.5 12 2.5 12Z"
+                                                            />
+                                                            <circle cx="12" cy="12" r="2.5" />
                                                         </svg>
+                                                    </span>
 
-                                                        Xác nhận đơn
-                                                    </button>
-                                                </form>
-
-
-                                                {{-- Hủy Booking --}}
-                                                <form method="POST"
-                                                    action="{{ route('admin.bookings.update-status', $booking) }}"
-                                                    onsubmit="return confirm('Bạn có chắc muốn hủy đơn {{ $booking->booking_code }} không?')">
-
-                                                    @csrf
-                                                    @method('PATCH')
-
-                                                    <input type="hidden" name="status" value="cancelled">
-
-                                                    <button type="submit"
-                                                        class="flex h-11 w-full cursor-pointer items-center gap-3 bg-transparent px-4
-                                                            text-left text-sm font-medium text-red-600 transition
-                                                            hover:bg-red-50 hover:text-red-700
-                                                            dark:text-red-400 dark:hover:bg-red-950/40 dark:hover:text-red-300">
-
-                                                        <svg viewBox="0 0 24 24"
-                                                            class="h-4 w-4 shrink-0"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round">
-
-                                                            <path d="M18 6L6 18M6 6l12 12" />
-                                                        </svg>
-
-                                                        Hủy Booking
-                                                    </button>
-                                                </form>
-
-                                            @endif
+                                                    <span>Xem</span>
+                                                </a>
 
 
-                                            {{-- Booking đã xác nhận --}}
-                                            @if ($booking->status === 'confirmed')
+                                                {{-- =========================
+                                                    BOOKING ĐANG CHỜ XÁC NHẬN
+                                                ========================== --}}
+                                                @if ($booking->status === 'pending')
 
-                                                {{-- Đã nhận phòng --}}
-                                                <form method="POST"
-                                                    action="{{ route('admin.bookings.update-status', $booking) }}"
-                                                    onsubmit="return confirm('Xác nhận khách đã nhận phòng?')">
-
-                                                    @csrf
-                                                    @method('PATCH')
-
-                                                    <input type="hidden" name="status" value="checked_in">
-
-                                                    <button type="submit"
-                                                        class="flex h-11 w-full cursor-pointer items-center gap-3 bg-transparent px-4
-                                                            text-left text-sm font-medium text-slate-700 transition
-                                                            hover:bg-slate-50 hover:text-blue-600
-                                                            dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-blue-400">
-
-                                                        <svg viewBox="0 0 24 24"
-                                                            class="h-4 w-4 shrink-0"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round">
-
-                                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                                            <circle cx="12" cy="10" r="3" />
-                                                        </svg>
-
-                                                        Đã nhận phòng
-                                                    </button>
-                                                </form>
+                                                    <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
 
 
-                                                {{-- Hủy Booking --}}
-                                                <form method="POST"
-                                                    action="{{ route('admin.bookings.update-status', $booking) }}"
-                                                    onsubmit="return confirm('Bạn có chắc muốn hủy đơn {{ $booking->booking_code }} không?')">
+                                                    {{-- Xác nhận đơn --}}
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ route('admin.bookings.update-status', $booking) }}"
+                                                        onsubmit="return confirm('Bạn có chắc muốn xác nhận đơn {{ $booking->booking_code }} không?')"
+                                                    >
+                                                        @csrf
+                                                        @method('PATCH')
 
-                                                    @csrf
-                                                    @method('PATCH')
+                                                        <input
+                                                            type="hidden"
+                                                            name="status"
+                                                            value="confirmed"
+                                                        >
 
-                                                    <input type="hidden" name="status" value="cancelled">
+                                                        <button
+                                                            type="submit"
 
-                                                    <button type="submit"
-                                                        class="flex h-11 w-full cursor-pointer items-center gap-3 bg-transparent px-4
-                                                            text-left text-sm font-medium text-red-600 transition
-                                                            hover:bg-red-50 hover:text-red-700
-                                                            dark:text-red-400 dark:hover:bg-red-950/40 dark:hover:text-red-300">
+                                                            class="group flex w-full cursor-pointer items-center gap-3
+                                                                px-3.5 py-2.5 text-left text-sm font-medium
+                                                                text-blue-600 transition-colors
+                                                                hover:bg-blue-50
+                                                                focus:bg-blue-50 focus:outline-none
+                                                                dark:text-blue-400
+                                                                dark:hover:bg-blue-950/50
+                                                                dark:focus:bg-blue-950/50"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-blue-50 text-blue-500
+                                                                    transition-colors
+                                                                    group-hover:bg-blue-100
+                                                                    dark:bg-blue-950/50
+                                                                    dark:text-blue-400
+                                                                    dark:group-hover:bg-blue-950/70"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path d="M20 6L9 17l-5-5" />
+                                                                </svg>
+                                                            </span>
 
-                                                        <svg viewBox="0 0 24 24"
-                                                            class="h-4 w-4 shrink-0"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round">
-
-                                                            <path d="M18 6L6 18M6 6l12 12" />
-                                                        </svg>
-
-                                                        Hủy Booking
-                                                    </button>
-                                                </form>
-
-                                            @endif
+                                                            <span>Xác nhận đơn</span>
+                                                        </button>
+                                                    </form>
 
 
-                                            {{-- Booking đã nhận phòng --}}
-                                            @if ($booking->status === 'checked_in')
+                                                    {{-- Hủy Booking --}}
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ route('admin.bookings.update-status', $booking) }}"
+                                                        onsubmit="return confirm('Bạn có chắc muốn hủy đơn {{ $booking->booking_code }} không?')"
+                                                    >
+                                                        @csrf
+                                                        @method('PATCH')
 
-                                                {{-- Hoàn thành Booking --}}
-                                                <form method="POST"
-                                                    action="{{ route('admin.bookings.update-status', $booking) }}"
-                                                    onsubmit="return confirm('Xác nhận đơn này đã hoàn thành?')">
+                                                        <input
+                                                            type="hidden"
+                                                            name="status"
+                                                            value="cancelled"
+                                                        >
 
-                                                    @csrf
-                                                    @method('PATCH')
+                                                        <button
+                                                            type="submit"
 
-                                                    <input type="hidden" name="status" value="completed">
+                                                            class="group flex w-full cursor-pointer items-center gap-3
+                                                                px-3.5 py-2.5 text-left text-sm font-medium
+                                                                text-red-600 transition-colors
+                                                                hover:bg-red-50
+                                                                focus:bg-red-50 focus:outline-none
+                                                                dark:text-red-400
+                                                                dark:hover:bg-red-950/50
+                                                                dark:focus:bg-red-950/50"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-red-50 text-red-500
+                                                                    transition-colors
+                                                                    group-hover:bg-red-100
+                                                                    dark:bg-red-950/60
+                                                                    dark:text-red-400
+                                                                    dark:group-hover:bg-red-950/80"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path d="M18 6L6 18M6 6l12 12" />
+                                                                </svg>
+                                                            </span>
 
-                                                    <button type="submit"
-                                                        class="flex h-11 w-full cursor-pointer items-center gap-3 bg-transparent px-4
-                                                            text-left text-sm font-medium text-emerald-700 transition
-                                                            hover:bg-emerald-50 hover:text-emerald-800
-                                                            dark:text-emerald-400 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300">
+                                                            <span>Hủy Booking</span>
+                                                        </button>
+                                                    </form>
 
-                                                        <svg viewBox="0 0 24 24"
-                                                            class="h-4 w-4 shrink-0"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            stroke-width="2"
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round">
+                                                @endif
 
-                                                            <path d="M20 6L9 17l-5-5" />
-                                                        </svg>
 
-                                                        Hoàn thành
-                                                    </button>
-                                                </form>
+                                                {{-- =================
+                                                    ĐÃ XÁC NHẬN
+                                                ================== --}}
+                                                @if ($booking->status === 'confirmed')
 
-                                            @endif
+                                                    <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
 
-                                        </div>
-                                    </details>
+
+                                                    {{-- Đã nhận phòng --}}
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ route('admin.bookings.update-status', $booking) }}"
+                                                        onsubmit="return confirm('Xác nhận khách đã nhận phòng?')"
+                                                    >
+                                                        @csrf
+                                                        @method('PATCH')
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="status"
+                                                            value="checked_in"
+                                                        >
+
+                                                        <button
+                                                            type="submit"
+
+                                                            class="group flex w-full cursor-pointer items-center gap-3
+                                                                px-3.5 py-2.5 text-left text-sm font-medium
+                                                                text-blue-600 transition-colors
+                                                                hover:bg-blue-50
+                                                                focus:bg-blue-50 focus:outline-none
+                                                                dark:text-blue-400
+                                                                dark:hover:bg-blue-950/50
+                                                                dark:focus:bg-blue-950/50"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-blue-50 text-blue-500
+                                                                    transition-colors
+                                                                    group-hover:bg-blue-100
+                                                                    dark:bg-blue-950/50
+                                                                    dark:text-blue-400
+                                                                    dark:group-hover:bg-blue-950/70"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path
+                                                                        d="M21 10c0 7-9 13-9 13s-9-6-9-13
+                                                                        a9 9 0 0 1 18 0z"
+                                                                    />
+                                                                    <circle cx="12" cy="10" r="3" />
+                                                                </svg>
+                                                            </span>
+
+                                                            <span>Đã nhận phòng</span>
+                                                        </button>
+                                                    </form>
+
+
+                                                    {{-- Hủy Booking --}}
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ route('admin.bookings.update-status', $booking) }}"
+                                                        onsubmit="return confirm('Bạn có chắc muốn hủy đơn {{ $booking->booking_code }} không?')"
+                                                    >
+                                                        @csrf
+                                                        @method('PATCH')
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="status"
+                                                            value="cancelled"
+                                                        >
+
+                                                        <button
+                                                            type="submit"
+
+                                                            class="group flex w-full cursor-pointer items-center gap-3
+                                                                px-3.5 py-2.5 text-left text-sm font-medium
+                                                                text-red-600 transition-colors
+                                                                hover:bg-red-50
+                                                                focus:bg-red-50 focus:outline-none
+                                                                dark:text-red-400
+                                                                dark:hover:bg-red-950/50
+                                                                dark:focus:bg-red-950/50"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-red-50 text-red-500
+                                                                    transition-colors
+                                                                    group-hover:bg-red-100
+                                                                    dark:bg-red-950/60
+                                                                    dark:text-red-400
+                                                                    dark:group-hover:bg-red-950/80"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path d="M18 6L6 18M6 6l12 12" />
+                                                                </svg>
+                                                            </span>
+
+                                                            <span>Hủy Booking</span>
+                                                        </button>
+                                                    </form>
+
+                                                @endif
+
+
+                                                {{-- =================
+                                                    ĐÃ NHẬN PHÒNG
+                                                ================== --}}
+                                                @if ($booking->status === 'checked_in')
+
+                                                    <div class="mx-3 border-t border-slate-100 dark:border-slate-700/80"></div>
+
+
+                                                    {{-- Hoàn thành --}}
+                                                    <form
+                                                        method="POST"
+                                                        action="{{ route('admin.bookings.update-status', $booking) }}"
+                                                        onsubmit="return confirm('Xác nhận đơn này đã hoàn thành?')"
+                                                    >
+                                                        @csrf
+                                                        @method('PATCH')
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="status"
+                                                            value="completed"
+                                                        >
+
+                                                        <button
+                                                            type="submit"
+
+                                                            class="group flex w-full cursor-pointer items-center gap-3
+                                                                px-3.5 py-2.5 text-left text-sm font-medium
+                                                                text-emerald-600 transition-colors
+                                                                hover:bg-emerald-50
+                                                                focus:bg-emerald-50 focus:outline-none
+                                                                dark:text-emerald-400
+                                                                dark:hover:bg-emerald-950/50
+                                                                dark:focus:bg-emerald-950/50"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-emerald-50 text-emerald-500
+                                                                    transition-colors
+                                                                    group-hover:bg-emerald-100
+                                                                    dark:bg-emerald-950/60
+                                                                    dark:text-emerald-400
+                                                                    dark:group-hover:bg-emerald-950/80"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path d="M20 6L9 17l-5-5" />
+                                                                </svg>
+                                                            </span>
+
+                                                            <span>Hoàn thành</span>
+                                                        </button>
+                                                    </form>
+
+                                                @endif
+
+                                            </div>
+                                        </template>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

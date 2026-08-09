@@ -10,7 +10,7 @@
         <div class="mb-8">
             <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
                 Chỉnh sửa thông tin phòng
-                <span class="font-bold text-blue-700 dark:text-blue-400">{{ $room->name }}</span>.
+                <span class="font-bold text-blue-700 dark:text-blue-400">{{ $room->name }}</span>
             </h2>
 
             <a href="{{ route('admin.rooms.index') }}"

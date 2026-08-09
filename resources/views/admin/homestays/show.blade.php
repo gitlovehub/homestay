@@ -11,7 +11,8 @@
 
             <div>
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                    Xem toàn bộ thông tin của Homestay trong hệ thống.
+                    Xem chi tiết Homestay
+                    <span class="font-bold text-blue-600 dark:text-blue-400">{{ $homestay->name }}</span>
                 </h2>
 
                 <a href="{{ route('admin.homestays.index') }}"

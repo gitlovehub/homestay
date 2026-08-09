@@ -216,40 +216,44 @@
                         </select>
                     </div>
 
-                    {{-- Reset --}}
-                    <div class="flex items-end lg:col-span-1">
+                    <div class="flex items-end gap-3 lg:col-span-2">
                         @if (request()->hasAny(['search', 'status', 'city', 'sort']))
                             <a href="{{ route('admin.homestays.index') }}"
                                 title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
                             <button type="button"
                                 disabled
                                 title="Chưa có bộ lọc"
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
 
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>
                         @endif
-                    </div>
 
-                    {{-- Nút lọc --}}
-                    <div class="flex items-end lg:col-span-1">
                         <button type="submit"
-                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-900/50">
+                            class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+
+                            <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 5h16"></path>
+                                <path d="M7 12h10"></path>
+                                <path d="M10 19h4"></path>
+                            </svg>
+
                             Lọc
                         </button>
                     </div>
@@ -371,65 +375,313 @@
                                 </td>
 
                                 {{-- Thao tác --}}
-                                <td class="whitespace-nowrap px-6 py-4 text-center">
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    <div
+                                        x-data="{
+                                            id: 'homestay-{{ $homestay->id }}',
+                                            open: false,
+                                            top: 0,
+                                            left: 0,
 
-                                    <details data-action-menu class="group relative inline-block text-left">
+                                            toggle() {
+                                                // Nếu menu hiện tại đang mở thì bấm lại để đóng
+                                                if (this.open) {
+                                                    this.open = false;
+                                                    return;
+                                                }
 
-                                        <summary
-                                            class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 bg-white text-lg font-bold text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-400"
-                                            title="Thao tác">
-                                            ⋮
-                                        </summary>
+                                                const rect = this.$refs.trigger.getBoundingClientRect();
 
-                                        <div
-                                            class="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-800">
+                                                // w-44 = 176px
+                                                const menuWidth = 176;
 
-                                            <a href="{{ route('admin.homestays.show', $homestay) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-700 transition hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/40">
-                                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                    <circle cx="12" cy="12" r="3" />
-                                                </svg>
-                                                Xem
-                                            </a>
+                                                // Luôn mở xuống dưới
+                                                this.top = rect.bottom + 8;
 
-                                            <a href="{{ route('admin.homestays.edit', $homestay) }}"
-                                                class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-amber-600 transition hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950/40">
-                                                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path
-                                                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                                    <path
-                                                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                                </svg>
-                                                Sửa
-                                            </a>
+                                                // Canh mép phải dropdown với nút 3 chấm
+                                                this.left = rect.right - menuWidth;
 
-                                            <form action="{{ route('admin.homestays.destroy', $homestay) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa Homestay {{ $homestay->name }} không?\nHành động này không thể hoàn tác.')">
-                                                @csrf
-                                                @method('DELETE')
+                                                // Không cho menu tràn khỏi mép trái màn hình
+                                                if (this.left < 8) {
+                                                    this.left = 8;
+                                                }
 
-                                                <button type="submit"
-                                                    class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40">
-                                                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <polyline points="3 6 5 6 21 6" />
-                                                        <path
-                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                                    </svg>
-                                                    Xóa
-                                                </button>
-                                            </form>
+                                                // Báo cho tất cả menu khác đóng lại
+                                                window.dispatchEvent(
+                                                    new CustomEvent('action-menu-open', {
+                                                        detail: {
+                                                            id: this.id
+                                                        }
+                                                    })
+                                                );
 
-                                        </div>
+                                                this.open = true;
+                                            },
 
-                                    </details>
+                                            close() {
+                                                this.open = false;
+                                            }
+                                        }"
+
+                                        data-action-menu
+
+                                        class="flex justify-center"
+
+                                        @action-menu-open.window="
+                                            if ($event.detail.id != id) {
+                                                open = false
+                                            }
+                                        "
+
+                                        @keydown.escape.window="close()"
+                                        @resize.window="close()"
+                                        @scroll.window="close()"
+                                    >
+
+                                        {{-- Nút 3 chấm --}}
+                                        <button
+                                            x-ref="trigger"
+                                            type="button"
+                                            @click.stop="toggle()"
+
+                                            class="inline-flex h-10 w-10 cursor-pointer items-center justify-center
+                                                rounded-xl text-slate-500 transition
+                                                hover:bg-slate-100 hover:text-slate-700
+                                                focus:outline-none focus:ring-4 focus:ring-blue-100
+                                                dark:text-slate-400
+                                                dark:hover:bg-slate-700
+                                                dark:hover:text-slate-200
+                                                dark:focus:ring-blue-900/30"
+
+                                            title="Thao tác"
+                                            aria-label="Thao tác"
+                                            :aria-expanded="open"
+                                        >
+                                            <svg
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                                class="h-5 w-5"
+                                                aria-hidden="true"
+                                            >
+                                                <path
+                                                    d="M10 6a2 2 0 110-4 2 2 0 010 4z
+                                                    M10 12a2 2 0 110-4 2 2 0 010 4z
+                                                    M10 18a2 2 0 110-4 2 2 0 010 4z"
+                                                />
+                                            </svg>
+                                        </button>
+
+
+                                        {{-- Dropdown --}}
+                                        <template x-teleport="body">
+                                            <div
+                                                x-show="open"
+                                                x-cloak
+
+                                                @click.outside="close()"
+
+                                                x-transition:enter="transition ease-out duration-150"
+                                                x-transition:enter-start="opacity-0 scale-95"
+                                                x-transition:enter-end="opacity-100 scale-100"
+
+                                                x-transition:leave="transition ease-in duration-100"
+                                                x-transition:leave-start="opacity-100 scale-100"
+                                                x-transition:leave-end="opacity-0 scale-95"
+
+                                                :style="`
+                                                    position: fixed;
+                                                    top: ${top}px;
+                                                    left: ${left}px;
+                                                    width: 176px;
+                                                `"
+
+                                                class="z-[9999] origin-top-right overflow-hidden
+                                                    rounded-2xl border border-slate-200/80 bg-white
+                                                    shadow-xl shadow-slate-200/50 ring-1 ring-black/5
+                                                    dark:border-slate-700/80
+                                                    dark:bg-slate-800
+                                                    dark:shadow-black/40"
+                                            >
+
+                                                {{-- Xem --}}
+                                                <a
+                                                    href="{{ route('admin.homestays.show', $homestay) }}"
+
+                                                    class="group flex items-center gap-3 px-3.5 py-2.5
+                                                        text-sm font-medium text-slate-700
+                                                        transition-colors
+                                                        hover:bg-slate-50
+                                                        focus:bg-slate-50 focus:outline-none
+                                                        dark:text-slate-200
+                                                        dark:hover:bg-slate-700/60
+                                                        dark:focus:bg-slate-700/60"
+                                                >
+                                                    <span
+                                                        class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                            rounded-xl bg-slate-100 text-slate-500
+                                                            transition-colors
+                                                            group-hover:bg-slate-200/80
+                                                            group-hover:text-slate-700
+                                                            dark:bg-slate-700/70
+                                                            dark:text-slate-400
+                                                            dark:group-hover:bg-slate-600
+                                                            dark:group-hover:text-slate-200"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            stroke-width="1.75"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="h-4 w-4"
+                                                        >
+                                                            <path
+                                                                d="M2.5 12s3.5-6.5 9.5-6.5
+                                                                9.5 6.5 9.5 6.5
+                                                                -3.5 6.5-9.5 6.5
+                                                                S2.5 12 2.5 12Z"
+                                                            />
+                                                            <circle cx="12" cy="12" r="2.5" />
+                                                        </svg>
+                                                    </span>
+
+                                                    <span>Xem</span>
+                                                </a>
+
+
+                                                {{-- Sửa --}}
+                                                <a
+                                                    href="{{ route('admin.homestays.edit', $homestay) }}"
+
+                                                    class="group flex items-center gap-3 px-3.5 py-2.5
+                                                        text-sm font-medium text-amber-600
+                                                        transition-colors
+                                                        hover:bg-amber-50
+                                                        focus:bg-amber-50 focus:outline-none
+                                                        dark:text-amber-400
+                                                        dark:hover:bg-amber-950/50
+                                                        dark:focus:bg-amber-950/50"
+                                                >
+                                                    <span
+                                                        class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                            rounded-xl bg-amber-50 text-amber-500
+                                                            transition-colors
+                                                            group-hover:bg-amber-100
+                                                            dark:bg-amber-950/50
+                                                            dark:text-amber-400
+                                                            dark:group-hover:bg-amber-950/70"
+                                                    >
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            stroke-width="1.75"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="h-4 w-4"
+                                                        >
+                                                            <path d="M12 20h9" />
+
+                                                            <path
+                                                                d="M16.5 3.5a2.12 2.12 0 0 1 3 3
+                                                                L7 19l-4 1 1-4Z"
+                                                            />
+                                                        </svg>
+                                                    </span>
+
+                                                    <span>Sửa</span>
+                                                </a>
+
+
+                                                {{-- Đường ngăn --}}
+                                                <div
+                                                    class="mx-3 border-t border-slate-100
+                                                        dark:border-slate-700/80"
+                                                ></div>
+
+
+                                                {{-- Xóa --}}
+                                                <form
+                                                    action="{{ route('admin.homestays.destroy', $homestay) }}"
+                                                    method="POST"
+
+                                                    onsubmit="return confirm(
+                                                        'Bạn có chắc chắn muốn xóa Homestay {{ addslashes($homestay->name) }} không?\nHành động này không thể hoàn tác.'
+                                                    )"
+                                                >
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button
+                                                        type="submit"
+
+                                                        class="group flex w-full cursor-pointer items-center gap-3
+                                                            px-3.5 py-2.5
+                                                            text-left text-sm font-medium text-red-600
+                                                            transition-colors
+                                                            hover:bg-red-50
+                                                            focus:bg-red-50 focus:outline-none
+                                                            dark:text-red-400
+                                                            dark:hover:bg-red-950/50
+                                                            dark:focus:bg-red-950/50"
+                                                    >
+                                                        <span
+                                                            class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                rounded-xl bg-red-50 text-red-500
+                                                                transition-colors
+                                                                group-hover:bg-red-100
+                                                                dark:bg-red-950/60
+                                                                dark:text-red-400
+                                                                dark:group-hover:bg-red-950/80"
+                                                        >
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="1.75"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="h-4 w-4"
+                                                            >
+                                                                <path d="M3 6h18" />
+
+                                                                <path
+                                                                    d="M8 6V4a2 2 0 0 1 2-2h4
+                                                                    a2 2 0 0 1 2 2v2"
+                                                                />
+
+                                                                <path
+                                                                    d="M19 6v14a2 2 0 0 1-2 2H7
+                                                                    a2 2 0 0 1-2-2V6"
+                                                                />
+
+                                                                <line
+                                                                    x1="10"
+                                                                    y1="11"
+                                                                    x2="10"
+                                                                    y2="17"
+                                                                />
+
+                                                                <line
+                                                                    x1="14"
+                                                                    y1="11"
+                                                                    x2="14"
+                                                                    y2="17"
+                                                                />
+                                                            </svg>
+                                                        </span>
+
+                                                        <span>Xóa</span>
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                        </template>
+                                    </div>
                                 </td>
 
                             </tr>
@@ -446,7 +698,7 @@
                                         Chưa có Homestay phù hợp
                                     </h2>
 
-                                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 dark:text-slate-400">
+                                    <p class="mx-auto mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
                                         Không tìm thấy Homestay phù hợp với nội dung tìm kiếm hoặc bộ lọc hiện tại.
                                     </p>
 

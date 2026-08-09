@@ -6,16 +6,18 @@
 
 @section('content')
     <div class="mx-auto max-w-screen-2xl">
-        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
             <div>
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                    Chi tiết danh mục
+                    Xem chi tiết Danh mục
+                    <span class="font-bold text-blue-600 dark:text-blue-400">{{ $category->name }}</span>.
                 </h2>
 
                 <a href="{{ route('admin.categories.index') }}"
                     class="mt-1 inline-flex items-center gap-1 text-xs font-medium text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 sm:text-sm">
                     ←
-                    Trở về danh sách danh mục
+                    Trở về danh sách Homestay
                 </a>
             </div>
 

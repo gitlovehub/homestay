@@ -53,7 +53,7 @@
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div class="min-w-0">
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                    Chi tiết đánh giá
+                    Chi tiết Đánh giá của khách hàng
                 </h2>
 
                 <a href="{{ route('admin.reviews.index') }}"

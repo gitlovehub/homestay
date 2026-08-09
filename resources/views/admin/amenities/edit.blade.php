@@ -35,7 +35,7 @@
                 Cập nhật thông tin tiện ích
                 <span class="font-bold text-blue-600 dark:text-blue-400">
                     {{ $amenity->name }}
-                </span>.
+                </span>
             </h2>
 
             <a href="{{ route('admin.amenities.index') }}"

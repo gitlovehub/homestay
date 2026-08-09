@@ -14,39 +14,12 @@
     @endphp
 
     <div class="mx-auto max-w-screen-2xl">
+        
         <x-alert />
 
-        {{-- Giới thiệu --}}
-        <section class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-800">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
-                        Danh sách tài khoản
-                    </h2>
-
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                        Theo dõi thông tin, hoạt động đặt phòng và quản lý trạng thái
-                        tài khoản trong hệ thống HomeStayGo.
-                    </p>
-                </div>
-
-                <div
-                    class="inline-flex w-fit items-center gap-2 rounded-xl bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.8" class="h-5 w-5">
-                        <circle cx="9" cy="8" r="4"></circle>
-                        <path d="M3 21a6 6 0 0 1 12 0"></path>
-                        <path d="M16 8h5"></path>
-                        <path d="M18.5 5.5v5"></path>
-                    </svg>
-
-                    <span>
-                        {{ number_format($statistics['total'] ?? 0, 0, ',', '.') }}
-                        tài khoản
-                    </span>
-                </div>
-            </div>
-        </section>
+        <h2 class="mb-8 text-lg font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
+            Theo dõi thông tin, hoạt động đặt phòng và quản lý trạng thái tài khoản trong hệ thống.
+        </h2>
 
         {{-- Thống kê --}}
         <section class="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -178,6 +151,7 @@
 
                 <form method="GET" action="{{ route('admin.users.index') }}"
                     class="grid gap-4 md:grid-cols-2 lg:grid-cols-12">
+                    
                     {{-- Tìm kiếm --}}
                     <div class="md:col-span-2 lg:col-span-4">
                         <label for="search" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
@@ -262,34 +236,34 @@
                         </select>
                     </div>
 
-                    {{-- Reset --}}
-                    <div class="flex items-end lg:col-span-1">
+                    <div class="flex items-end gap-3 lg:col-span-2">
                         @if ($hasFilters)
                             <a href="{{ route('admin.users.index') }}"
                                 title="Xóa bộ lọc"
-                                class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+                                class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
-                                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </a>
                         @else
                             <button type="button"
                                 disabled
                                 title="Chưa có bộ lọc"
-                                class="inline-flex h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-100 px-4 text-sm font-semibold text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
+                                class="inline-flex h-11 w-11 shrink-0 cursor-not-allowed items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-500">
 
-                                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15" />
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </button>
                         @endif
-                    </div>
-
-                    {{-- Lọc --}}
-                    <div class="flex items-end lg:col-span-1">
+                    
                         <button type="submit"
                             class="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
 
@@ -303,6 +277,7 @@
                             Lọc
                         </button>
                     </div>
+
                 </form>
                 
             </div>
@@ -496,104 +471,319 @@
                                     </td>
 
                                     {{-- Thao tác --}}
-                                    <td class="whitespace-nowrap px-5 py-5 text-center align-middle sm:px-6">
-                                        <details data-action-menu class="group relative inline-block text-left">
-                                            <summary
-                                                class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:hover:border-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
-                                                title="Mở menu thao tác">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                    fill="currentColor" class="h-5 w-5">
+                                    <td class="whitespace-nowrap px-5 py-5 align-middle sm:px-6">
+                                        <div
+                                            x-data="{
+                                                id: 'user-{{ $user->id }}',
+                                                open: false,
+                                                top: 0,
+                                                left: 0,
+
+                                                toggle() {
+                                                    // Bấm lại chính menu đang mở thì đóng
+                                                    if (this.open) {
+                                                        this.open = false;
+                                                        return;
+                                                    }
+
+                                                    const rect = this.$refs.trigger.getBoundingClientRect();
+
+                                                    // w-56 = 224px
+                                                    const menuWidth = 224;
+
+                                                    // Luôn mở xuống dưới
+                                                    this.top = rect.bottom + 8;
+
+                                                    // Canh phải dropdown với nút 3 chấm
+                                                    this.left = rect.right - menuWidth;
+
+                                                    // Không cho menu tràn khỏi mép trái màn hình
+                                                    if (this.left < 8) {
+                                                        this.left = 8;
+                                                    }
+
+                                                    // Đóng các action menu khác
+                                                    window.dispatchEvent(
+                                                        new CustomEvent('action-menu-open', {
+                                                            detail: {
+                                                                id: this.id
+                                                            }
+                                                        })
+                                                    );
+
+                                                    this.open = true;
+                                                },
+
+                                                close() {
+                                                    this.open = false;
+                                                }
+                                            }"
+
+                                            data-action-menu
+
+                                            class="flex justify-center"
+
+                                            @action-menu-open.window="
+                                                if ($event.detail.id != id) {
+                                                    open = false
+                                                }
+                                            "
+
+                                            @keydown.escape.window="close()"
+                                            @resize.window="close()"
+                                            @scroll.window="close()"
+                                        >
+
+                                            {{-- Nút 3 chấm --}}
+                                            <button
+                                                x-ref="trigger"
+                                                type="button"
+                                                @click.stop="toggle()"
+
+                                                class="inline-flex h-10 w-10 cursor-pointer items-center justify-center
+                                                    rounded-xl text-slate-500 transition
+                                                    hover:bg-slate-100 hover:text-slate-700
+                                                    focus:outline-none focus:ring-4 focus:ring-blue-100
+                                                    dark:text-slate-400
+                                                    dark:hover:bg-slate-700
+                                                    dark:hover:text-slate-200
+                                                    dark:focus:ring-blue-900/30"
+
+                                                title="Mở menu thao tác"
+                                                aria-label="Mở menu thao tác"
+                                                :aria-expanded="open"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="currentColor"
+                                                    class="h-5 w-5"
+                                                    aria-hidden="true"
+                                                >
                                                     <circle cx="12" cy="5" r="1.8"></circle>
                                                     <circle cx="12" cy="12" r="1.8"></circle>
                                                     <circle cx="12" cy="19" r="1.8"></circle>
                                                 </svg>
-                                            </summary>
+                                            </button>
 
-                                            <div
-                                                class="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-800">
-                                                {{-- Xem chi tiết --}}
-                                                <a href="{{ route('admin.users.show', $user) }}"
-                                                    class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:hover:bg-slate-700/70 dark:text-slate-300">
-                                                    <span
-                                                        class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor" stroke-width="1.8"
-                                                            class="h-4 w-4">
-                                                            <path
-                                                                d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z">
-                                                            </path>
-                                                            <circle cx="12" cy="12" r="2.5"></circle>
-                                                        </svg>
-                                                    </span>
 
-                                                    <span>Xem chi tiết</span>
-                                                </a>
+                                            {{-- Dropdown --}}
+                                            <template x-teleport="body">
+                                                <div
+                                                    x-show="open"
+                                                    x-cloak
 
-                                                <div class="border-t border-slate-100 dark:border-slate-700"></div>
+                                                    @click.outside="close()"
 
-                                                @if (!$isCurrentUser)
-                                                    <form method="POST"
-                                                        action="{{ route('admin.users.update-status', $user) }}"
-                                                        onsubmit="return confirm(
-                                                            '{{ $user->status === 'active'
-                                                                ? 'Bạn có chắc muốn khóa tài khoản ' . addslashes($user->name) . ' không?'
-                                                                : 'Bạn có chắc muốn mở khóa tài khoản ' . addslashes($user->name) . ' không?' }}'
-                                                        )">
-                                                        @csrf
-                                                        @method('PATCH')
+                                                    x-transition:enter="transition ease-out duration-150"
+                                                    x-transition:enter-start="opacity-0 scale-95"
+                                                    x-transition:enter-end="opacity-100 scale-100"
 
-                                                        <input type="hidden" name="status"
-                                                            value="{{ $user->status === 'active' ? 'inactive' : 'active' }}">
+                                                    x-transition:leave="transition ease-in duration-100"
+                                                    x-transition:leave-start="opacity-100 scale-100"
+                                                    x-transition:leave-end="opacity-0 scale-95"
 
-                                                        <button type="submit"
-                                                            class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium transition
-                                                                {{ $user->status === 'active' ? 'text-red-700 hover:bg-red-50 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-950/40' : 'text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/40' }}">
-                                                            <span
-                                                                class="flex h-8 w-8 items-center justify-center rounded-lg
-                                                                    {{ $user->status === 'active' ? 'bg-red-50 dark:bg-red-950/40' : 'bg-emerald-50 dark:bg-emerald-950/40' }}">
-                                                                @if ($user->status === 'active')
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" fill="none"
-                                                                        stroke="currentColor" stroke-width="1.8"
-                                                                        class="h-4 w-4">
-                                                                        <rect x="5" y="10" width="14" height="10"
-                                                                            rx="2"></rect>
-                                                                        <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
-                                                                    </svg>
-                                                                @else
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24" fill="none"
-                                                                        stroke="currentColor" stroke-width="1.8"
-                                                                        class="h-4 w-4">
-                                                                        <rect x="5" y="10" width="14" height="10"
-                                                                            rx="2"></rect>
-                                                                        <path d="M8 10V7a4 4 0 0 1 7.5-2"></path>
-                                                                    </svg>
-                                                                @endif
-                                                            </span>
+                                                    :style="`
+                                                        position: fixed;
+                                                        top: ${top}px;
+                                                        left: ${left}px;
+                                                        width: 224px;
+                                                    `"
 
-                                                            <span>
-                                                                {{ $user->status === 'active' ? 'Khóa tài khoản' : 'Mở khóa tài khoản' }}
-                                                            </span>
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <div
-                                                        class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-blue-600 dark:text-blue-400">
+                                                    class="z-[9999] origin-top-right overflow-hidden
+                                                        rounded-2xl border border-slate-200/80 bg-white
+                                                        shadow-xl shadow-slate-200/50 ring-1 ring-black/5
+                                                        dark:border-slate-700/80
+                                                        dark:bg-slate-800
+                                                        dark:shadow-black/40"
+                                                >
+
+                                                    {{-- Xem chi tiết --}}
+                                                    <a
+                                                        href="{{ route('admin.users.show', $user) }}"
+
+                                                        class="group flex items-center gap-3 px-3.5 py-2.5
+                                                            text-sm font-medium text-slate-700
+                                                            transition-colors
+                                                            hover:bg-slate-50
+                                                            focus:bg-slate-50 focus:outline-none
+                                                            dark:text-slate-200
+                                                            dark:hover:bg-slate-700/60
+                                                            dark:focus:bg-slate-700/60"
+                                                    >
                                                         <span
-                                                            class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                                fill="none" stroke="currentColor" stroke-width="2"
-                                                                class="h-4 w-4">
-                                                                <path d="m5 12 4 4L19 6"></path>
+                                                            class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                rounded-xl bg-slate-100 text-slate-500
+                                                                transition-colors
+                                                                group-hover:bg-slate-200/80
+                                                                group-hover:text-slate-700
+                                                                dark:bg-slate-700/70
+                                                                dark:text-slate-400
+                                                                dark:group-hover:bg-slate-600
+                                                                dark:group-hover:text-slate-200"
+                                                        >
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                viewBox="0 0 24 24"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                stroke-width="1.75"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                class="h-4 w-4"
+                                                            >
+                                                                <path
+                                                                    d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z"
+                                                                />
+                                                                <circle cx="12" cy="12" r="2.5" />
                                                             </svg>
                                                         </span>
 
-                                                        <span>Tài khoản hiện tại</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </details>
+                                                        <span>Xem chi tiết</span>
+                                                    </a>
+
+
+                                                    {{-- Đường ngăn --}}
+                                                    <div
+                                                        class="mx-3 border-t border-slate-100
+                                                            dark:border-slate-700/80"
+                                                    ></div>
+
+
+                                                    @if (!$isCurrentUser)
+
+                                                        {{-- Khóa / Mở khóa tài khoản --}}
+                                                        <form
+                                                            method="POST"
+                                                            action="{{ route('admin.users.update-status', $user) }}"
+
+                                                            onsubmit="return confirm('{{ $user->status === 'active'
+                                                                ? 'Bạn có chắc muốn khóa tài khoản ' . addslashes($user->name) . ' không?'
+                                                                : 'Bạn có chắc muốn mở khóa tài khoản ' . addslashes($user->name) . ' không?' }}')"
+                                                        >
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="status"
+                                                                value="{{ $user->status === 'active' ? 'inactive' : 'active' }}"
+                                                            >
+
+                                                            <button
+                                                                type="submit"
+
+                                                                class="group flex w-full cursor-pointer items-center gap-3
+                                                                    px-3.5 py-2.5 text-left text-sm font-medium
+                                                                    transition-colors focus:outline-none
+
+                                                                    {{ $user->status === 'active'
+                                                                        ? 'text-red-600 hover:bg-red-50 focus:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50 dark:focus:bg-red-950/50'
+                                                                        : 'text-emerald-600 hover:bg-emerald-50 focus:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/50 dark:focus:bg-emerald-950/50' }}"
+                                                            >
+                                                                <span
+                                                                    class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                        rounded-xl transition-colors
+
+                                                                        {{ $user->status === 'active'
+                                                                            ? 'bg-red-50 text-red-500 group-hover:bg-red-100 dark:bg-red-950/60 dark:text-red-400 dark:group-hover:bg-red-950/80'
+                                                                            : 'bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-400 dark:group-hover:bg-emerald-950/80' }}"
+                                                                >
+
+                                                                    @if ($user->status === 'active')
+
+                                                                        {{-- Khóa --}}
+                                                                        <svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            stroke-width="1.75"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round"
+                                                                            class="h-4 w-4"
+                                                                        >
+                                                                            <rect
+                                                                                x="5"
+                                                                                y="11"
+                                                                                width="14"
+                                                                                height="10"
+                                                                                rx="2"
+                                                                            />
+
+                                                                            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                                                                        </svg>
+
+                                                                    @else
+
+                                                                        {{-- Mở khóa --}}
+                                                                        <svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            stroke-width="1.75"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round"
+                                                                            class="h-4 w-4"
+                                                                        >
+                                                                            <rect
+                                                                                x="5"
+                                                                                y="11"
+                                                                                width="14"
+                                                                                height="10"
+                                                                                rx="2"
+                                                                            />
+
+                                                                            <path d="M8 11V7a4 4 0 0 1 8 0" />
+                                                                        </svg>
+
+                                                                    @endif
+                                                                </span>
+
+                                                                <span>
+                                                                    {{ $user->status === 'active'
+                                                                        ? 'Khóa tài khoản'
+                                                                        : 'Mở khóa tài khoản' }}
+                                                                </span>
+                                                            </button>
+                                                        </form>
+
+                                                    @else
+
+                                                        {{-- Tài khoản hiện tại --}}
+                                                        <div
+                                                            class="flex items-center gap-3 px-3.5 py-2.5
+                                                                text-sm font-medium text-blue-600
+                                                                dark:text-blue-400"
+                                                        >
+                                                            <span
+                                                                class="flex h-8 w-8 shrink-0 items-center justify-center
+                                                                    rounded-xl bg-blue-50 text-blue-500
+                                                                    dark:bg-blue-950/50 dark:text-blue-400"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="1.75"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    class="h-4 w-4"
+                                                                >
+                                                                    <path d="M5 13l4 4L19 7" />
+                                                                </svg>
+                                                            </span>
+
+                                                            <span>Tài khoản hiện tại</span>
+                                                        </div>
+
+                                                    @endif
+
+                                                </div>
+                                            </template>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

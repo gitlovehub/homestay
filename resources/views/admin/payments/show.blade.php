@@ -10,6 +10,7 @@
             'paid' => 'Đã thanh toán',
             'failed' => 'Thất bại',
             'refunded' => 'Đã hoàn tiền',
+            'cancelled' => 'Đã hủy giao dịch',
         ];
 
         $statusStyles = [
@@ -36,6 +37,12 @@
                 'dot' => 'bg-blue-500',
                 'text' => 'text-blue-700 dark:text-blue-300',
                 'panel' => 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/40',
+            ],
+            'cancelled' => [
+                'badge' => 'border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
+                'dot' => 'bg-slate-500',
+                'text' => 'text-slate-700 dark:text-slate-300',
+                'panel' => 'border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900',
             ],
         ];
 
@@ -65,10 +72,49 @@
             ? $responseData
             : [];
 
+        $refundStatusLabels = [
+            null => 'Chưa có yêu cầu hoàn',
+            'pending' => 'Chờ gửi/đang chuẩn bị',
+            'processing' => 'VNPAY đang xử lý',
+            'refunded' => 'Hoàn tiền thành công',
+            'failed' => 'Hoàn tiền thất bại',
+        ];
+
+        $refundTarget = (int) ($booking?->refund_amount ?? 0);
+        $refundedAmount = (int) ($payment->refunded_amount ?? 0);
+        $remainingRefund = max(0, $refundTarget - $refundedAmount);
+
+        $canRetryRefund = $booking
+            && $booking->status === 'cancelled'
+            && $payment->payment_method === 'vnpay'
+            && $payment->status === 'paid'
+            && $remainingRefund > 0
+            && !in_array(
+                $payment->refund_status,
+                ['pending', 'processing'],
+                true
+        );
+
+        $canCheckRefund = $booking
+            && $booking->status === 'cancelled'
+            && $payment->payment_method === 'vnpay'
+            && $remainingRefund > 0
+            && in_array(
+                $payment->refund_status,
+                ['pending', 'processing'],
+                true
+        );
+
+        $purposeLabel = match ($payment->payment_purpose) {
+            'deposit' => 'Tiền cọc 10%',
+            'cash_balance' => '90% trả tại homestay',
+            default => 'Thanh toán toàn bộ',
+        };
+
         $methodMessage = match ($payment->payment_method) {
             'cash' => 'Thanh toán tiền mặt được ghi nhận khi khách thanh toán trực tiếp.',
             'bank_transfer' => 'Chuyển khoản ngân hàng cần được đối chiếu trước khi ghi nhận thanh toán.',
-            'vnpay' => 'Trạng thái giao dịch được cập nhật theo kết quả xác minh từ VNPAY.',
+            'vnpay' => 'Trạng thái giao dịch và hoàn tiền được cập nhật theo kết quả xác minh từ VNPAY.',
             'momo' => 'Trạng thái giao dịch được cập nhật theo kết quả xác minh từ MoMo.',
             default => 'Trạng thái giao dịch được cập nhật theo phương thức thanh toán tương ứng.',
         };
@@ -291,6 +337,91 @@
                     </div>
                 </section>
 
+                {{-- Thông tin hoàn tiền --}}
+                @if ($payment->payment_method === 'vnpay' && ($refundTarget > 0 || $payment->refund_status || $refundedAmount > 0))
+                    <section class="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-sm dark:border-violet-800 dark:bg-slate-800">
+                        <div class="border-b border-violet-100 bg-violet-50/80 px-5 py-4 sm:px-6 dark:border-violet-900 dark:bg-violet-950/30">
+                            <h2 class="text-base font-bold text-violet-800 dark:text-violet-300 sm:text-lg">
+                                Thông tin hoàn tiền
+                            </h2>
+                            <p class="mt-1 text-sm text-violet-600 dark:text-violet-400">
+                                Theo dõi số tiền và kết quả yêu cầu hoàn qua VNPAY.
+                            </p>
+                        </div>
+
+                        <div class="grid gap-4 p-5 sm:grid-cols-2 sm:p-6">
+                            <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Khoản cần hoàn
+                                </p>
+                                <p class="mt-1.5 text-lg font-bold text-slate-900 dark:text-slate-100">
+                                    {{ number_format($refundTarget, 0, ',', '.') }}đ
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Đã hoàn
+                                </p>
+                                <p class="mt-1.5 text-lg font-bold text-violet-700 dark:text-violet-300">
+                                    {{ number_format($refundedAmount, 0, ',', '.') }}đ
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Trạng thái hoàn
+                                </p>
+                                <p class="mt-1.5 font-semibold text-slate-900 dark:text-slate-100">
+                                    {{ $refundStatusLabels[$payment->refund_status] ?? $payment->refund_status }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                    Còn phải hoàn
+                                </p>
+                                <p class="mt-1.5 font-bold text-slate-900 dark:text-slate-100">
+                                    {{ number_format($remainingRefund, 0, ',', '.') }}đ
+                                </p>
+                            </div>
+
+                            @if ($payment->refund_request_id)
+                                <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                        Mã yêu cầu hoàn
+                                    </p>
+                                    <p class="mt-1.5 break-all font-semibold text-slate-900 dark:text-slate-100">
+                                        {{ $payment->refund_request_id }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if ($payment->refund_transaction_code)
+                                <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                        Mã giao dịch hoàn VNPAY
+                                    </p>
+                                    <p class="mt-1.5 break-all font-semibold text-slate-900 dark:text-slate-100">
+                                        {{ $payment->refund_transaction_code }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if ($payment->refunded_at)
+                                <div class="rounded-xl bg-emerald-50 p-4 sm:col-span-2 dark:bg-emerald-950/30">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                                        Hoàn tiền lúc
+                                    </p>
+                                    <p class="mt-1.5 font-bold text-emerald-800 dark:text-emerald-300">
+                                        {{ $payment->refunded_at->format('H:i · d/m/Y') }}
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </section>
+                @endif
+
                 {{-- Chỉ hiện response data khi giao dịch có dữ liệu --}}
                 @if ($responseData)
                     <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
@@ -361,6 +492,39 @@
                             </a>
                         @endif
 
+                        @if ($canCheckRefund)
+                            <form method="POST"
+                                action="{{ route('admin.payments.refund.check', $payment) }}"
+                                onsubmit="return confirm('Kiểm tra trạng thái hoàn tiền mới nhất từ VNPAY?')">
+
+                                @csrf
+
+                                <button type="submit"
+                                    class="inline-flex h-11 w-full cursor-pointer items-center justify-center
+                                        rounded-xl bg-violet-600 px-5 text-sm font-semibold text-white
+                                        shadow-sm transition hover:bg-violet-700
+                                        focus:outline-none focus:ring-4 focus:ring-violet-200
+                                        dark:bg-violet-500 dark:hover:bg-violet-600
+                                        dark:focus:ring-violet-900/40">
+
+                                    Kiểm tra trạng thái hoàn tiền
+                                </button>
+                            </form>
+                        @endif
+
+                        @if ($canRetryRefund)
+                            <form method="POST"
+                                action="{{ route('admin.payments.refund.retry', $payment) }}"
+                                onsubmit="return confirm('Thử gửi lại yêu cầu hoàn {{ number_format($remainingRefund, 0, ',', '.') }}đ qua VNPAY?')">
+                                @csrf
+
+                                <button type="submit"
+                                    class="inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-violet-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200 dark:bg-violet-500 dark:hover:bg-violet-600 dark:focus:ring-violet-900/40">
+                                    Thử hoàn tiền lại
+                                </button>
+                            </form>
+                        @endif
+
                         <a href="{{ route('admin.payments.index') }}"
                             class="inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-400">
                             Danh sách thanh toán
@@ -380,11 +544,6 @@
                     </div>
 
                     <dl class="divide-y divide-slate-100 px-5 dark:divide-slate-700">
-                        <div class="flex items-center justify-between gap-3 py-3.5">
-                            <dt class="text-sm text-slate-500 dark:text-slate-400">Mã bản ghi</dt>
-                            <dd class="font-semibold text-slate-900 dark:text-slate-100">#{{ $payment->id }}</dd>
-                        </div>
-
                         <div class="flex items-center justify-between gap-3 py-3.5">
                             <dt class="text-sm text-slate-500 dark:text-slate-400">Phương thức</dt>
                             <dd class="text-right font-semibold text-slate-900 dark:text-slate-100">

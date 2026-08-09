@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Payment;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
@@ -26,6 +27,8 @@ class VnpayService
     private string $hashSecret;
 
     private string $paymentUrl;
+
+    private string $apiUrl;
 
     private string $returnUrl;
 
@@ -61,6 +64,13 @@ class VnpayService
                 )
             ),
             '?&'
+        );
+
+        $this->apiUrl = trim(
+            (string) config(
+                'services.vnpay.api_url',
+                'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
+            )
         );
 
         $this->returnUrl = trim(
@@ -132,6 +142,10 @@ class VnpayService
             'Asia/Ho_Chi_Minh'
         );
 
+        $payment->forceFill([
+            'gateway_created_at' => $now,
+        ])->save();
+
         $expiresAt = $payment->expired_at
             ? CarbonImmutable::instance(
                 $payment->expired_at
@@ -194,6 +208,420 @@ class VnpayService
         return $this->buildSignedUrl(
             $inputData
         );
+    }
+
+    /**
+     * Gửi yêu cầu hoàn tiền sang VNPAY.
+     *
+     * - 02: hoàn toàn phần
+     * - 03: hoàn một phần
+     */
+    public function refundPayment(
+        Payment $payment,
+        int $refundAmount,
+        string $ipAddress,
+        string $createdBy
+    ): array {
+        $this->ensureConfigured();
+
+        if (!filter_var($this->apiUrl, FILTER_VALIDATE_URL)) {
+            throw new RuntimeException(
+                'VNPAY_API_URL không hợp lệ.'
+            );
+        }
+
+        $payment->loadMissing('booking');
+
+        if (!$payment->booking) {
+            throw new RuntimeException(
+                'Không tìm thấy đơn đặt phòng của giao dịch.'
+            );
+        }
+
+        if ($payment->status !== 'paid') {
+            throw new RuntimeException(
+                'Chỉ có thể hoàn tiền cho giao dịch đã thanh toán.'
+            );
+        }
+
+        $remainingRefundable = max(
+            0,
+            (int) $payment->amount - (int) $payment->refunded_amount
+        );
+
+        if (
+            $refundAmount <= 0
+            || $refundAmount > $remainingRefundable
+        ) {
+            throw new RuntimeException(
+                'Số tiền hoàn không hợp lệ.'
+            );
+        }
+
+        $now = CarbonImmutable::now(
+            'Asia/Ho_Chi_Minh'
+        );
+
+        $requestId = 'RF'
+            . $now->format('YmdHis')
+            . strtoupper(Str::random(8));
+
+        $transactionType = $refundAmount === (int) $payment->amount
+            && (int) $payment->refunded_amount === 0
+            ? '02'
+            : '03';
+
+        $transactionDate = $this->resolveOriginalTransactionDate(
+            $payment
+        );
+
+        $orderInfo = $this->buildRefundOrderInfo(
+            $payment
+        );
+
+        $createdBy = Str::limit(
+            trim(Str::ascii($createdBy)),
+            245,
+            ''
+        );
+
+        if ($createdBy === '') {
+            $createdBy = 'HomeStayGo';
+        }
+
+        $inputData = [
+            'vnp_RequestId' => $requestId,
+            'vnp_Version' => $this->version,
+            'vnp_Command' => 'refund',
+            'vnp_TmnCode' => $this->tmnCode,
+            'vnp_TransactionType' => $transactionType,
+            'vnp_TxnRef' => trim(
+                (string) $payment->transaction_code
+            ),
+            'vnp_Amount' => (string) ($refundAmount * 100),
+            'vnp_TransactionNo' => trim(
+                (string) ($payment->gateway_transaction_code ?? '')
+            ),
+            'vnp_TransactionDate' => $transactionDate,
+            'vnp_CreateBy' => $createdBy,
+            'vnp_CreateDate' => $now->format('YmdHis'),
+            'vnp_IpAddr' => $this->normalizeIpAddress($ipAddress),
+            'vnp_OrderInfo' => $orderInfo,
+        ];
+
+        $checksumData = implode('|', [
+            $inputData['vnp_RequestId'],
+            $inputData['vnp_Version'],
+            $inputData['vnp_Command'],
+            $inputData['vnp_TmnCode'],
+            $inputData['vnp_TransactionType'],
+            $inputData['vnp_TxnRef'],
+            $inputData['vnp_Amount'],
+            $inputData['vnp_TransactionNo'],
+            $inputData['vnp_TransactionDate'],
+            $inputData['vnp_CreateBy'],
+            $inputData['vnp_CreateDate'],
+            $inputData['vnp_IpAddr'],
+            $inputData['vnp_OrderInfo'],
+        ]);
+
+        $inputData['vnp_SecureHash'] = hash_hmac(
+            'sha512',
+            $checksumData,
+            $this->hashSecret
+        );
+
+        $response = Http::asJson()
+            ->acceptJson()
+            ->timeout(20)
+            ->post(
+                $this->apiUrl,
+                $inputData
+            );
+
+        if (!$response->successful()) {
+            throw new RuntimeException(
+                'VNPAY không phản hồi yêu cầu hoàn tiền hợp lệ.'
+            );
+        }
+
+        $payload = $response->json();
+
+        if (!is_array($payload)) {
+            throw new RuntimeException(
+                'Phản hồi hoàn tiền từ VNPAY không hợp lệ.'
+            );
+        }
+
+        $signatureValid = $this->verifyRefundResponseSignature(
+            $payload
+        );
+
+        $responseCode = (string) (
+            $payload['vnp_ResponseCode'] ?? ''
+        );
+
+        $transactionStatus = (string) (
+            $payload['vnp_TransactionStatus'] ?? ''
+        );
+
+        $state = match (true) {
+            !$signatureValid => 'failed',
+
+            $responseCode === '94' => 'processing',
+
+            $responseCode !== '00' => 'failed',
+
+            $transactionStatus === '00' => 'refunded',
+
+            in_array(
+                $transactionStatus,
+                ['01', '05', '06'],
+                true
+            ) => 'processing',
+
+            default => 'failed',
+        };
+
+        return [
+            'request_id' => $requestId,
+            'state' => $state,
+            'signature_valid' => $signatureValid,
+            'response_code' => $responseCode,
+            'transaction_status' => $transactionStatus,
+            'transaction_no' => $payload['vnp_TransactionNo'] ?? null,
+            'payload' => $this->responseData($payload),
+        ];
+    }
+
+    /**
+     * Truy vấn lại trạng thái giao dịch/hoàn tiền tại VNPAY.
+     */
+    public function queryRefundStatus(
+        Payment $payment,
+        string $ipAddress
+    ): array {
+        $this->ensureConfigured();
+
+        $payment->loadMissing('booking');
+
+        if (!$payment->booking) {
+            throw new RuntimeException(
+                'Không tìm thấy Booking của giao dịch.'
+            );
+        }
+
+        if ($payment->payment_method !== 'vnpay') {
+            throw new RuntimeException(
+                'Chỉ có thể kiểm tra giao dịch VNPAY.'
+            );
+        }
+
+        if (
+            !$payment->transaction_code
+            || trim($payment->transaction_code) === ''
+        ) {
+            throw new RuntimeException(
+                'Giao dịch chưa có mã tham chiếu VNPAY.'
+            );
+        }
+
+        $now = CarbonImmutable::now(
+            'Asia/Ho_Chi_Minh'
+        );
+
+        $requestId =
+            'QR'
+            . $now->format('YmdHis')
+            . strtoupper(Str::random(8));
+
+        $transactionDate =
+            $this->resolveOriginalTransactionDate(
+                $payment
+            );
+
+        $orderInfo = $this->buildRefundOrderInfo(
+            $payment
+        );
+
+        $inputData = [
+            'vnp_RequestId' => $requestId,
+            'vnp_Version' => $this->version,
+            'vnp_Command' => 'querydr',
+            'vnp_TmnCode' => $this->tmnCode,
+
+            'vnp_TxnRef' => trim(
+                (string) $payment->transaction_code
+            ),
+
+            'vnp_OrderInfo' => $orderInfo,
+
+            'vnp_TransactionDate' =>
+                $transactionDate,
+
+            'vnp_CreateDate' =>
+                $now->format('YmdHis'),
+
+            'vnp_IpAddr' =>
+                $this->normalizeIpAddress(
+                    $ipAddress
+                ),
+        ];
+
+        if (
+            $payment->gateway_transaction_code
+            && trim(
+                (string) $payment->gateway_transaction_code
+            ) !== ''
+        ) {
+            $inputData['vnp_TransactionNo'] =
+                trim(
+                    (string) $payment
+                        ->gateway_transaction_code
+                );
+        }
+
+        /*
+         * Thứ tự checksum QUERYDR theo tài liệu VNPAY.
+         */
+        $checksumData = implode('|', [
+            $inputData['vnp_RequestId'],
+            $inputData['vnp_Version'],
+            $inputData['vnp_Command'],
+            $inputData['vnp_TmnCode'],
+            $inputData['vnp_TxnRef'],
+            $inputData['vnp_TransactionDate'],
+            $inputData['vnp_CreateDate'],
+            $inputData['vnp_IpAddr'],
+            $inputData['vnp_OrderInfo'],
+        ]);
+
+        $inputData['vnp_SecureHash'] =
+            hash_hmac(
+                'sha512',
+                $checksumData,
+                $this->hashSecret
+            );
+
+        $response = Http::asJson()
+            ->acceptJson()
+            ->timeout(20)
+            ->post(
+                $this->apiUrl,
+                $inputData
+            );
+
+        if (!$response->successful()) {
+            throw new RuntimeException(
+                'VNPAY không phản hồi yêu cầu kiểm tra trạng thái.'
+            );
+        }
+
+        $payload = $response->json();
+
+        if (!is_array($payload)) {
+            throw new RuntimeException(
+                'Phản hồi truy vấn từ VNPAY không hợp lệ.'
+            );
+        }
+
+        $signatureValid =
+            $this->verifyQueryResponseSignature(
+                $payload
+            );
+
+        $responseCode = (string) (
+            $payload['vnp_ResponseCode']
+            ?? ''
+        );
+
+        $transactionStatus = (string) (
+            $payload['vnp_TransactionStatus']
+            ?? ''
+        );
+
+        $transactionType = (string) (
+            $payload['vnp_TransactionType']
+            ?? ''
+        );
+
+        $state = match (true) {
+
+            !$signatureValid => 'failed',
+
+            $responseCode === '94' => 'processing',
+
+            $responseCode !== '00' => 'failed',
+
+            in_array(
+                $transactionType,
+                ['02', '03'],
+                true
+            )
+            && $transactionStatus === '00' =>
+            'refunded',
+
+            in_array(
+                $transactionType,
+                ['02', '03'],
+                true
+            )
+            && in_array(
+                $transactionStatus,
+                ['01', '05', '06'],
+                true
+            ) =>
+            'processing',
+
+            $transactionStatus === '09' =>
+            'failed',
+
+            /*
+             * QUERYDR vẫn chỉ trả giao dịch PAY gốc
+             * thì chưa coi là đã hoàn.
+             */
+            $transactionType === '01'
+            && $transactionStatus === '00' =>
+            'processing',
+
+            default =>
+            'failed',
+        };
+
+        return [
+            'state' => $state,
+
+            'signature_valid' =>
+                $signatureValid,
+
+            'response_code' =>
+                $responseCode,
+
+            'transaction_status' =>
+                $transactionStatus,
+
+            'transaction_type' =>
+                $transactionType,
+
+            'transaction_no' =>
+                $payload['vnp_TransactionNo']
+                ?? null,
+
+            'amount' =>
+                $this->convertVnpayAmountToVnd(
+                    $payload['vnp_Amount']
+                    ?? null
+                ),
+
+            'pay_date' =>
+                $payload['vnp_PayDate']
+                ?? null,
+
+            'payload' =>
+                $this->responseData(
+                    $payload
+                ),
+        ];
     }
 
     /**
@@ -318,9 +746,9 @@ class VnpayService
     ): string {
         $inputData = array_filter(
             $inputData,
-            static fn (mixed $value): bool =>
-                $value !== null
-                && $value !== ''
+            static fn(mixed $value): bool =>
+            $value !== null
+            && $value !== ''
         );
 
         ksort($inputData);
@@ -428,6 +856,158 @@ class VnpayService
             : 'Thanh toan booking';
     }
 
+    private function resolveOriginalTransactionDate(
+        Payment $payment
+    ): string {
+        if ($payment->gateway_created_at) {
+            return CarbonImmutable::instance(
+                $payment->gateway_created_at
+            )
+                ->setTimezone('Asia/Ho_Chi_Minh')
+                ->format('YmdHis');
+        }
+
+        if (
+            is_string($payment->transaction_code)
+            && preg_match(
+                '/^VNP(\d{14})/',
+                $payment->transaction_code,
+                $matches
+            )
+        ) {
+            return $matches[1];
+        }
+
+        if ($payment->created_at) {
+            return CarbonImmutable::instance(
+                $payment->created_at
+            )
+                ->setTimezone('Asia/Ho_Chi_Minh')
+                ->format('YmdHis');
+        }
+
+        throw new RuntimeException(
+            'Không xác định được thời gian giao dịch gốc để hoàn tiền.'
+        );
+    }
+
+    private function buildRefundOrderInfo(
+        Payment $payment
+    ): string {
+        $orderInfo = Str::ascii(
+            'Hoan tien booking '
+            . $payment->booking->booking_code
+        );
+
+        $orderInfo = preg_replace(
+            '/[^A-Za-z0-9\s\-.:]/',
+            '',
+            $orderInfo
+        ) ?? '';
+
+        $orderInfo = preg_replace(
+            '/\s+/',
+            ' ',
+            $orderInfo
+        ) ?? '';
+
+        return Str::limit(
+            trim($orderInfo) ?: 'Hoan tien booking',
+            255,
+            ''
+        );
+    }
+
+    private function verifyRefundResponseSignature(
+        array $payload
+    ): bool {
+        $receivedHash = strtolower(
+            trim(
+                (string) ($payload['vnp_SecureHash'] ?? '')
+            )
+        );
+
+        if ($receivedHash === '') {
+            return false;
+        }
+
+        $checksumData = implode('|', [
+            (string) ($payload['vnp_ResponseId'] ?? ''),
+            (string) ($payload['vnp_Command'] ?? ''),
+            (string) ($payload['vnp_ResponseCode'] ?? ''),
+            (string) ($payload['vnp_Message'] ?? ''),
+            (string) ($payload['vnp_TmnCode'] ?? ''),
+            (string) ($payload['vnp_TxnRef'] ?? ''),
+            (string) ($payload['vnp_Amount'] ?? ''),
+            (string) ($payload['vnp_BankCode'] ?? ''),
+            (string) ($payload['vnp_PayDate'] ?? ''),
+            (string) ($payload['vnp_TransactionNo'] ?? ''),
+            (string) ($payload['vnp_TransactionType'] ?? ''),
+            (string) ($payload['vnp_TransactionStatus'] ?? ''),
+            (string) ($payload['vnp_OrderInfo'] ?? ''),
+        ]);
+
+        $calculatedHash = hash_hmac(
+            'sha512',
+            $checksumData,
+            $this->hashSecret
+        );
+
+        return hash_equals(
+            strtolower($calculatedHash),
+            $receivedHash
+        );
+    }
+
+    /**
+     * Kiểm tra checksum phản hồi QUERYDR.
+     */
+    private function verifyQueryResponseSignature(
+        array $payload
+    ): bool {
+        $receivedHash = strtolower(
+            trim(
+                (string) (
+                    $payload['vnp_SecureHash']
+                    ?? ''
+                )
+            )
+        );
+
+        if ($receivedHash === '') {
+            return false;
+        }
+
+        $checksumData = implode('|', [
+            (string) ($payload['vnp_ResponseId'] ?? ''),
+            (string) ($payload['vnp_Command'] ?? ''),
+            (string) ($payload['vnp_ResponseCode'] ?? ''),
+            (string) ($payload['vnp_Message'] ?? ''),
+            (string) ($payload['vnp_TmnCode'] ?? ''),
+            (string) ($payload['vnp_TxnRef'] ?? ''),
+            (string) ($payload['vnp_Amount'] ?? ''),
+            (string) ($payload['vnp_BankCode'] ?? ''),
+            (string) ($payload['vnp_PayDate'] ?? ''),
+            (string) ($payload['vnp_TransactionNo'] ?? ''),
+            (string) ($payload['vnp_TransactionType'] ?? ''),
+            (string) ($payload['vnp_TransactionStatus'] ?? ''),
+            (string) ($payload['vnp_OrderInfo'] ?? ''),
+            (string) ($payload['vnp_PromotionCode'] ?? ''),
+            (string) ($payload['vnp_PromotionAmount'] ?? ''),
+        ]);
+
+        $calculatedHash = hash_hmac(
+            'sha512',
+            $checksumData,
+            $this->hashSecret
+        );
+
+        return hash_equals(
+            strtolower($calculatedHash),
+            $receivedHash
+        );
+    }
+
     /**
      * Chuẩn hóa phương thức thanh toán.
      */
@@ -445,11 +1025,13 @@ class VnpayService
             trim($bankCode)
         );
 
-        if (!in_array(
-            $bankCode,
-            self::ALLOWED_BANK_CODES,
-            true
-        )) {
+        if (
+            !in_array(
+                $bankCode,
+                self::ALLOWED_BANK_CODES,
+                true
+            )
+        ) {
             throw new InvalidArgumentException(
                 'Phương thức thanh toán VNPAY không hợp lệ.'
             );
@@ -504,6 +1086,7 @@ class VnpayService
             'VNPAY_TMN_CODE' => $this->tmnCode,
             'VNPAY_HASH_SECRET' => $this->hashSecret,
             'VNPAY_PAYMENT_URL' => $this->paymentUrl,
+            'VNPAY_API_URL' => $this->apiUrl,
             'VNPAY_RETURN_URL' => $this->returnUrl,
         ];
 
@@ -518,19 +1101,34 @@ class VnpayService
             }
         }
 
-        if (!filter_var(
-            $this->paymentUrl,
-            FILTER_VALIDATE_URL
-        )) {
+        if (
+            !filter_var(
+                $this->paymentUrl,
+                FILTER_VALIDATE_URL
+            )
+        ) {
             throw new RuntimeException(
                 'VNPAY_PAYMENT_URL không hợp lệ.'
             );
         }
 
-        if (!filter_var(
-            $this->returnUrl,
-            FILTER_VALIDATE_URL
-        )) {
+        if (
+            !filter_var(
+                $this->apiUrl,
+                FILTER_VALIDATE_URL
+            )
+        ) {
+            throw new RuntimeException(
+                'VNPAY_API_URL không hợp lệ.'
+            );
+        }
+
+        if (
+            !filter_var(
+                $this->returnUrl,
+                FILTER_VALIDATE_URL
+            )
+        ) {
             throw new RuntimeException(
                 'VNPAY_RETURN_URL không hợp lệ.'
             );

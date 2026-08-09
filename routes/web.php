@@ -109,6 +109,12 @@ Route::middleware('auth')->group(function () {
         )->whereNumber('booking')
             ->name('payments.vnpay.create');
 
+        Route::patch(
+            '/{booking}/cancel',
+            [FrontendBookingController::class, 'cancel']
+        )->whereNumber('booking')
+            ->name('cancel');
+
         Route::get(
             '/{booking}',
             [FrontendBookingController::class, 'show']
@@ -205,6 +211,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::prefix('payments')->name('payments.')
     ->group(function () {
         Route::get('/', [PaymentController::class, 'index'])->name('index');
+
+        Route::post(
+            '/{payment}/refund/check',
+            [PaymentController::class, 'checkRefundStatus']
+        )
+            ->whereNumber('payment')
+            ->name('refund.check');
+
+        Route::post('/{payment}/refund/retry', [PaymentController::class, 'retryRefund'])
+            ->whereNumber('payment')
+            ->name('refund.retry');
 
         Route::get('/{payment}', [PaymentController::class, 'show'])
             ->whereNumber('payment')

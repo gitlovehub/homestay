@@ -10,6 +10,7 @@
             'paid' => 'Đã thanh toán',
             'failed' => 'Thất bại',
             'refunded' => 'Đã hoàn tiền',
+            'cancelled' => 'Đã hủy giao dịch',
         ];
 
         $statusStyles = [
@@ -28,6 +29,10 @@
             'refunded' => [
                 'badge' => 'border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-300',
                 'dot' => 'bg-violet-500',
+            ],
+            'cancelled' => [
+                'badge' => 'border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
+                'dot' => 'bg-slate-500',
             ],
         ];
 
@@ -312,7 +317,11 @@
                                             {{ number_format($payment->amount, 0, ',', '.') }}đ
                                         </p>
 
-                                        @if ($method['uses_gateway'] && $payment->response_code)
+                                        @if ((int) $payment->refunded_amount > 0)
+                                            <p class="mt-1 text-xs font-semibold text-violet-600 dark:text-violet-400">
+                                                Đã hoàn: {{ number_format((int) $payment->refunded_amount, 0, ',', '.') }}đ
+                                            </p>
+                                        @elseif ($method['uses_gateway'] && $payment->response_code)
                                             <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
                                                 Mã phản hồi: {{ $payment->response_code }}
                                             </p>

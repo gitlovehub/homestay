@@ -54,7 +54,12 @@
         'unpaid' => 'Chưa thanh toán',
         'pending' => 'Đang xử lý',
         'paid' => 'Đã thanh toán',
+        'deposit_paid' => 'Đã cọc 10%',
+        'refund_pending' => 'Đang hoàn tiền',
+        'partially_refunded' => 'Đã hoàn một phần',
         'refunded' => 'Đã hoàn tiền',
+        'refund_failed' => 'Hoàn tiền thất bại',
+        'cancelled' => 'Đã hủy thanh toán',
         'failed' => 'Thanh toán thất bại',
     ];
 
@@ -62,7 +67,12 @@
         'unpaid' => 'border-slate-200 bg-slate-100 text-slate-700',
         'pending' => 'border-amber-200 bg-amber-50 text-amber-700',
         'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+        'deposit_paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+        'refund_pending' => 'border-amber-200 bg-amber-50 text-amber-700',
+        'partially_refunded' => 'border-blue-200 bg-blue-50 text-blue-700',
         'refunded' => 'border-blue-200 bg-blue-50 text-blue-700',
+        'refund_failed' => 'border-red-200 bg-red-50 text-red-700',
+        'cancelled' => 'border-slate-200 bg-slate-100 text-slate-700',
         'failed' => 'border-red-200 bg-red-50 text-red-700',
     ];
 @endphp
@@ -187,10 +197,15 @@
                             $canReview = $booking->status === 'completed' && !$review && $homestay;
                             $canRebook = $room && $room->status === 'available' && $homestay && $homestay->status;
                             $canPay = $booking->status !== 'cancelled' && in_array($booking->payment_status, ['unpaid', 'pending', 'failed'], true);
+                            $isDeposit = $booking->isCashDepositOption();
+                            $remainingCashAmount = $booking->remainingCashAmount();
+                            $canCancel = in_array($booking->status, ['pending', 'confirmed'], true)
+                                && $booking->check_in
+                                && $booking->check_in->copy()->startOfDay()->greaterThan(now('Asia/Ho_Chi_Minh')->startOfDay());
                             $paymentButtonLabel = match ($booking->payment_status) {
                                 'pending' => 'Tiếp tục thanh toán',
                                 'failed' => 'Thanh toán lại',
-                                default => 'Thanh toán VNPAY',
+                                default => $isDeposit ? 'Thanh toán cọc 10%' : 'Thanh toán VNPAY',
                             };
                             $statusClass =
                                 $statusClasses[$booking->status] ?? 'border-slate-200 bg-slate-100 text-slate-700';
@@ -276,6 +291,13 @@
                                             <p class="mt-1 text-2xl font-bold text-blue-600">
                                                 {{ number_format($booking->total_price, 0, ',', '.') }}đ
                                             </p>
+                                            <p class="mt-1 text-xs font-medium text-slate-500">
+                                                @if ($isDeposit)
+                                                    Cọc 10% · còn {{ number_format($remainingCashAmount, 0, ',', '.') }}đ tại homestay
+                                                @else
+                                                    Thanh toán toàn bộ qua VNPAY
+                                                @endif
+                                            </p>
                                         </div>
                                     </div>
 
@@ -302,34 +324,41 @@
                                                     data-booking-code="{{ $booking->booking_code }}"
                                                     data-homestay-name="{{ $homestay->name }}"
                                                     data-review-action="{{ route('reviews.store', $booking) }}"
-                                                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-orange-300 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700 transition hover:border-orange-400 hover:bg-orange-100">
+                                                    class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-orange-300 bg-white px-4 h-11 text-sm font-semibold text-orange-700 transition hover:border-orange-400 hover:bg-orange-100">
                                                     <x-icon-star class="h-4 w-4 text-amber-400" />
                                                     Viết đánh giá
                                                 </button>
                                             @endif
 
                                             <a href="{{ route('bookings.show', $booking) }}"
-                                                class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-600 hover:bg-blue-50 hover:text-blue-600">
+                                                class="inline-flex items-center justify-center rounded-xl border border-blue-300 bg-white px-4 h-11 text-sm font-semibold text-blue-700 transition hover:border-blue-600 hover:bg-blue-100 hover:text-blue-600">
                                                 Xem chi tiết
                                             </a>
 
                                             @if ($canPay)
                                                 <a
                                                     href="{{ route('bookings.payment.show', $booking) }}"
-                                                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                                    class="inline-flex items-center justify-center rounded-xl border border-emerald-300 bg-white px-4 h-11 text-sm font-semibold text-emerald-700 transition hover:border-emerald-600 hover:bg-emerald-100 hover:text-emerald-600"
                                                 >
                                                     {{ $paymentButtonLabel }}
                                                 </a>
                                             @endif
 
+                                            @if ($canCancel)
+                                                <a href="{{ route('bookings.show', $booking) }}#cancel-booking"
+                                                    class="inline-flex items-center justify-center rounded-xl border border-red-300 bg-white px-4 h-11 text-sm font-semibold text-red-700 transition hover:border-red-600 hover:bg-red-100 hover:text-red-600">
+                                                    Hủy đặt phòng
+                                                </a>
+                                            @endif
+
                                             @if ($canRebook)
                                                 <a href="{{ route('bookings.create', $room) }}"
-                                                    class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:ring-4 focus:ring-blue-200">
-                                                    Đặt phòng lại
+                                                    class="inline-flex items-center justify-center rounded-xl border border-violet-300 bg-white px-4 h-11 text-sm font-semibold text-violet-700 transition hover:border-violet-600 hover:bg-violet-100 hover:text-violet-600">
+                                                    Đặt phòng
                                                 </a>
                                             @else
                                                 <span
-                                                    class="inline-flex cursor-not-allowed items-center justify-center rounded-xl bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-400">
+                                                    class="inline-flex cursor-not-allowed items-center justify-center rounded-xl bg-white px-4 h-11 text-sm font-semibold text-slate-400">
                                                     Phòng ngừng nhận
                                                 </span>
                                             @endif

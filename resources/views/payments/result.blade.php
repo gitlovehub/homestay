@@ -66,6 +66,14 @@
     $booking = $payment?->booking;
     $room = $booking?->room;
     $homestay = $room?->homestay;
+    $isDeposit = $booking?->isCashDepositOption() ?? false;
+    $remainingCashAmount = $booking?->remainingCashAmount() ?? 0;
+
+    if ($resultStatus === 'success' && $isDeposit) {
+        $configuration['eyebrow'] = 'Thanh toán cọc hoàn tất';
+        $configuration['title'] = 'Đã thanh toán cọc 10%';
+        $configuration['description'] = 'Tiền cọc đã được VNPAY xác nhận. Phần còn lại sẽ thanh toán tại homestay khi check-in.';
+    }
 
     $canAccessBooking = auth()->check()
         && $booking
@@ -297,7 +305,7 @@
                             <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
 
                                 <p class="text-sm font-semibold text-slate-500">
-                                    Số tiền
+                                    {{ $isDeposit ? 'Tiền cọc đã thanh toán' : 'Số tiền' }}
                                 </p>
 
                                 <p class="mt-2 text-3xl font-black tracking-tight text-blue-600">
@@ -305,6 +313,15 @@
                                         ? number_format($payment->amount, 0, ',', '.') . 'đ'
                                         : 'Không xác định' }}
                                 </p>
+
+                                @if ($isDeposit && $booking)
+                                    <div class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm">
+                                        <div>
+                                            <p class="mb-1 text-emerald-700">Còn lại khi check-in:</p>
+                                            <span class="font-bold text-emerald-800">{{ number_format($remainingCashAmount, 0, ',', '.') }}đ</span>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 @if ($homestay)
                                     <div class="mt-5 border-t border-slate-100 pt-5">

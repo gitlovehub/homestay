@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Services\BookingCancellationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use RuntimeException;
+use Throwable;
 
 class BookingController extends Controller
 {
@@ -21,14 +24,20 @@ class BookingController extends Controller
             'checked_in',
             'completed',
             'cancelled',
+            'no_show',
         ];
 
         $allowedPaymentStatuses = [
             'unpaid',
             'pending',
             'paid',
+            'deposit_paid',
+            'refund_pending',
+            'partially_refunded',
             'refunded',
+            'refund_failed',
             'failed',
+            'cancelled',
         ];
 
         $allowedSorts = [
@@ -60,6 +69,7 @@ class BookingController extends Controller
             ->with([
                 'user',
                 'room.homestay',
+                'payment',
             ]);
 
         if ($request->filled('search')) {
@@ -148,6 +158,8 @@ class BookingController extends Controller
         $booking->load([
             'user',
             'room.homestay',
+            'payment',
+            'payments',
         ]);
 
         return view(
@@ -158,38 +170,35 @@ class BookingController extends Controller
 
     /**
      * Cập nhật trạng thái Booking.
+     *
+     * Admin hủy Booking => hoàn 100% số tiền khách đã thanh toán qua VNPAY.
+     * No-show => không hoàn tiền.
      */
     public function updateStatus(
         Request $request,
-        Booking $booking
+        Booking $booking,
+        BookingCancellationService $cancellationService
     ): RedirectResponse {
         $validated = $request->validate(
             [
                 'status' => [
                     'required',
-                    'in:confirmed,checked_in,completed,cancelled',
+                    'in:confirmed,checked_in,completed,cancelled,no_show',
+                ],
+                'cancellation_reason' => [
+                    'nullable',
+                    'string',
+                    'max:1000',
                 ],
             ],
             [
                 'status.required' => 'Vui lòng chọn trạng thái Booking.',
                 'status.in' => 'Trạng thái Booking không hợp lệ.',
+                'cancellation_reason.max' => 'Lý do hủy không được vượt quá 1000 ký tự.',
             ]
         );
 
         $newStatus = $validated['status'];
-
-        /*
-        |--------------------------------------------------------------------------
-        | Quy trình trạng thái hợp lệ
-        |--------------------------------------------------------------------------
-        |
-        | pending    → confirmed hoặc cancelled
-        | confirmed  → checked_in hoặc cancelled
-        | checked_in → completed
-        | completed  → không được đổi
-        | cancelled  → không được đổi
-        |
-        */
 
         $allowedTransitions = [
             'pending' => [
@@ -200,6 +209,7 @@ class BookingController extends Controller
             'confirmed' => [
                 'checked_in',
                 'cancelled',
+                'no_show',
             ],
 
             'checked_in' => [
@@ -207,8 +217,8 @@ class BookingController extends Controller
             ],
 
             'completed' => [],
-
             'cancelled' => [],
+            'no_show' => [],
         ];
 
         $currentStatus = $booking->status;
@@ -226,24 +236,82 @@ class BookingController extends Controller
             );
         }
 
-        $updateData = [
-            'status' => $newStatus,
-        ];
+        try {
+            if ($newStatus === 'cancelled') {
+                $result = $cancellationService->cancelByAdmin(
+                    $booking,
+                    (string) ($validated['cancellation_reason'] ?? ''),
+                    (string) $request->ip(),
+                    $this->refundCreatedBy()
+                );
 
-        if ($newStatus === 'cancelled') {
-            $updateData['cancelled_at'] = now();
+                return back()->with(
+                    $result['refund_state'] === 'failed' ? 'error' : 'success',
+                    $this->adminCancellationMessage($result)
+                );
+            }
+
+            if ($newStatus === 'no_show') {
+                $cancellationService->markNoShow($booking);
+
+                return back()->with(
+                    'success',
+                    'Đã đánh dấu khách không đến nhận phòng. Đơn no-show không phát sinh hoàn tiền.'
+                );
+            }
+
+            $booking->update([
+                'status' => $newStatus,
+            ]);
+
+            $message = match ($newStatus) {
+                'confirmed' => 'Đã xác nhận đơn đặt phòng.',
+                'checked_in' => 'Đã cập nhật khách nhận phòng.',
+                'completed' => 'Đơn đặt phòng đã hoàn thành.',
+                default => 'Cập nhật trạng thái thành công.',
+            };
+
+            return back()->with('success', $message);
+        } catch (RuntimeException $exception) {
+            return back()->with('error', $exception->getMessage());
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return back()->with(
+                'error',
+                'Không thể cập nhật Booking lúc này. Vui lòng thử lại.'
+            );
         }
+    }
 
-        $booking->update($updateData);
+    private function refundCreatedBy(): string
+    {
+        $user = auth()->user();
 
-        $message = match ($newStatus) {
-            'confirmed' => 'Đã xác nhận đơn đặt phòng.',
-            'checked_in' => 'Đã cập nhật khách nhận phòng.',
-            'completed' => 'Đơn đặt phòng đã hoàn thành.',
-            'cancelled' => 'Đã hủy đơn đặt phòng.',
-            default => 'Cập nhật trạng thái thành công.',
+        return (string) (
+            $user?->email
+            ?: $user?->name
+            ?: 'HomeStayGo Admin'
+        );
+    }
+
+    private function adminCancellationMessage(array $result): string
+    {
+        $refundAmount = (int) ($result['refund_amount'] ?? 0);
+        $formattedAmount = number_format($refundAmount, 0, ',', '.') . 'đ';
+
+        return match ($result['refund_state'] ?? 'not_required') {
+            'refunded' =>
+                "Đã hủy Booking và hoàn {$formattedAmount} cho khách qua VNPAY.",
+
+            'processing' =>
+                "Đã hủy Booking. Yêu cầu hoàn {$formattedAmount} đang được VNPAY xử lý.",
+
+            'failed' =>
+                "Booking đã được hủy nhưng yêu cầu hoàn {$formattedAmount} chưa thành công. Hãy mở chi tiết giao dịch để thử hoàn lại.",
+
+            default =>
+                'Đã hủy Booking. Đơn chưa có khoản thanh toán cần hoàn.',
         };
-
-        return back()->with('success', $message);
     }
 }

@@ -63,4 +63,9 @@ return [
         ),
     ],
 
+    'api_url' => env(
+        'VNPAY_API_URL',
+        'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
+    ),
+
 ];

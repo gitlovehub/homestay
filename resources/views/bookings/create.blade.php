@@ -382,6 +382,468 @@
                         </div>
                     </div>
 
+                    {{-- Phương thức thanh toán --}}
+                    <div
+                        x-data="{ policyOpen: false }"
+                        x-effect="
+                            document.body.classList.toggle('overflow-hidden', policyOpen)
+                        "
+                        class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+                    >
+
+                        {{-- Header --}}
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-900">
+                                    Phương thức thanh toán
+                                </h2>
+
+                                <p class="mt-2 text-slate-500">
+                                    Hệ thống tự giới hạn phương thức theo khoảng cách tới ngày nhận phòng.
+                                </p>
+                            </div>
+
+                            <button type="button"
+                                @click="policyOpen = true"
+                                class="inline-flex h-10 w-fit cursor-pointer items-center justify-center gap-2 rounded-xl
+                                    border border-blue-200 bg-blue-50 px-4 text-sm font-semibold text-blue-700
+                                    transition hover:border-blue-300 hover:bg-blue-100
+                                    focus:outline-none focus:ring-4 focus:ring-blue-100">
+
+                                <svg class="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+
+                                Xem chính sách
+                            </button>
+                        </div>
+
+                        {{-- Danh sách phương thức --}}
+                        <div class="mt-6 grid gap-4">
+
+                            {{-- VNPay 100% --}}
+                            <label class="group relative cursor-pointer">
+
+                                <input id="payment-option-full"
+                                    type="radio"
+                                    name="payment_option"
+                                    value="vnpay_full"
+                                    class="peer sr-only"
+                                    @checked(old('payment_option', 'vnpay_full') === 'vnpay_full')>
+
+                                <span
+                                    class="flex items-start gap-4 rounded-2xl border-2 border-slate-200 p-5
+                                        transition group-hover:border-blue-300 group-hover:bg-blue-50/40
+                                        peer-checked:border-blue-600 peer-checked:bg-blue-50
+                                        peer-checked:shadow-sm">
+
+                                    {{-- Icon --}}
+                                    <span
+                                        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl
+                                            bg-blue-100 text-xl">
+                                        💳
+                                    </span>
+
+                                    {{-- Nội dung --}}
+                                    <span class="min-w-0 flex-1">
+
+                                        <span class="font-bold text-slate-900">
+                                            Thanh toán toàn bộ qua VNPAY
+                                        </span>
+
+                                        <span class="mt-1 block text-sm leading-6 text-slate-500">
+                                            Thanh toán 100% trước. Khi hủy, số tiền hoàn được tính theo
+                                            mốc 30 ngày / 7 ngày.
+                                        </span>
+
+                                    </span>
+
+                                </span>
+                            </label>
+
+                            {{-- Cọc 10% --}}
+                            <label id="cash-deposit-card"
+                                class="group relative cursor-pointer">
+
+                                <input id="payment-option-deposit"
+                                    type="radio"
+                                    name="payment_option"
+                                    value="cash_deposit"
+                                    class="peer sr-only"
+                                    @checked(old('payment_option') === 'cash_deposit')>
+
+                                <span
+                                    class="flex items-start gap-4 rounded-2xl border-2 border-slate-200 p-5
+                                        transition group-hover:border-emerald-300 group-hover:bg-emerald-50/40
+                                        peer-checked:border-emerald-600 peer-checked:bg-emerald-50
+                                        peer-checked:shadow-sm">
+
+                                    {{-- Icon --}}
+                                    <span
+                                        class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl
+                                            bg-emerald-100 text-xl">
+                                        💵
+                                    </span>
+
+                                    {{-- Nội dung --}}
+                                    <span class="min-w-0 flex-1">
+
+                                        <span class="flex flex-wrap items-center gap-2">
+
+                                            <span class="font-bold text-slate-900">
+                                                Cọc 10% + trả 90% tại homestay
+                                            </span>
+
+                                            <span
+                                                class="rounded-full bg-emerald-100 px-2.5 py-1
+                                                    text-[11px] font-bold text-emerald-700">
+                                                Dưới 30 ngày
+                                            </span>
+
+                                        </span>
+
+                                        <span class="mt-1 block text-sm leading-6 text-slate-500">
+                                            Cọc 10% qua VNPAY để giữ chỗ.
+                                            90% còn lại thanh toán tiền mặt khi check-in.
+                                            Khách chủ động hủy hoặc no-show sẽ không được hoàn tiền cọc.
+                                        </span>
+
+                                        {{-- Tính tiền cọc --}}
+                                        <span id="deposit-calculation"
+                                            class="mt-2 hidden text-xs font-semibold text-emerald-700">
+
+                                            Tiền cọc dự kiến:
+                                            <strong id="deposit-preview">
+                                                0đ
+                                            </strong>
+
+                                            <span class="mx-1">·</span>
+
+                                            Còn lại tại homestay:
+                                            <strong id="cash-balance-preview">
+                                                0đ
+                                            </strong>
+
+                                        </span>
+
+                                    </span>
+
+                                </span>
+                            </label>
+
+                        </div>
+
+                        {{-- Thông báo luật thanh toán --}}
+                        <div id="payment-rule-notice"
+                            class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+
+                            <p id="payment-rule-title"
+                                class="text-sm font-bold text-slate-800">
+                                Chọn ngày nhận phòng để xác định phương thức thanh toán
+                            </p>
+
+                            <p id="payment-rule-description"
+                                class="mt-1 text-xs leading-5 text-slate-500">
+                                Đơn đặt trước từ 30 ngày trở lên bắt buộc thanh toán 100% qua VNPAY.
+                            </p>
+
+                        </div>
+
+                        @error('payment_option')
+                            <p class="mt-3 text-sm font-semibold text-red-600">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
+
+                        {{-- ===================================================== --}}
+                        {{-- MODAL CHÍNH SÁCH GIỮ CHỖ --}}
+                        {{-- ===================================================== --}}
+                        <div x-show="policyOpen"
+                            x-cloak
+                            @keydown.escape.window="policyOpen = false"
+                            class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+
+                            {{-- Overlay --}}
+                            <div class="absolute inset-0 bg-slate-950/50 backdrop-blur-sm"
+                                @click="policyOpen = false">
+                            </div>
+
+                            {{-- Modal --}}
+                            <div x-show="policyOpen"
+                                x-transition:enter="transition duration-200 ease-out"
+                                x-transition:enter-start="scale-95 opacity-0"
+                                x-transition:enter-end="scale-100 opacity-100"
+                                x-transition:leave="transition duration-150 ease-in"
+                                x-transition:leave-start="scale-100 opacity-100"
+                                x-transition:leave-end="scale-95 opacity-0"
+                                @click.stop
+                                class="relative z-10 flex w-full max-w-xl max-h-[75vh] flex-col overflow-hidden
+                                    rounded-3xl bg-white shadow-2xl">
+
+                                {{-- Header --}}
+                                <div
+                                    class="flex shrink-0 items-start justify-between gap-4
+                                        border-b border-slate-200 px-6 py-5">
+
+                                    <div>
+
+                                        <p
+                                            class="text-xs font-bold uppercase tracking-[0.2em]
+                                                text-blue-600">
+                                            HomeStayGo
+                                        </p>
+
+                                        <h3 class="mt-1 text-xl font-bold text-slate-900">
+                                            Chính sách giữ chỗ & hủy phòng
+                                        </h3>
+
+                                        <p class="mt-1 text-sm text-slate-500">
+                                            Vui lòng đọc kỹ trước khi xác nhận đặt phòng.
+                                        </p>
+
+                                    </div>
+
+                                    <button type="button"
+                                        @click="policyOpen = false"
+                                        class="flex h-10 w-10 shrink-0 cursor-pointer items-center
+                                            justify-center rounded-xl text-slate-500 transition
+                                            hover:bg-slate-100 hover:text-slate-900">
+
+                                        <svg class="h-5 w-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24">
+
+                                            <path stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+
+                                        </svg>
+
+                                    </button>
+
+                                </div>
+
+                                {{-- Nội dung modal --}}
+                                <div class="max-h-[70vh] space-y-5 overflow-y-auto p-6">
+
+                                    {{-- Chính sách VNPay --}}
+                                    <div
+                                        class="rounded-2xl border border-blue-200
+                                            bg-blue-50/60 p-5">
+
+                                        <div class="flex items-center gap-3">
+
+                                            <span
+                                                class="flex h-10 w-10 items-center justify-center
+                                                    rounded-xl bg-blue-100 text-lg">
+                                                💳
+                                            </span>
+
+                                            <div>
+                                                <h4 class="font-bold text-slate-900">
+                                                    Thanh toán toàn bộ qua VNPAY
+                                                </h4>
+
+                                                <p class="text-xs text-slate-500">
+                                                    Thanh toán 100% giá trị đơn.
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <ul
+                                            class="mt-4 space-y-2 text-sm leading-6 text-slate-600">
+
+                                            <li>
+                                                • Đơn đặt trước từ
+                                                <strong class="text-slate-800">
+                                                    30 ngày trở lên
+                                                </strong>
+                                                bắt buộc thanh toán 100%.
+                                            </li>
+
+                                            <li>
+                                                • Hủy trước check-in từ
+                                                <strong class="text-emerald-700">
+                                                    30 ngày trở lên
+                                                </strong>:
+                                                hoàn 100%.
+                                            </li>
+
+                                            <li>
+                                                • Hủy trước check-in từ
+                                                <strong class="text-amber-700">
+                                                    7 đến dưới 30 ngày
+                                                </strong>:
+                                                hoàn 50%.
+                                            </li>
+
+                                            <li>
+                                                • Hủy trước check-in
+                                                <strong class="text-red-700">
+                                                    dưới 7 ngày
+                                                </strong>:
+                                                không hoàn tiền.
+                                            </li>
+
+                                            <li>
+                                                • Không đến nhận phòng:
+                                                <strong class="text-red-700">
+                                                    không hoàn tiền.
+                                                </strong>
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+
+
+                                    {{-- Chính sách cọc --}}
+                                    <div
+                                        class="rounded-2xl border border-emerald-200
+                                            bg-emerald-50/60 p-5">
+
+                                        <div class="flex items-center gap-3">
+
+                                            <span
+                                                class="flex h-10 w-10 items-center justify-center
+                                                    rounded-xl bg-emerald-100 text-lg">
+                                                💵
+                                            </span>
+
+                                            <div>
+
+                                                <h4 class="font-bold text-slate-900">
+                                                    Cọc 10% + trả 90% tại homestay
+                                                </h4>
+
+                                                <p class="text-xs text-slate-500">
+                                                    Chỉ áp dụng cho đơn dưới 30 ngày.
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                        <ul
+                                            class="mt-4 space-y-2 text-sm leading-6 text-slate-600">
+
+                                            <li>
+                                                • Chỉ áp dụng khi còn
+                                                <strong class="text-emerald-700">
+                                                    dưới 30 ngày
+                                                </strong>
+                                                đến ngày nhận phòng.
+                                            </li>
+
+                                            <li>
+                                                • Khách thanh toán trước
+                                                <strong class="text-slate-800">
+                                                    10%
+                                                </strong>
+                                                qua VNPAY để giữ phòng.
+                                            </li>
+
+                                            <li>
+                                                •
+                                                <strong class="text-slate-800">
+                                                    90%
+                                                </strong>
+                                                còn lại thanh toán trực tiếp tại homestay
+                                                khi check-in.
+                                            </li>
+
+                                            <li>
+                                                • Khách chủ động hủy:
+                                                <strong class="text-red-700">
+                                                    không hoàn tiền cọc.
+                                                </strong>
+                                            </li>
+
+                                            <li>
+                                                • Khách không đến nhận phòng:
+                                                <strong class="text-red-700">
+                                                    không hoàn tiền cọc.
+                                                </strong>
+                                            </li>
+
+                                        </ul>
+
+                                    </div>
+
+
+                                    {{-- Homestay hủy --}}
+                                    <div
+                                        class="rounded-2xl border border-amber-200
+                                            bg-amber-50 p-4">
+
+                                        <div class="flex gap-3">
+
+                                            <svg class="mt-0.5 h-5 w-5 shrink-0 text-amber-600"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24">
+
+                                                <path stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M12 9v2m0 4h.01M5.07 19h13.86
+                                                    c1.54 0 2.5-1.67 1.73-3L13.73 4
+                                                    c-.77-1.33-2.69-1.33-3.46 0
+                                                    L3.34 16c-.77 1.33.19 3 1.73 3z" />
+
+                                            </svg>
+
+                                            <p class="text-sm leading-6 text-amber-800">
+
+                                                <strong>Lưu ý:</strong>
+
+                                                Nếu homestay chủ động hủy đơn,
+                                                khách sẽ được hoàn lại
+                                                <strong>
+                                                    100% số tiền đã thanh toán.
+                                                </strong>
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                {{-- Footer --}}
+                                <div class="border-t border-slate-200 px-6 py-4">
+
+                                    <button type="button"
+                                        @click="policyOpen = false"
+                                        class="inline-flex h-11 w-full cursor-pointer items-center
+                                            justify-center rounded-xl bg-blue-600 px-5
+                                            text-sm font-semibold text-white shadow-sm
+                                            transition hover:bg-blue-700
+                                            focus:outline-none focus:ring-4 focus:ring-blue-100">
+
+                                        Tôi đã hiểu
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                     {{-- Ghi chú --}}
                     <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
                         <label for="note" class="block text-2xl font-bold text-slate-900">Ghi chú</label>
@@ -447,6 +909,17 @@
                                 <span class="font-bold text-slate-900">Tổng cộng</span>
                                 <span id="summary-total" class="text-2xl font-bold text-blue-600">0đ</span>
                             </div>
+
+                            <div class="mt-4 rounded-xl bg-slate-50 p-4">
+                                <div class="flex items-center justify-between gap-4 text-xs">
+                                    <span class="text-slate-500">Hình thức</span>
+                                    <span id="summary-payment-method" class="text-right font-semibold text-slate-700">VNPAY 100%</span>
+                                </div>
+                                <div class="mt-2 flex items-center justify-between gap-4 text-sm">
+                                    <span class="font-semibold text-slate-700">Thanh toán trước</span>
+                                    <span id="summary-pay-now" class="font-bold text-blue-600">0đ</span>
+                                </div>
+                            </div>
                         </div>
 
                         <button id="submit-booking" type="submit"
@@ -479,8 +952,23 @@
             const summaryGuests = document.getElementById('summary-guests');
             const summarySubtotal = document.getElementById('summary-subtotal');
             const summaryTotal = document.getElementById('summary-total');
+            const summaryPaymentMethod = document.getElementById('summary-payment-method');
+            const summaryPayNow = document.getElementById('summary-pay-now');
+
+            const fullPaymentRadio = document.getElementById('payment-option-full');
+            const depositPaymentRadio = document.getElementById('payment-option-deposit');
+            const cashDepositCard = document.getElementById('cash-deposit-card');
+            const depositPreview = document.getElementById('deposit-preview');
+            const cashBalancePreview = document.getElementById('cash-balance-preview');
+            const depositCalculation = document.getElementById('deposit-calculation');
+            const paymentRuleNotice = document.getElementById('payment-rule-notice');
+            const paymentRuleTitle = document.getElementById('payment-rule-title');
+            const paymentRuleDescription = document.getElementById('payment-rule-description');
 
             const roomPrice = Number(@json($room->price_per_night));
+            const depositPercent = 10;
+            const fullPaymentRequiredDays = 30;
+            const serverToday = new Date(`${@json(now('Asia/Ho_Chi_Minh')->toDateString())}T00:00:00`);
 
             const formatDisplayDate = (value) => {
                 if (!value) return 'Chưa chọn';
@@ -489,6 +977,57 @@
 
             const formatMoney = (value) => {
                 return new Intl.NumberFormat('vi-VN').format(value) + 'đ';
+            };
+
+            const updatePaymentRule = (checkInValue, totalAmount = 0) => {
+                const depositAmount = Math.round(totalAmount * depositPercent / 100);
+                const remainingAmount = Math.max(0, totalAmount - depositAmount);
+
+                if (depositPreview) depositPreview.textContent = formatMoney(depositAmount);
+                if (cashBalancePreview) cashBalancePreview.textContent = formatMoney(remainingAmount);
+
+                if (!checkInValue) {
+                    depositPaymentRadio.disabled = true;
+                    cashDepositCard.classList.add('opacity-60', 'cursor-not-allowed');
+                    depositCalculation?.classList.add('hidden');
+                    paymentRuleNotice.className = 'mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4';
+                    paymentRuleTitle.textContent = 'Chọn ngày nhận phòng để xác định phương thức thanh toán';
+                    paymentRuleDescription.textContent = 'Đơn đặt trước từ 30 ngày trở lên bắt buộc thanh toán 100% qua VNPAY.';
+                    if (summaryPaymentMethod) summaryPaymentMethod.textContent = 'VNPAY 100%';
+                    if (summaryPayNow) summaryPayNow.textContent = formatMoney(totalAmount);
+                    return;
+                }
+
+                const checkInDate = new Date(`${checkInValue}T00:00:00`);
+                const daysUntilCheckIn = Math.round((checkInDate - serverToday) / (1000 * 60 * 60 * 24));
+                const requiresFullPayment = daysUntilCheckIn >= fullPaymentRequiredDays;
+
+                if (requiresFullPayment) {
+                    depositPaymentRadio.disabled = true;
+                    fullPaymentRadio.checked = true;
+                    depositCalculation?.classList.add('hidden');
+                    cashDepositCard.classList.add('opacity-60', 'cursor-not-allowed');
+                    paymentRuleNotice.className = 'mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-4';
+                    paymentRuleTitle.textContent = 'Đơn này bắt buộc thanh toán 100% qua VNPAY';
+                    paymentRuleDescription.textContent = `Ngày nhận phòng còn ${daysUntilCheckIn} ngày (từ 30 ngày trở lên), nên không áp dụng cọc 10%.`;
+                } else {
+                    depositPaymentRadio.disabled = false;
+                    cashDepositCard.classList.remove('opacity-60', 'cursor-not-allowed');
+                    depositCalculation?.classList.remove('hidden');
+                    paymentRuleNotice.className = 'mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4';
+                    paymentRuleTitle.textContent = 'Bạn được chọn cọc 10% hoặc thanh toán toàn bộ';
+                    paymentRuleDescription.textContent = `Ngày nhận phòng còn ${Math.max(daysUntilCheckIn, 0)} ngày, nên phương thức cọc 10% được phép sử dụng.`;
+                }
+
+                const useDeposit = depositPaymentRadio.checked && !depositPaymentRadio.disabled;
+                if (summaryPaymentMethod) {
+                    summaryPaymentMethod.textContent = useDeposit
+                        ? 'Cọc 10% + 90% tiền mặt'
+                        : 'VNPAY 100%';
+                }
+                if (summaryPayNow) {
+                    summaryPayNow.textContent = formatMoney(useDeposit ? depositAmount : totalAmount);
+                }
             };
 
             const calculateBooking = () => {
@@ -504,6 +1043,7 @@
                     summaryNights.textContent = '0 đêm';
                     summarySubtotal.textContent = '0đ';
                     summaryTotal.textContent = '0đ';
+                    updatePaymentRule(checkInValue, 0);
                     submitButton.disabled = true;
                     return;
                 }
@@ -516,6 +1056,7 @@
                     summaryNights.textContent = '0 đêm';
                     summarySubtotal.textContent = '0đ';
                     summaryTotal.textContent = '0đ';
+                    updatePaymentRule(checkInValue, 0);
                     submitButton.disabled = true;
                     return;
                 }
@@ -524,6 +1065,7 @@
                 summaryNights.textContent = `${nights} đêm`;
                 summarySubtotal.textContent = formatMoney(subtotal);
                 summaryTotal.textContent = formatMoney(subtotal);
+                updatePaymentRule(checkInValue, subtotal);
                 submitButton.disabled = false;
             };
 
@@ -531,6 +1073,8 @@
             window.calculateBooking = calculateBooking;
 
             guestsInput?.addEventListener('change', calculateBooking);
+            fullPaymentRadio?.addEventListener('change', calculateBooking);
+            depositPaymentRadio?.addEventListener('change', calculateBooking);
 
             const updateNoteCounter = () => {
                 if (noteCounter && noteInput) {

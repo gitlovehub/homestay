@@ -25,7 +25,12 @@
             'unpaid' => 'Chưa thanh toán',
             'pending' => 'Đang xử lý',
             'paid' => 'Đã thanh toán',
+            'deposit_paid' => 'Đã thanh toán cọc',
+            'refund_pending' => 'Đang hoàn tiền',
+            'partially_refunded' => 'Đã hoàn một phần',
             'refunded' => 'Đã hoàn tiền',
+            'refund_failed' => 'Hoàn tiền thất bại',
+            'cancelled' => 'Đã hủy thanh toán',
             'failed' => 'Thanh toán thất bại',
         ];
 
@@ -33,18 +38,38 @@
             'unpaid' => 'border-slate-200 bg-slate-100 text-slate-700',
             'pending' => 'border-amber-200 bg-amber-50 text-amber-700',
             'paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'deposit_paid' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'refund_pending' => 'border-amber-200 bg-amber-50 text-amber-700',
+            'partially_refunded' => 'border-blue-200 bg-blue-50 text-blue-700',
             'refunded' => 'border-blue-200 bg-blue-50 text-blue-700',
+            'refund_failed' => 'border-red-200 bg-red-50 text-red-700',
+            'cancelled' => 'border-slate-200 bg-slate-100 text-slate-700',
             'failed' => 'border-red-200 bg-red-50 text-red-700',
         ];
 
         $canPay = $booking->status !== 'cancelled'
-            && $booking->payment_status !== 'paid';
+            && in_array($booking->payment_status, ['unpaid', 'pending', 'failed'], true);
+
+        $isDeposit = $booking->isCashDepositOption();
+        $vnpayAmount = $booking->amountRequiredForVnpay();
+        $remainingCashAmount = $booking->remainingCashAmount();
+        $canCancel = in_array($booking->status, ['pending', 'confirmed'], true)
+            && $booking->check_in
+            && $booking->check_in->copy()->startOfDay()->greaterThan(now('Asia/Ho_Chi_Minh')->startOfDay());
+        $refundPercentage = $booking->customerCancellationRefundPercentage();
+        $expectedRefundAmount = in_array($booking->payment_status, ['paid'], true)
+            ? (int) round($vnpayAmount * $refundPercentage / 100)
+            : 0;
 
         $paymentButtonLabel = match ($booking->payment_status) {
             'pending' => 'Tiếp tục thanh toán',
             'failed' => 'Thanh toán lại qua VNPAY',
-            default => 'Thanh toán qua VNPAY',
+            default => $isDeposit ? 'Thanh toán cọc 10%' : 'Thanh toán qua VNPAY',
         };
+
+        $refundPayment = $booking->payments()->where('payment_method', 'vnpay')->whereNotNull('refund_status')->latest('id')->first();
+
+        $actualRefundedAmount = (int) ($refundPayment?->refunded_amount ?? 0);
 
     @endphp
 
@@ -311,7 +336,7 @@
                                 Ghi chú
                             </h2>
 
-                            <p class="mt-5 whitespace-pre-line leading-7 text-slate-600">
+                            <p class="mt-5 leading-7 text-slate-600">
                                 {{ $booking->note }}
                             </p>
 
@@ -325,7 +350,7 @@
                                 Đơn đặt phòng đã bị hủy
                             </h2>
 
-                            <p class="mt-3 whitespace-pre-line leading-7 text-red-600">
+                            <p class="mt-3 leading-7 text-red-600">
                                 {{ $booking->cancellation_reason }}
                             </p>
 
@@ -336,6 +361,125 @@
                                 </p>
                             @endif
 
+                            @if ($booking->refund_amount > 0)
+                                <div class="mt-4 rounded-2xl border border-red-200 bg-white/70 p-4">
+                                    <p class="text-sm text-red-600">Số tiền hoàn theo chính sách</p>
+                                    <p class="mt-1 text-xl font-bold text-red-700">
+                                        {{ number_format($booking->refund_amount, 0, ',', '.') }}đ
+                                    </p>
+                                </div>
+                            @elseif ($isDeposit && in_array($booking->payment_status, ['deposit_paid', 'cancelled'], true))
+                                <p class="mt-4 text-sm font-semibold text-red-700">
+                                    Khoản cọc 10% không được hoàn do khách chủ động hủy.
+                                </p>
+                            @endif
+
+                            @if ($booking->payment_status === 'refund_pending')
+
+                                <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                                    <p class="font-bold text-amber-700">
+                                        Đang hoàn tiền
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-6 text-amber-600">
+                                        Yêu cầu hoàn
+                                        <strong>
+                                            {{ number_format($booking->refund_amount, 0, ',', '.') }}đ
+                                        </strong>
+                                        đã được gửi và đang chờ VNPAY xác nhận.
+                                    </p>
+                                </div>
+
+                            @elseif (in_array(
+                                $booking->payment_status,
+                                ['refunded', 'partially_refunded'],
+                                true
+                            ))
+
+                                <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+
+                                    <p class="font-bold text-emerald-700">
+                                        ✓ Đã hoàn tiền
+                                    </p>
+
+                                    <p class="mt-1 text-sm text-emerald-600">
+                                        Số tiền đã hoàn:
+                                        <strong>
+                                            {{ number_format($actualRefundedAmount, 0, ',', '.') }}đ
+                                        </strong>
+                                    </p>
+
+                                    @if ($refundPayment?->refunded_at)
+                                        <p class="mt-1 text-xs text-emerald-500">
+                                            Hoàn lúc:
+                                            {{ $refundPayment->refunded_at->format('H:i d/m/Y') }}
+                                        </p>
+                                    @endif
+
+                                </div>
+
+                            @elseif ($booking->payment_status === 'refund_failed')
+
+                                <div class="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4">
+
+                                    <p class="font-bold text-red-700">
+                                        Hoàn tiền chưa thành công
+                                    </p>
+
+                                    <p class="mt-1 text-sm leading-6 text-red-600">
+                                        Yêu cầu hoàn tiền hiện chưa được VNPAY xác nhận thành công.
+                                        Vui lòng chờ quản trị viên kiểm tra lại.
+                                    </p>
+
+                                </div>
+
+                            @endif
+
+                        </div>
+                    @endif
+
+                    @if ($canCancel)
+                        <div id="cancel-booking" class="rounded-3xl border border-red-200 bg-white p-6 shadow-sm sm:p-8">
+                            <h2 class="text-2xl font-bold text-slate-900">Hủy đặt phòng</h2>
+
+                            @if ($isDeposit)
+                                <p class="mt-3 text-sm leading-6 text-slate-600">
+                                    Đơn này sử dụng hình thức cọc 10%. Nếu bạn chủ động hủy, tiền cọc đã thanh toán sẽ không được hoàn lại.
+                                </p>
+                            @else
+                                <p class="mt-3 text-sm leading-6 text-slate-600">
+                                    Chính sách tại thời điểm hiện tại: hoàn <strong>{{ $refundPercentage }}%</strong>
+                                    @if ($booking->payment_status === 'paid')
+                                        (dự kiến {{ number_format($expectedRefundAmount, 0, ',', '.') }}đ).
+                                    @else
+                                        nếu giao dịch VNPAY đã được thanh toán thành công.
+                                    @endif
+                                </p>
+                                <p class="mt-2 text-xs leading-5 text-slate-500">
+                                    ≥ 30 ngày: hoàn 100% · 7–29 ngày: hoàn 50% · dưới 7 ngày: không hoàn.
+                                </p>
+                            @endif
+
+                            <form method="POST" action="{{ route('bookings.cancel', $booking) }}" class="mt-5"
+                                onsubmit="return confirm('Bạn có chắc muốn hủy đặt phòng này không?');">
+                                @csrf
+                                @method('PATCH')
+
+                                <label for="cancellation_reason" class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Lý do hủy <span class="text-red-500">*</span>
+                                </label>
+                                <textarea id="cancellation_reason" name="cancellation_reason" rows="4" minlength="5" maxlength="500" required
+                                    placeholder="Nhập lý do hủy đặt phòng..."
+                                    class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100">{{ old('cancellation_reason') }}</textarea>
+                                @error('cancellation_reason')
+                                    <p class="mt-2 text-sm font-semibold text-red-600">{{ $message }}</p>
+                                @enderror
+
+                                <button type="submit"
+                                    class="mt-4 inline-flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-red-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-200">
+                                    Xác nhận hủy đặt phòng
+                                </button>
+                            </form>
                         </div>
                     @endif
 
@@ -420,6 +564,25 @@
 
                         </div>
 
+                        <div class="mt-5 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm">
+                            <div class="flex items-center justify-between gap-4">
+                                <span class="text-blue-700">Hình thức</span>
+                                <span class="text-right font-bold text-blue-900">
+                                    {{ $isDeposit ? 'Cọc 10% + 90% tiền mặt' : 'VNPAY 100%' }}
+                                </span>
+                            </div>
+                            @if ($isDeposit)
+                                <div class="mt-2 flex items-center justify-between gap-4">
+                                    <span class="text-blue-700">Cọc qua VNPAY</span>
+                                    <span class="font-bold text-blue-900">{{ number_format($vnpayAmount, 0, ',', '.') }}đ</span>
+                                </div>
+                                <div class="mt-2 flex items-center justify-between gap-4">
+                                    <span class="text-blue-700">Còn lại khi check-in</span>
+                                    <span class="font-bold text-blue-900">{{ number_format($remainingCashAmount, 0, ',', '.') }}đ</span>
+                                </div>
+                            @endif
+                        </div>
+
                         <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
 
                             <div class="flex items-center justify-between gap-4">
@@ -456,15 +619,15 @@
                             </a>
                         @elseif ($booking->payment_status === 'paid')
                             <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center">
-
-                                <p class="font-bold text-emerald-700">
-                                    ✓ Đơn đã được thanh toán
-                                </p>
-
+                                <p class="font-bold text-emerald-700">✓ Đơn đã được thanh toán đầy đủ</p>
+                                <p class="mt-1 text-xs leading-5 text-emerald-600">Bạn không cần thực hiện thêm giao dịch cho đơn này.</p>
+                            </div>
+                        @elseif ($booking->payment_status === 'deposit_paid')
+                            <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center">
+                                <p class="font-bold text-emerald-700">✓ Đã cọc 10% để giữ chỗ</p>
                                 <p class="mt-1 text-xs leading-5 text-emerald-600">
-                                    Bạn không cần thực hiện thêm giao dịch cho đơn này.
+                                    Còn {{ number_format($remainingCashAmount, 0, ',', '.') }}đ thanh toán tại homestay khi check-in.
                                 </p>
-
                             </div>
                         @elseif ($booking->status === 'cancelled')
                             <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-center">

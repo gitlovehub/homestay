@@ -1,0 +1,12 @@
+BỔ SUNG QUY TẮC THANH TOÁN THEO THỜI GIAN ĐẶT PHÒNG
+
+- Booking được tạo trước ngày check-in từ 30 ngày trở lên:
+  Bắt buộc payment_option = vnpay_full (thanh toán 100% qua VNPAY).
+
+- Booking được tạo trước ngày check-in dưới 30 ngày:
+  Có thể chọn vnpay_full hoặc cash_deposit.
+  cash_deposit = cọc 10% qua VNPAY, 90% còn lại trả tiền mặt khi check-in.
+
+- Backend BookingController chặn request cash_deposit nếu >= 30 ngày.
+- PaymentController kiểm tra lại để phòng trường hợp dữ liệu cũ/bị sửa thủ công.
+- Booking::requiresFullVnpayPayment() dùng created_at làm mốc sau khi booking đã được lưu, nên quy tắc không tự thay đổi chỉ vì thời gian trôi qua.

@@ -43,12 +43,18 @@ class PaymentController extends Controller
                 );
         }
 
-        if ($booking->payment_status === 'paid') {
+        if (in_array(
+            $booking->payment_status,
+            ['paid', 'deposit_paid'],
+            true
+        )) {
             return redirect()
                 ->route('bookings.show', $booking)
                 ->with(
                     'success',
-                    'Đơn đặt phòng này đã được thanh toán.'
+                    $booking->payment_status === 'deposit_paid'
+                        ? 'Đơn đặt phòng này đã thanh toán tiền cọc.'
+                        : 'Đơn đặt phòng này đã được thanh toán.'
                 );
         }
 
@@ -156,8 +162,14 @@ class PaymentController extends Controller
                     if ($payment) {
                         $payment->update([
                             'bank_code' => $bankCode,
+                            'payment_purpose' =>
+                                $this->paymentPurposeForBooking(
+                                    $lockedBooking
+                                ),
                             'amount' =>
-                                $lockedBooking->total_price,
+                                $this->paymentAmountForBooking(
+                                    $lockedBooking
+                                ),
                         ]);
                     } else {
                         $payment = $lockedBooking
@@ -169,10 +181,16 @@ class PaymentController extends Controller
                                     ),
 
                                 'payment_method' => 'vnpay',
+                                'payment_purpose' =>
+                                    $this->paymentPurposeForBooking(
+                                        $lockedBooking
+                                    ),
                                 'bank_code' => $bankCode,
 
                                 'amount' =>
-                                    $lockedBooking->total_price,
+                                    $this->paymentAmountForBooking(
+                                        $lockedBooking
+                                    ),
 
                                 'status' => 'pending',
 
@@ -364,7 +382,10 @@ class PaymentController extends Controller
                     ]);
 
                     $lockedPayment->booking->update([
-                        'payment_status' => 'paid',
+                        'payment_status' =>
+                            $this->bookingPaymentStatusAfterSuccessfulVnpay(
+                                $lockedPayment->booking
+                            ),
                     ]);
                 }
             );
@@ -571,7 +592,9 @@ class PaymentController extends Controller
                         ->update([
                             'payment_status' =>
                                 $isSuccessful
-                                    ? 'paid'
+                                    ? $this->bookingPaymentStatusAfterSuccessfulVnpay(
+                                        $lockedPayment->booking
+                                    )
                                     : 'failed',
                         ]);
 
@@ -654,11 +677,42 @@ class PaymentController extends Controller
             );
         }
 
+        if (
+            $booking->isCashDepositOption()
+            && $booking->requiresFullVnpayPayment()
+        ) {
+            throw new RuntimeException(
+                'Đơn đặt trước từ 30 ngày trở lên phải thanh toán toàn bộ qua VNPAY.'
+            );
+        }
+
         if ((int) $booking->total_price <= 0) {
             throw new RuntimeException(
                 'Số tiền thanh toán của đơn không hợp lệ.'
             );
         }
+    }
+
+    private function paymentAmountForBooking(
+        Booking $booking
+    ): int {
+        return $booking->amountRequiredForVnpay();
+    }
+
+    private function paymentPurposeForBooking(
+        Booking $booking
+    ): string {
+        return $booking->isCashDepositOption()
+            ? Payment::PURPOSE_DEPOSIT
+            : Payment::PURPOSE_FULL_PAYMENT;
+    }
+
+    private function bookingPaymentStatusAfterSuccessfulVnpay(
+        Booking $booking
+    ): string {
+        return $booking->isCashDepositOption()
+            ? 'deposit_paid'
+            : 'paid';
     }
 
     /**

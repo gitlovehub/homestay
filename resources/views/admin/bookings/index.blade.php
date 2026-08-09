@@ -16,22 +16,33 @@
                 'checked_in' => 'Đã nhận phòng',
                 'completed' => 'Đã hoàn thành',
                 'cancelled' => 'Đã hủy',
+                'no_show' => 'Không đến',
             ];
 
             $paymentLabels = [
                 'unpaid' => 'Chưa thanh toán',
                 'pending' => 'Đang xử lý',
                 'paid' => 'Đã thanh toán',
+                'deposit_paid' => 'Đã cọc 10%',
+                'refund_pending' => 'Đang hoàn tiền',
+                'partially_refunded' => 'Đã hoàn một phần',
                 'refunded' => 'Đã hoàn tiền',
+                'refund_failed' => 'Hoàn tiền thất bại',
                 'failed' => 'Thanh toán thất bại',
+                'cancelled' => 'Đã đóng thanh toán',
             ];
 
             $paymentStatus = [
                 'unpaid' => 'text-slate-500 dark:text-slate-400',
                 'pending' => 'text-amber-600 dark:text-amber-400',
                 'paid' => 'text-emerald-600 dark:text-emerald-400',
+                'deposit_paid' => 'text-blue-600 dark:text-blue-400',
+                'refund_pending' => 'text-amber-600 dark:text-amber-400',
+                'partially_refunded' => 'text-cyan-600 dark:text-cyan-400',
                 'refunded' => 'text-violet-600 dark:text-violet-400',
+                'refund_failed' => 'text-red-600 dark:text-red-400',
                 'failed' => 'text-red-600 dark:text-red-400',
+                'cancelled' => 'text-slate-500 dark:text-slate-400',
             ];
         @endphp
 
@@ -382,6 +393,13 @@
                                             </span>
                                             @break
 
+                                        @case('no_show')
+                                            <span class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-300">
+                                                <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+                                                Không đến
+                                            </span>
+                                            @break
+
                                         @case('cancelled')
                                             <span class="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
                                                 <span class="h-2 w-2 rounded-full bg-red-500"></span>
@@ -649,6 +667,8 @@
                                                             name="status"
                                                             value="cancelled"
                                                         >
+                                                        <input type="hidden" name="cancellation_reason"
+                                                            value="Homestay/Quản trị viên chủ động hủy đơn.">
 
                                                         <button
                                                             type="submit"
@@ -720,21 +740,21 @@
 
                                                             class="group flex w-full cursor-pointer items-center gap-3
                                                                 px-3.5 py-2.5 text-left text-sm font-medium
-                                                                text-blue-600 transition-colors
-                                                                hover:bg-blue-50
-                                                                focus:bg-blue-50 focus:outline-none
-                                                                dark:text-blue-400
-                                                                dark:hover:bg-blue-950/50
-                                                                dark:focus:bg-blue-950/50"
+                                                                text-violet-600 transition-colors
+                                                                hover:bg-violet-50
+                                                                focus:bg-violet-50 focus:outline-none
+                                                                dark:text-violet-400
+                                                                dark:hover:bg-violet-950/50
+                                                                dark:focus:bg-violet-950/50"
                                                         >
                                                             <span
                                                                 class="flex h-8 w-8 shrink-0 items-center justify-center
-                                                                    rounded-xl bg-blue-50 text-blue-500
+                                                                    rounded-xl bg-violet-50 text-violet-500
                                                                     transition-colors
-                                                                    group-hover:bg-blue-100
-                                                                    dark:bg-blue-950/50
-                                                                    dark:text-blue-400
-                                                                    dark:group-hover:bg-blue-950/70"
+                                                                    group-hover:bg-violet-100
+                                                                    dark:bg-violet-950/50
+                                                                    dark:text-violet-400
+                                                                    dark:group-hover:bg-violet-950/70"
                                                             >
                                                                 <svg
                                                                     xmlns="http://www.w3.org/2000/svg"
@@ -773,6 +793,8 @@
                                                             name="status"
                                                             value="cancelled"
                                                         >
+                                                        <input type="hidden" name="cancellation_reason"
+                                                            value="Homestay/Quản trị viên chủ động hủy đơn.">
 
                                                         <button
                                                             type="submit"

@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\Room;
+use App\Services\BookingCancellationService;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class BookingController extends Controller
 {
@@ -29,6 +32,27 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request)
     {
         $data = $request->validated();
+
+        $paymentOption = (string) $request->input(
+            'payment_option',
+            Booking::PAYMENT_OPTION_VNPAY_FULL
+        );
+
+        if (!in_array(
+            $paymentOption,
+            [
+                Booking::PAYMENT_OPTION_VNPAY_FULL,
+                Booking::PAYMENT_OPTION_CASH_DEPOSIT,
+            ],
+            true
+        )) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'payment_option' =>
+                        'Phương thức thanh toán không hợp lệ.',
+                ]);
+        }
 
         $room = Room::query()
             ->with('homestay')
@@ -78,8 +102,43 @@ class BookingController extends Controller
                 ]);
         }
 
-        $checkIn = Carbon::parse($data['check_in']);
-        $checkOut = Carbon::parse($data['check_out']);
+        $checkIn = Carbon::parse(
+            $data['check_in'],
+            'Asia/Ho_Chi_Minh'
+        );
+        $checkOut = Carbon::parse(
+            $data['check_out'],
+            'Asia/Ho_Chi_Minh'
+        );
+
+        /*
+         * Đơn đặt trước ngày check-in từ 30 ngày trở lên phải
+         * thanh toán toàn bộ qua VNPAY. Không chỉ ẩn lựa chọn ở UI,
+         * backend vẫn chặn để tránh sửa request thủ công.
+         */
+        $requiresFullVnpay = $checkIn
+            ->copy()
+            ->startOfDay()
+            ->greaterThanOrEqualTo(
+                now('Asia/Ho_Chi_Minh')
+                    ->startOfDay()
+                    ->addDays(
+                        Booking::FULL_VNPAY_REQUIRED_FROM_DAYS
+                    )
+            );
+
+        if (
+            $paymentOption
+                === Booking::PAYMENT_OPTION_CASH_DEPOSIT
+            && $requiresFullVnpay
+        ) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'payment_option' =>
+                        'Đơn đặt trước từ 30 ngày trở lên phải thanh toán toàn bộ qua VNPAY.',
+                ]);
+        }
 
         $numberOfNights = $checkIn->diffInDays($checkOut);
         $roomPrice = $room->price_per_night;
@@ -115,13 +174,17 @@ class BookingController extends Controller
 
             'status' => 'pending',
             'payment_status' => 'unpaid',
+            'payment_option' => $paymentOption,
+            'refund_amount' => 0,
         ]);
 
         return redirect()
-            ->route('bookings.show', $booking)
+            ->route('bookings.payment.show', $booking)
             ->with(
                 'success',
-                'Đặt phòng thành công. Booking đang chờ xác nhận.'
+                $paymentOption === Booking::PAYMENT_OPTION_CASH_DEPOSIT
+                    ? 'Đặt phòng thành công. Vui lòng thanh toán cọc 10% qua VNPAY để giữ chỗ.'
+                    : 'Đặt phòng thành công. Vui lòng thanh toán toàn bộ qua VNPAY để hoàn tất giữ chỗ.'
             );
     }
 
@@ -203,6 +266,83 @@ class BookingController extends Controller
         ]);
 
         return view('bookings.show', compact('booking'));
+    }
+
+    public function cancel(
+        Request $request,
+        Booking $booking,
+        BookingCancellationService $cancellationService
+    ): RedirectResponse {
+        abort_unless(
+            (int) $booking->user_id === (int) auth()->id(),
+            403
+        );
+
+        $validated = $request->validate(
+            [
+                'cancellation_reason' => [
+                    'required',
+                    'string',
+                    'min:5',
+                    'max:500',
+                ],
+            ],
+            [
+                'cancellation_reason.required' =>
+                    'Vui lòng nhập lý do hủy đặt phòng.',
+                'cancellation_reason.min' =>
+                    'Lý do hủy phải có ít nhất 5 ký tự.',
+                'cancellation_reason.max' =>
+                    'Lý do hủy không được vượt quá 500 ký tự.',
+            ]
+        );
+
+        try {
+            $result = $cancellationService->cancelByCustomer(
+                $booking,
+                $validated['cancellation_reason'],
+                (string) $request->ip(),
+                (string) (auth()->user()?->name ?? 'Khach hang')
+            );
+        } catch (RuntimeException $exception) {
+            return back()->with(
+                'error',
+                $exception->getMessage()
+            );
+        }
+
+        $refundAmount = (int) $result['refund_amount'];
+        $refundState = $result['refund_state'];
+
+        $message = match (true) {
+            $refundAmount <= 0
+                && $result['payment_option']
+                    === Booking::PAYMENT_OPTION_CASH_DEPOSIT
+                => 'Hủy đặt phòng thành công. Tiền cọc 10% không được hoàn lại.',
+
+            $refundAmount <= 0
+                => 'Hủy đặt phòng thành công. Đơn này không phát sinh tiền hoàn.',
+
+            $refundState === 'refunded'
+                => 'Hủy đặt phòng thành công. Đã gửi hoàn '
+                    . number_format($refundAmount, 0, ',', '.')
+                    . 'đ qua VNPAY.',
+
+            $refundState === 'processing'
+                => 'Hủy đặt phòng thành công. Khoản hoàn '
+                    . number_format($refundAmount, 0, ',', '.')
+                    . 'đ đang được VNPAY xử lý.',
+
+            default
+                => 'Đơn đã được hủy nhưng yêu cầu hoàn tiền chưa xử lý thành công. Vui lòng liên hệ hỗ trợ.',
+        };
+
+        return redirect()
+            ->route('bookings.show', $booking)
+            ->with(
+                $refundState === 'failed' ? 'error' : 'success',
+                $message
+            );
     }
 
     private function generateBookingCode(): string
